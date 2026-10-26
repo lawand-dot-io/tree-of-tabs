@@ -12,6 +12,8 @@ const dropLine = document.getElementById('drop-line');
 const menuEl = document.getElementById('menu');
 
 let windowId;
+// True when this page is the docked window rather than Chrome's side panel.
+const docked = new URLSearchParams(location.search).get('docked') === '1';
 let settings = { ...DEFAULTS };
 let tabsById = new Map();
 let collapsed = new Set();
@@ -292,8 +294,15 @@ function selectedIdsFor(id) {
   return tab?.highlighted && highlighted.length > 1 ? highlighted.map((t) => t.id) : [id];
 }
 
+// In docked mode the tree lives in its own window, so hand focus back to the
+// browser window once a tab is picked, the way clicking the tab strip would.
+function focusBrowserWindow() {
+  if (docked) chrome.windows.update(windowId, { focused: true });
+}
+
 function newTab() {
   chrome.tabs.create({ windowId });
+  focusBrowserWindow();
 }
 
 // --- Pointer and keyboard ----------------------------------------------------
@@ -326,6 +335,7 @@ function onClick(event) {
   if (event.ctrlKey || event.metaKey || event.shiftKey) return;
   const tab = tabsById.get(id);
   if (tab && !tab.active) activate(id);
+  focusBrowserWindow();
 }
 
 function onAuxClick(event) {
@@ -765,9 +775,16 @@ function applySettings(next) {
 
 async function main() {
   newTabEl.querySelector('.new-tab-icon').innerHTML = icon('add');
-  // ?windowId= shows another window's tabs (used by the end-to-end test).
+  // ?windowId= shows another window's tabs: the docked window uses it to
+  // show its browser window, and so does the end-to-end test.
   const forced = Number(new URLSearchParams(location.search).get('windowId'));
   windowId = forced || (await chrome.windows.getCurrent()).id;
+  document.documentElement.classList.toggle('docked', docked);
+  if (docked) {
+    // A dock outliving its browser window (say, restored by Chrome) closes.
+    if (!(await chrome.windows.get(windowId).catch(() => null))) return window.close();
+    chrome.windows.onRemoved.addListener((id) => id === windowId && window.close());
+  }
   applySettings(await loadSettings());
   onSettingsChanged((next) => {
     applySettings(next);
