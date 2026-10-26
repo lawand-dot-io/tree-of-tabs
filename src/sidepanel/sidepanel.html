@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tab Tree</title>
+    <link rel="stylesheet" href="../theme.css" />
+    <link rel="stylesheet" href="sidepanel.css" />
+  </head>
+  <body>
+    <div id="pinned" class="pinned" role="list" aria-label="Pinned tabs"></div>
+    <div id="scroller" class="scroller">
+      <div id="tree" class="tree" role="tree" aria-label="Tabs"></div>
+      <div id="new-tab" class="new-tab" role="button" tabindex="0">
+        <span class="new-tab-icon"></span>
+        <span>New tab</span>
+      </div>
+      <div id="drop-line" class="drop-line" hidden></div>
+    </div>
+    <div id="menu" class="menu" role="menu" hidden></div>
+    <script type="module" src="sidepanel.js"></script>
+  </body>
+</html>

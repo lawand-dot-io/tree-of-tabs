@@ -1,0 +1,112 @@
+body {
+  min-height: 100vh;
+}
+
+main {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 16px 16px 48px;
+}
+
+h1 {
+  margin: 8px 0 16px;
+  font-size: 22px;
+  font-weight: 400;
+}
+
+h2 {
+  margin: 24px 0 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.card {
+  border-radius: 12px;
+  background: var(--control-bg);
+  overflow: hidden;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 48px;
+  padding: 8px 20px;
+}
+
+.row + .row {
+  border-top: 1px solid var(--divider);
+}
+
+.label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hint {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+select {
+  flex: none;
+  max-width: 50%;
+  height: 32px;
+  padding: 0 28px 0 12px;
+  border: 1px solid var(--divider);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+}
+
+/* Chrome style toggle switch. */
+.switch {
+  appearance: none;
+  flex: none;
+  position: relative;
+  width: 36px;
+  height: 20px;
+  margin: 0;
+  border: 2px solid var(--switch-track);
+  border-radius: 10px;
+  background: transparent;
+  transition: background 150ms ease, border-color 150ms ease;
+  cursor: pointer;
+}
+
+.switch::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--switch-track);
+  transition: transform 150ms ease, background 150ms ease;
+}
+
+.switch:checked {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.switch:checked::before {
+  transform: translateX(16px);
+  background: var(--switch-thumb);
+}
+
+.footnote {
+  margin-top: 24px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.mono {
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 12px;
+}

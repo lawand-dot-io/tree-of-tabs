@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tab Tree settings</title>
+    <link rel="stylesheet" href="../theme.css" />
+    <link rel="stylesheet" href="options.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Tab Tree</h1>
+
+      <h2>New tabs</h2>
+      <section class="card">
+        <label class="row">
+          <span class="label">
+            Place tabs opened from a tab
+            <span class="hint">Links, middle clicks and pages that open tabs</span>
+          </span>
+          <select name="childPosition">
+            <option value="end">As the last child</option>
+            <option value="first">As the first child</option>
+          </select>
+        </label>
+        <label class="row">
+          <span class="label">
+            Open new tabs (Ctrl+T) as children of the current tab
+            <span class="hint">Off: blank new tabs start their own tree</span>
+          </span>
+          <input type="checkbox" name="newTabAsChild" class="switch" />
+        </label>
+      </section>
+
+      <h2>Closing tabs</h2>
+      <section class="card">
+        <label class="row">
+          <span class="label">When a parent tab is closed</span>
+          <select name="onCloseParent">
+            <option value="promoteFirst">Promote the first child</option>
+            <option value="promoteAll">Move all children up a level</option>
+          </select>
+        </label>
+        <label class="row">
+          <span class="label">
+            Close the whole tree when its collapsed parent is closed
+            <span class="hint">Hidden tabs close with the parent you can see</span>
+          </span>
+          <input type="checkbox" name="closeCollapsedTree" class="switch" />
+        </label>
+      </section>
+
+      <h2>Appearance</h2>
+      <section class="card">
+        <label class="row">
+          <span class="label">Density</span>
+          <select name="density">
+            <option value="comfortable">Comfortable</option>
+            <option value="compact">Compact</option>
+          </select>
+        </label>
+        <label class="row">
+          <span class="label">Indentation per level</span>
+          <select name="indent">
+            <option value="10">Narrow</option>
+            <option value="16">Medium</option>
+            <option value="24">Wide</option>
+          </select>
+        </label>
+        <label class="row">
+          <span class="label">
+            Expand a collapsed tree when one of its tabs is selected
+            <span class="hint">For example when switching tabs with Ctrl+Tab</span>
+          </span>
+          <input type="checkbox" name="autoExpandOnActivate" class="switch" />
+        </label>
+      </section>
+
+      <p class="footnote">
+        Tip: Chrome can show the side panel on the left. Open
+        <span class="mono">chrome://settings/appearance</span> and set <em>Side panel position</em> to
+        <em>Show on left</em>.
+      </p>
+    </main>
+    <script type="module" src="options.js"></script>
+  </body>
+</html>
