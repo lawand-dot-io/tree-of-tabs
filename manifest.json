@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "description": "Tree style tabs in Chrome's side panel. Tabs opened from a tab become its children; drag and drop to reorganize.",
   "minimum_chrome_version": "116",
-  "permissions": ["tabs", "tabGroups", "sidePanel", "storage", "favicon", "system.display"],
+  "permissions": ["tabs", "tabGroups", "sidePanel", "storage", "favicon"],
   "background": {
     "service_worker": "src/background.js",
     "type": "module"
@@ -17,7 +17,7 @@
     "open_in_tab": true
   },
   "action": {
-    "default_title": "Show or hide the tab tree",
+    "default_title": "Show tab tree",
     "default_icon": {
       "16": "icons/icon16.png",
       "32": "icons/icon32.png"

@@ -12,18 +12,8 @@ function write(field, value) {
   else field.value = String(value);
 }
 
-// Docked window options only show in docked mode.
-function showDockedRows() {
-  const docked = document.querySelector('[name=displayMode]').value === 'docked';
-  for (const row of document.querySelectorAll('[data-docked]')) row.hidden = !docked;
-}
-
 const settings = await loadSettings();
 for (const field of fields) {
   write(field, settings[field.name]);
-  field.addEventListener('change', () => {
-    chrome.storage.sync.set({ [field.name]: read(field) });
-    showDockedRows();
-  });
+  field.addEventListener('change', () => chrome.storage.sync.set({ [field.name]: read(field) }));
 }
-showDockedRows();

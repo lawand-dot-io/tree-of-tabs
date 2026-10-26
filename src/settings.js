@@ -13,14 +13,6 @@ export const DEFAULTS = {
   indent: 16,
   // 'comfortable' (32px rows) or 'compact' (26px rows).
   density: 'comfortable',
-  // Where the tree shows: 'sidePanel' (Chrome's side panel) or 'docked' (a
-  // narrow window attached to the side of each browser window).
-  displayMode: 'sidePanel',
-  // Docked mode: which side of the browser window, how wide (remembered when
-  // the dock is resized), and whether every new window gets one.
-  dockSide: 'left',
-  dockWidth: 220,
-  dockAutoOpen: true,
 };
 
 export async function loadSettings() {

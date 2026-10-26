@@ -9,7 +9,6 @@ import {
   sanitize,
 } from './tree.js';
 import { DEFAULTS, loadSettings, onSettingsChanged } from './settings.js';
-import { registerDock } from './dock.js';
 
 // Tree state for every window, keyed by tab id. Sibling order is the native
 // tab order, which this worker keeps consistent with the tree.
@@ -560,7 +559,10 @@ onSettingsChanged((next) => {
   settings = next;
 });
 
-// The toolbar button toggles the side panel, or the docked window in docked mode.
-registerDock();
+// Clicking the toolbar button toggles the side panel.
+chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => {});
+// The removed docked window mode turned the side panel off, and Chrome keeps
+// that setting, so make sure it is on.
+chrome.sidePanel.setOptions({ enabled: true }).catch(() => {});
 
 enqueue(init);

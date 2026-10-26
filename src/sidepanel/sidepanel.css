@@ -366,30 +366,15 @@ body {
 }
 
 .menu-item {
-  display: block;
+  display: flex;
+  align-items: center;
   width: 100%;
   height: 32px;
   padding: 0 16px;
   border: 0;
   background: none;
-  line-height: 32px;
   text-align: start;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* The docked window can be much narrower than the side panel. */
-@media (max-width: 240px) {
-  .menu {
-    min-width: 0;
-    left: 4px !important;
-    right: 4px;
-  }
-
-  .menu-item {
-    padding: 0 12px;
-  }
 }
 
 .menu-item:hover,

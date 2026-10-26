@@ -4,6 +4,6 @@
   "type": "module",
   "scripts": {
     "test": "node --test test/*.test.js",
-    "test:e2e": "node test/e2e/run.js && node test/e2e/dock.js"
+    "test:e2e": "node test/e2e/run.js"
   }
 }

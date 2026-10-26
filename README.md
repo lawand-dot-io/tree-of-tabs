@@ -39,30 +39,6 @@ tree in Chrome's own side panel, styled to match the browser.
 - Pinned tabs show as a row of icons at the top, tab group colors show as a
   bar on each tab, and a spinner shows while a page loads.
 
-## Docked window mode
-
-Chrome's side panel has a minimum width that extensions can't lower. If it's
-too wide for you, open the settings (right-click in the tree, then
-**Settings**) and set **Show the tree in** to **A docked window**. The tree
-then lives in its own narrow window attached to the left (or right) edge of
-each browser window:
-
-- Drag the docked window's edge to make it as narrow as you like. The width is
-  remembered.
-- It follows the browser window when you move or resize it, and snaps back if
-  dragged away.
-- If there's no room beside the browser window, or the browser window is
-  maximized, the browser window shrinks to make room. Closing the dock gives
-  the space back.
-- The toolbar button and Alt+Shift+T toggle the dock for the current window.
-  By default every browser window gets one; you can turn that off.
-- Minimizing or going full screen hides the dock along with the window.
-
-The docked window is a separate Chrome window with its own title bar, so it
-looks a little less built in than the side panel. On Windows, the invisible
-resize borders Chrome windows have can leave a small gap between the two
-windows.
-
 ## Looking native
 
 The panel uses Chrome's own Material 3 colors, its system font at 13px, its
@@ -92,7 +68,6 @@ There is no build step. The extension is plain ES modules.
 ```
 src/
   background.js      service worker: owns the tree and keeps the tab strip in sync
-  dock.js            docked window mode: a narrow window attached to each browser window
   tree.js            pure tree logic (planning moves, inferring parents, ...)
   settings.js        defaults and storage
   theme.css          Chrome-matching colors and type, shared by all pages
@@ -101,13 +76,12 @@ src/
 test/
   tree.test.js       unit tests for tree.js
   e2e/run.js         loads the extension into Chromium and drives real tabs
-  e2e/dock.js        the same for docked window mode
 tools/make-icons.py  regenerates icons/
 ```
 
 ```sh
 npm test                    # unit tests
-npm run test:e2e            # end-to-end (both files), needs Playwright and Chromium
+npm run test:e2e            # end-to-end, needs Playwright and Chromium
 node test/e2e/run.js shots/ # also saves light and dark screenshots
 ```
 
