@@ -1,10 +1,37 @@
 # Tree of Tabs
 
-Tree style tabs for Chrome, modeled on Firefox's
-[Tree Style Tab](https://github.com/piroor/treestyletab). Your tabs show as a
-tree in Chrome's own side panel, styled to match the browser.
+See your tabs as a tree in Chrome's side panel. Tabs you open from a page nest
+under it, so you can always tell where a tab came from and which tabs belong
+together. Drag tabs to reorganize them, and collapse the trees you're not using.
+It works like Firefox's [Tree Style Tab](https://github.com/piroor/treestyletab),
+and looks like part of Chrome.
 
-Built with [Claude Code](https://claude.com/claude-code).
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/screenshot-dark.png">
+    <img src="docs/screenshot-light.png" width="320" alt="The Tree of Tabs side panel: tabs nested under the tabs they were opened from, with guide lines, a tab group and a collapsed tree">
+  </picture>
+</p>
+
+Free and open source. Built with [Claude Code](https://claude.com/claude-code).
+
+## Install
+
+Tree of Tabs is coming to the Chrome Web Store. Until then, you can install it
+from this repository:
+
+1. Download `tree-of-tabs-v1.0.0.zip` from the
+   [latest release](https://github.com/lawand-dot-io/tree-of-tabs/releases/latest)
+   and unzip it.
+2. Open `chrome://extensions` and turn on **Developer mode**.
+3. Click **Load unpacked** and pick the unzipped folder.
+
+Then click the Tree of Tabs button in the toolbar (pin it from the puzzle menu
+first), or press Alt+Shift+T (Option+Shift+T on a Mac), to open the tree. Needs
+Chrome 116 or newer.
+
+Found a bug? [Report it](https://github.com/lawand-dot-io/tree-of-tabs/issues).
+Have an idea? [Suggest a feature](https://github.com/lawand-dot-io/tree-of-tabs/discussions/categories/feature-requests).
 
 ## Features
 
@@ -64,7 +91,7 @@ Built with [Claude Code](https://claude.com/claude-code).
   extensions reopen the side panel by themselves
   ([Chromium issue 578117954](https://issues.chromium.org/issues/578117954)),
   so after full screen you bring it back with the toolbar button or Alt+Shift+T.
-- Thin guide lines run down from each parent, so you can see which tabs
+- **Guide lines**: thin lines run down from each parent, so you can see which tabs
   belong to it, even several levels deep. You can hide them in Settings.
 - **Split views** (two tabs side by side) show as one row with both halves,
   each with its own icon, title and close button. The half in focus is
@@ -73,8 +100,8 @@ Built with [Claude Code](https://claude.com/claude-code).
   half leaves the other in its place. Tree of Tabs never moves the halves
   themselves, since that would end the split view in Chrome; it moves the tabs
   around them instead.
-- Pinned tabs show as a row of icons at the top, tab group colors show as a
-  bar on each tab, and a spinner shows while a page loads.
+- **Tab groups** show as a colored line along the group's tabs, and pinned
+  tabs as a row of icons at the top. A spinner shows while a page loads.
 
 ## Looking native
 
@@ -89,18 +116,16 @@ For the classic vertical tabs layout, put the side panel on the left: open
 `chrome://settings/appearance` and set **Side panel position** to
 **Show on left**.
 
-## Install (developer mode)
+## Privacy
 
-1. Open `chrome://extensions` and turn on **Developer mode**.
-2. Click **Load unpacked** and pick this folder.
-3. Click the toolbar button (pin it from the puzzle menu) or press Alt+Shift+T
-   to open the tree.
-
-Needs Chrome 116 or newer.
+Tree of Tabs never sends your tabs or browsing anywhere. It has no analytics,
+no accounts and no servers. See the [privacy policy](PRIVACY.md).
 
 ## Development
 
-There is no build step. The extension is plain ES modules.
+There is no build step. The extension is plain ES modules: to try a change, load
+this folder itself with **Load unpacked**, and reload it on `chrome://extensions`
+after editing.
 
 ```
 src/
@@ -114,6 +139,8 @@ test/
   tree.test.js       unit tests for tree.js
   e2e/run.js         loads the extension into Chromium and drives real tabs
 CHROMEWEBSTORE.md    everything for the Chrome Web Store listing and how to package
+PRIVACY.md           the privacy policy the store listing links to
+docs/                README screenshots and the repository's social preview
 tools/make-icons.mjs regenerates icons/ (needs Playwright)
 tools/chrome-devtools-mcp.sh  starts the Chrome DevTools MCP server (see below)
 ```
@@ -123,6 +150,10 @@ npm test                    # unit tests
 npm run test:e2e            # end-to-end, needs Playwright and Chromium
 node test/e2e/run.js shots/ # also saves light and dark screenshots
 ```
+
+GitHub runs both test suites on every push and pull request
+(`.github/workflows/test.yml`). Pushing a version tag such as `v1.0.1` builds the
+store ZIP and publishes it as a GitHub release (`.github/workflows/release.yml`).
 
 ### Chrome DevTools MCP server
 
