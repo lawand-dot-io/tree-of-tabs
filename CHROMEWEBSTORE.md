@@ -7,7 +7,7 @@ field from here.
 
 ## Still needed before submitting
 
-- [ ] Publisher name and contact email (see [Developer Info](#developer-info))
+- [ ] Decide whether to declare yourself a trader under EU rules (see [Developer Info](#developer-info))
 - [ ] At least one screenshot (see [Graphics & Assets](#graphics--assets))
 - [ ] Host the privacy policy below at a public URL and put the link in the dashboard
 - [ ] Choose visibility (public or unlisted)
@@ -188,7 +188,7 @@ Changes to this policy
 If Tab Tree's data practices change, this policy will be updated and the date above changed before the new version is published.
 
 Contact
-[contact email or support page]
+support@lawand.io
 ```
 
 ## Distribution
@@ -199,10 +199,14 @@ Contact
 
 ## Developer Info
 
-**Publisher Name**: to fill in
+**Publisher Name**: Lawand
 
-**Contact Email**: to fill in. It is shown publicly, and Google sends policy notices
-to it, so use an address that is checked.
+**Contact Email**: support@lawand.io (shown publicly; Google also sends policy
+notices to it)
+
+**Trader status**: to decide. The dashboard asks whether you are a trader under EU
+rules. If you declare yes, your address and contact details are shown publicly on
+the listing.
 
 **Support URL**: https://github.com/lawand-dot-io/chrome-tree-style-tab/issues
 

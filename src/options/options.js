@@ -52,6 +52,6 @@ for (const field of fields) {
 }
 updateDisabledRows();
 
-// The apps mentioned at the bottom are Mac apps, so the line only shows on a Mac.
+// Taskbar, mentioned at the bottom, is a Mac app, so only Macs show that sentence.
 const { os } = await chrome.runtime.getPlatformInfo();
 document.getElementById('mac-apps').hidden = os !== 'mac';
