@@ -235,6 +235,8 @@ zip -r tab-tree-v0.1.0.zip manifest.json icons src -x "*.DS_Store"
   panel by themselves; the user reopens it with the toolbar button or shortcut
   (reported as Chromium issue 578117954). The first time, the panel explains this
   and lets the user choose whether to hide it.
+- For the same reason, a new window starts without the tree; the user opens it
+  with the toolbar button or shortcut (reported as Chromium issue 578112289).
 - Requires Chrome 116 or newer.
 - Web history disclosure: open tabs' addresses are only handled on the device, so
   "Web history" is answered No above. If a reviewer counts storing tab addresses

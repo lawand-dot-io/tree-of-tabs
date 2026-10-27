@@ -143,6 +143,10 @@ the one before it. Moves the worker makes itself are recorded, so their
 
 ## Limitations
 
+- Chrome's side panel belongs to one window, and extensions can only open it
+  when you click or press a shortcut. So a new window starts without the tree;
+  open it with the toolbar button or Alt+Shift+T
+  ([Chromium issue 578112289](https://issues.chromium.org/issues/578112289)).
 - Chrome's horizontal tab strip can't be hidden by an extension.
 - Collapsing a tree only hides tabs in the panel. Chrome has no API for
   hiding tabs in the tab strip.
