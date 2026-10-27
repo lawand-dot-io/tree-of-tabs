@@ -173,6 +173,19 @@ try {
     await settle();
   });
 
+  await check('the buttons at the top collapse and expand every tree', async () => {
+    const collapsedIds = async () => (await worker.evaluate(() => chrome.storage.session.get('tree'))).tree.collapsed;
+    assert.ok(await panel.locator('#expand-all').isDisabled(), 'nothing to expand yet');
+    await panel.click('#collapse-all');
+    await settle();
+    assert.ok((await collapsedIds()).length > 0, 'trees collapsed');
+    assert.ok(await panel.locator('#collapse-all').isDisabled(), 'nothing left to collapse');
+    await panel.click('#expand-all');
+    await settle();
+    assert.deepEqual(await collapsedIds(), []);
+    assert.ok(await panel.locator('#expand-all').isDisabled());
+  });
+
   await check('turning collapsing off expands trees and removes the collapse controls', async () => {
     const collapsedIds = async () => (await worker.evaluate(() => chrome.storage.session.get('tree'))).tree.collapsed;
     const parentRow = panel.locator('.tab', { hasText: 'Page A' }).first();
@@ -186,6 +199,7 @@ try {
     const titles = await panel.$$eval('.tab .title', (els) => els.map((e) => e.textContent));
     assert.ok(titles.includes('Page A-child-child'), 'hidden tabs are shown again');
     assert.equal(await panel.locator('.twisty:visible').count(), 0, 'no arrows');
+    assert.equal(await panel.locator('#top-bar').isVisible(), false, 'no buttons, and no empty bar');
 
     await parentRow.click({ button: 'right' });
     const labels = await panel.$$eval('.menu-item', (items) => items.map((item) => item.textContent));

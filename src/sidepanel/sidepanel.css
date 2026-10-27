@@ -26,14 +26,25 @@ body {
   flex-direction: column;
 }
 
-/* --- Pinned tabs ------------------------------------------------------------ */
+/* --- Top bar: pinned tabs, then the collapse and expand buttons -------------- */
 
-.pinned {
+.top-bar {
   display: flex;
-  flex-wrap: wrap;
+  align-items: flex-start;
   gap: 2px;
   padding: 6px var(--tree-padding);
   border-bottom: 1px solid var(--divider);
+}
+
+.top-bar[hidden] {
+  display: none;
+}
+
+.pinned {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
 }
 
 .pinned:empty {
@@ -77,6 +88,40 @@ body {
   height: 6px;
   border-radius: 50%;
   background: var(--accent);
+}
+
+.tree-actions {
+  display: flex;
+  gap: 2px;
+  margin-inline-start: auto;
+}
+
+.no-collapsing .tree-actions {
+  display: none;
+}
+
+.tool-button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--text-secondary);
+}
+
+.tool-button:hover:not(:disabled) {
+  background: var(--hover);
+}
+
+.tool-button:active:not(:disabled) {
+  background: var(--pressed);
+}
+
+.tool-button:disabled {
+  color: var(--text-disabled);
 }
 
 /* --- Tree ------------------------------------------------------------------- */

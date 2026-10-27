@@ -8,7 +8,13 @@
     <link rel="stylesheet" href="sidepanel.css" />
   </head>
   <body>
-    <div id="pinned" class="pinned" role="list" aria-label="Pinned tabs"></div>
+    <div id="top-bar" class="top-bar">
+      <div id="pinned" class="pinned" role="list" aria-label="Pinned tabs"></div>
+      <div id="tree-actions" class="tree-actions">
+        <button id="collapse-all" class="tool-button" title="Collapse all" aria-label="Collapse all"></button>
+        <button id="expand-all" class="tool-button" title="Expand all" aria-label="Expand all"></button>
+      </div>
+    </div>
     <div id="scroller" class="scroller">
       <div id="tree" class="tree" role="tree" aria-label="Tabs"></div>
       <div id="new-tab" class="new-tab" role="button" tabindex="0" title="New tab&#10;Middle-click: new tab under the current tab">
