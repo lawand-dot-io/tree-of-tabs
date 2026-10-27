@@ -113,14 +113,15 @@ body {
 }
 
 /* A thin gap between rows, without a dead zone for drag and drop. In child
-   rows the highlight starts 4.5px after the last guide line, so it covers
-   the arrow, icon, title and buttons but never the lines to its left. */
+   rows the highlight starts at the guide line right next to the tab (its
+   parent's), which becomes its edge, as a group's colored line does. The
+   lines further left stay outside it. */
 .tab::after {
   content: '';
   position: absolute;
   inset: 1px 0;
   inset-inline-start: calc(
-    min(var(--depth), 1) * (var(--row-start) + 12px + (var(--depth) - 1) * var(--indent))
+    min(var(--depth), 1) * (var(--row-start) + 6.5px + (var(--depth) - 1) * var(--indent))
   );
   border-radius: 8px;
   z-index: -1;
@@ -191,13 +192,6 @@ body {
 
 .tab.group-first.group-last::before {
   border-radius: 2px;
-}
-
-/* When the group's line is right next to a tab (no guide lines between
-   them), the tab's highlight starts at the line, so the line becomes its
-   colored edge, as it is for top-level tabs. */
-.tab.group-adjacent::after {
-  inset-inline-start: var(--group-x);
 }
 
 .twisty {

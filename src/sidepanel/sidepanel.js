@@ -221,7 +221,6 @@ function updateRow(el, tab, row) {
   }
   el.classList.toggle('group-first', !!group && row.groupFirst);
   el.classList.toggle('group-last', !!group && row.groupLast);
-  el.classList.toggle('group-adjacent', !!group && row.depth === row.groupLevel);
 }
 
 function renderPinned(pinnedTabs) {
