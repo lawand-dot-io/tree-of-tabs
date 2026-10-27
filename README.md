@@ -84,6 +84,7 @@ test/
   tree.test.js       unit tests for tree.js
   e2e/run.js         loads the extension into Chromium and drives real tabs
 tools/make-icons.py  regenerates icons/
+tools/chrome-devtools-mcp.sh  starts the Chrome DevTools MCP server (see below)
 ```
 
 ```sh
@@ -91,6 +92,22 @@ npm test                    # unit tests
 npm run test:e2e            # end-to-end, needs Playwright and Chromium
 node test/e2e/run.js shots/ # also saves light and dark screenshots
 ```
+
+### Chrome DevTools MCP server
+
+`.mcp.json` registers the [Chrome DevTools MCP server](https://github.com/ChromeDevTools/chrome-devtools-mcp)
+with its extension tools, as Chrome's "Build with AI" docs suggest, so Claude
+Code can install, reload and inspect the extension in a real browser.
+`tools/chrome-devtools-mcp.sh` picks how to run it:
+
+- On your computer it connects to your running Chrome (`--autoConnect`).
+  Turn on remote debugging at `chrome://inspect/#remote-debugging` first
+  (Chrome 144+).
+- In a Claude Code cloud session it starts the preinstalled Chromium headless.
+
+Claude Code asks you to approve project MCP servers the first time it starts
+in this folder. The server sends Google usage statistics unless you add
+`--no-usage-statistics` to the script.
 
 ### How it works
 
