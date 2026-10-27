@@ -627,6 +627,57 @@ try {
     await settle();
   });
 
+  await check('when one half of a nested split view closes, the other keeps its place', async () => {
+    const [parentPage, windowId] = await Promise.all([
+      context.waitForEvent('page'),
+      worker.evaluate(async (url) => (await chrome.windows.create({ url })).id, `${base}/Nest parent`),
+    ]);
+    await parentPage.waitForLoadState();
+    const leftPage = await openFrom(parentPage, 'Nest left', { middle: true });
+    await openFrom(parentPage, 'Nest right', { middle: true });
+    await settle();
+    const [parent, left, right] = [await idOf('Page Nest parent'), await idOf('Page Nest left'), await idOf('Page Nest right')];
+    // As in the split view test, the worker is told the two children form a
+    // split view. `gone` hides a tab, as Chrome does once it starts closing.
+    await worker.evaluate(
+      ([left, right]) => {
+        const query = chrome.tabs.query.bind(chrome.tabs);
+        const get = chrome.tabs.get.bind(chrome.tabs);
+        self.unsimulate = () => Object.assign(chrome.tabs, { query, get });
+        self.gone = new Set();
+        const paired = () => ![left, right].some((id) => self.gone.has(id));
+        const patch = (tab) => tab && Object.assign(tab, { splitViewId: paired() && [left, right].includes(tab.id) ? 98 : -1 });
+        chrome.tabs.query = async (q) => (await query(q)).filter((t) => !self.gone.has(t.id)).map(patch);
+        chrome.tabs.get = async (id) => patch(await get(id));
+      },
+      [left, right],
+    );
+    const parents = async () => new Map((await worker.evaluate(() => chrome.storage.session.get('tree'))).tree.parents);
+    const nudge = () => panel.evaluate((id) => chrome.runtime.sendMessage({ type: 'set-collapsed', tabId: id, collapsed: false }), parent);
+    await nudge();
+    await settle();
+    assert.equal((await parents()).get(right), left, 'joined');
+    await openFrom(leftPage, 'Nest kid', { middle: true });
+    await settle();
+    const kid = await idOf('Page Nest kid');
+    assert.equal((await parents()).get(kid), left);
+
+    // The left half closes. The worker first notices the split view ended
+    // without it, and only then hears that it closed.
+    await worker.evaluate((id) => self.gone.add(id), left);
+    await nudge();
+    await settle();
+    await worker.evaluate((id) => chrome.tabs.remove(id), left);
+    await settle();
+    const after = await parents();
+    assert.equal(after.get(right), parent, 'the right half stays a child of the parent');
+    assert.equal(after.get(kid), right, "and takes over the split view's children");
+
+    await worker.evaluate(() => self.unsimulate());
+    await worker.evaluate((id) => chrome.windows.remove(id), windowId);
+    await settle();
+  });
+
   await check('links on the settings page open as its children', async () => {
     const optionsUrl = `chrome-extension://${extensionId}/src/options/options.html`;
     const [options] = await Promise.all([

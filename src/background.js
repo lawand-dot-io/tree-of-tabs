@@ -81,7 +81,9 @@ function itemOf(id) {
 /**
  * Records the window's split views and keeps each one a single item (see
  * joinSplits). When one ends, its partner becomes a tab of its own next to
- * the head, which needs the window laid out again (done in commit).
+ * the head, which needs the window laid out again (done in commit). If the
+ * head is gone (closed, or moved to another window), the partner takes its
+ * place instead.
  */
 function joinSplitViews(windowId, tabs, order) {
   const byId = new Map(tabs.map((t) => [t.id, t]));
@@ -90,15 +92,25 @@ function joinSplitViews(windowId, tabs, order) {
   for (const [head, partner] of state.splits) {
     if ((!byId.has(head) && !byId.has(partner)) || paired.get(head) === partner) continue;
     state.splits.delete(head);
-    if (byId.has(partner) && state.parents.has(partner)) {
-      state.parents.set(partner, byId.has(head) ? state.parents.get(head) ?? null : null);
+    if (!byId.has(partner) || !state.parents.has(partner)) continue;
+    if (byId.has(head)) {
+      state.parents.set(partner, state.parents.get(head) ?? null);
       needsLayout.add(windowId);
+    } else {
+      takeOver(partner, head);
     }
   }
   for (const [head, partner] of pairs) state.splits.set(head, partner);
   for (const [id, parent] of joinSplits(state.parents, pairs)) {
     if (state.parents.has(id)) state.parents.set(id, parent);
   }
+}
+
+/** `tabId` takes the place of `oldId` in the tree, with its children and collapsed state. */
+function takeOver(tabId, oldId) {
+  state.parents.set(tabId, state.parents.get(oldId) ?? null);
+  for (const [id, parent] of state.parents) if (parent === oldId && id !== tabId) state.parents.set(id, tabId);
+  if (state.collapsed.delete(oldId)) state.collapsed.add(tabId);
 }
 
 /**
@@ -434,10 +446,8 @@ async function onRemoved(tabId, { windowId, isWindowClosing }, removedAt) {
   }
   if (partner !== undefined && state.parents.has(partner)) {
     // One half of a split view closed: the other half carries on as the
-    // item, with its place and its children. Nothing else closes with it.
-    state.parents.set(partner, state.parents.get(tabId) ?? null);
-    for (const [id, parent] of state.parents) if (parent === tabId) state.parents.set(id, partner);
-    if (state.collapsed.delete(tabId)) state.collapsed.add(partner);
+    // item. Nothing else closes with it.
+    takeOver(partner, tabId);
     state.parents.delete(tabId);
     return commit(windowId);
   }
