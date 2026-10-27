@@ -38,7 +38,10 @@ tree in Chrome's own side panel, styled to match the browser.
   the restored tabs by URL.
 - **Full screen**: the panel closes when its window goes full screen, for
   example for a video. Chrome only lets extensions open the side panel from a
-  click or shortcut, so reopen it with the toolbar button or Alt+Shift+T.
+  click or shortcut ([Chromium issue 578117954](https://issues.chromium.org/issues/578117954)),
+  so it can't come back by itself. Instead the toolbar button gets a blue dot
+  when you leave full screen; click it (or press Alt+Shift+T) to bring the
+  tree back. A panel you closed yourself leaves no dot.
 - Pinned tabs show as a row of icons at the top, tab group colors show as a
   bar on each tab, and a spinner shows while a page loads.
 

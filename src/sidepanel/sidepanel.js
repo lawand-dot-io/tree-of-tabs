@@ -794,11 +794,16 @@ async function main() {
   // Chrome keeps showing the side panel next to full screen videos and
   // pages, so close it when the window goes full screen (which resizes the
   // panel). Chrome only lets the panel open from a click or shortcut, so it
-  // stays closed until the user opens it again.
+  // can't come back by itself: the worker marks the toolbar button instead,
+  // and opening the panel clears the mark.
   if (!forced) {
+    send({ type: 'panel-opened', windowId });
     addEventListener('resize', async () => {
       const win = await chrome.windows.get(windowId).catch(() => null);
-      if (win?.state === 'fullscreen') window.close();
+      if (win?.state !== 'fullscreen') return;
+      const delivered = send({ type: 'panel-closed-for-fullscreen', windowId });
+      await Promise.race([delivered, new Promise((resolve) => setTimeout(resolve, 500))]);
+      window.close();
     });
   }
   await refresh();

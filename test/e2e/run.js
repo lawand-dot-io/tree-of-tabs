@@ -287,10 +287,12 @@ try {
     // Here the panel runs as a tab without ?windowId=, like the real side
     // panel, so it watches its own window.
     const url = panelUrl.replace(/\?.*/, '');
-    const [own] = await Promise.all([
-      context.waitForEvent('page'),
-      worker.evaluate((url) => chrome.windows.create({ url: [url, 'about:blank'], width: 900, height: 600 }), url),
-    ]);
+    await worker.evaluate((url) => chrome.windows.create({ url: [url, 'about:blank'], width: 900, height: 600 }), url);
+    let own;
+    for (let i = 0; i < 50 && !own; i++) {
+      own = context.pages().find((p) => p.url() === url);
+      if (!own) await new Promise((resolve) => setTimeout(resolve, 100));
+    }
     await own.waitForLoadState();
     const windowId = await worker.evaluate(async (url) => (await chrome.tabs.query({ url }))[0].windowId, url);
     // Playwright pins the page size, so the page gets no real resize events
@@ -302,6 +304,47 @@ try {
     assert.equal(own.isClosed(), false, 'an ordinary resize keeps the panel open');
     await worker.evaluate((id) => chrome.windows.update(id, { state: 'fullscreen' }), windowId);
     await Promise.all([own.waitForEvent('close', { timeout: 5000 }), resized().catch(() => {})]);
+  });
+
+  await check('after full screen the toolbar button is marked until the panel opens again', async () => {
+    const url = panelUrl.replace(/\?.*/, '');
+    const windowId = await worker.evaluate(
+      async () => (await chrome.windows.getAll()).find((w) => w.state === 'fullscreen').id,
+    );
+    const badge = () =>
+      worker.evaluate(async (windowId) => {
+        const [tab] = await chrome.tabs.query({ windowId, active: true });
+        return chrome.action.getBadgeText({ tabId: tab.id });
+      }, windowId);
+    const waitForBadge = async (text, step) => {
+      for (let i = 0; i < 40 && (await badge()) !== text; i++) await new Promise((r) => setTimeout(r, 100));
+      assert.equal(await badge(), text, step);
+    };
+    await waitForBadge('•', 'marked after full screen');
+
+    // The mark follows the active tab within the window.
+    await worker.evaluate(async (windowId) => {
+      await chrome.windows.update(windowId, { state: 'normal' });
+      await chrome.tabs.create({ windowId, url: 'about:blank#other' });
+    }, windowId);
+    await waitForBadge('•', 'mark follows the active tab');
+
+    // Opening the panel again clears it.
+    const [reopened] = await Promise.all([
+      context.waitForEvent('page'),
+      worker.evaluate(({ windowId, url }) => chrome.tabs.create({ windowId, url }), { windowId, url }),
+    ]);
+    await reopened.waitForLoadState();
+    await worker.evaluate(async (windowId) => {
+      const [, other] = await chrome.tabs.query({ windowId });
+      await chrome.tabs.update(other.id, { active: true });
+    }, windowId);
+    await waitForBadge('', 'cleared when the panel opens');
+
+    // Closing the panel by hand leaves no mark.
+    await reopened.close();
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    assert.equal(await badge(), '');
     await worker.evaluate((id) => chrome.windows.remove(id), windowId);
   });
 
