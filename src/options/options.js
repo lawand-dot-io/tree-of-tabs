@@ -56,17 +56,3 @@ updateDisabledRows();
 const { os } = await chrome.runtime.getPlatformInfo();
 document.getElementById('mac-apps').hidden = os !== 'mac';
 
-// Chrome doesn't report tabs opened from extension pages as opened by a page,
-// so links here wouldn't nest under this tab. Open them as its children
-// through the worker instead: in front on a click, in the background on a
-// middle or Ctrl/Cmd click, like ordinary links.
-async function openAsChild(event) {
-  const link = event.target.closest('a[href]');
-  if (!link || event.shiftKey || event.button > 1) return;
-  event.preventDefault();
-  const background = event.button === 1 || event.ctrlKey || event.metaKey;
-  const tab = await chrome.tabs.getCurrent();
-  chrome.runtime.sendMessage({ type: 'new-child-tab', tabId: tab.id, url: link.href, active: !background });
-}
-document.addEventListener('click', openAsChild);
-document.addEventListener('auxclick', openAsChild);

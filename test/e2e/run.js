@@ -296,8 +296,10 @@ try {
     assert.ok(options.id, 'the options page opened');
     assert.equal(options.parent, null, 'the options page is not a child');
     const created = await worker.evaluate(async (windowId) => {
-      const [active] = await chrome.tabs.query({ windowId, active: true });
-      const tab = await chrome.tabs.create({ windowId, url: 'about:blank', openerTabId: active.id, active: false });
+      // An extension creating a tab "from" a web page (extension pages as
+      // openers are trusted, see the settings page links test).
+      const [web] = (await chrome.tabs.query({ windowId })).filter((t) => t.url.startsWith('http'));
+      const tab = await chrome.tabs.create({ windowId, url: 'about:blank', openerTabId: web.id, active: false });
       await new Promise((resolve) => setTimeout(resolve, 400));
       const { tree } = await chrome.storage.session.get('tree');
       return { id: tab.id, parent: new Map(tree.parents).get(tab.id) };
@@ -428,16 +430,17 @@ try {
     }, base);
     const optionsId = await worker.evaluate(async (url) => (await chrome.tabs.query({ url }))[0].id, optionsUrl);
     await options.click('.about a >> nth=0');
+    // People can only click links on the tab in front.
+    await options.bringToFront();
     await options.click('.about a >> nth=1', { button: 'middle' });
     await new Promise((resolve) => setTimeout(resolve, 800));
     const opened = await worker.evaluate(async (optionsId) => {
       const { tree } = await chrome.storage.session.get('tree');
       const parents = new Map(tree.parents);
       const tabs = (await chrome.tabs.query({})).filter((t) => (t.pendingUrl || t.url).includes('Settings%20link'));
-      return tabs.map((t) => ({ child: parents.get(t.id) === optionsId, active: t.active }))
-        .sort((a, b) => Number(b.active) - Number(a.active));
+      return tabs.map((t) => parents.get(t.id) === optionsId);
     }, optionsId);
-    assert.deepEqual(opened, [{ child: true, active: true }, { child: true, active: false }]);
+    assert.deepEqual(opened, [true, true], 'a click and a middle click both nest under the settings page');
     await worker.evaluate(async (optionsId) => {
       const tabs = (await chrome.tabs.query({})).filter((t) => (t.pendingUrl || t.url).includes('Settings%20link'));
       await chrome.tabs.remove([optionsId, ...tabs.map((t) => t.id)]);

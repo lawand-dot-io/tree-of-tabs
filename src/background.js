@@ -27,10 +27,11 @@ const pendingPlacements = new Map(); // tabId -> { targetId, position }
 // Tabs we are moving to another window together with their subtrees.
 const crossWindowMoves = new Map(); // tabId -> placement | null
 // Tabs that a page opened (a link, a middle click, a script), with the tab
-// whose page opened them. Only these become children of another tab. A
-// tab's openerTabId is not enough: Chrome also sets it, to whatever tab is
-// active, for tabs opened from its own interface (an options page, a
-// bookmark), and for middle-clicked links it can name the wrong tab.
+// whose page opened them. These become children of that tab. A tab's
+// openerTabId is not enough in general: Chrome also sets it, to whatever tab
+// is active, for tabs opened from its own interface (an options page, a
+// bookmark). Chrome doesn't report links opened from extension pages,
+// though, so for those the opener is used (see onCreated).
 const openedFrom = new Map(); // tabId -> source tabId
 
 // Blank new tabs (Ctrl+T), for the "Open new tabs as children" setting.
@@ -285,7 +286,7 @@ async function onCreated(createdTab, latest) {
   if (state.parents.has(createdTab.id)) return; // Already picked up during init.
   state.parents.set(createdTab.id, null);
   const tab = { ...createdTab, ...(await latest) };
-  const { order } = await windowTabs(tab.windowId);
+  const { tabs, order } = await windowTabs(tab.windowId);
   if (!order.includes(tab.id)) return commit(tab.windowId); // Pinned, or already gone.
 
   let placement = pendingPlacements.get(tab.id);
@@ -293,8 +294,13 @@ async function onCreated(createdTab, latest) {
   const source = openedFrom.get(tab.id);
   openedFrom.delete(tab.id);
   const opener = tab.openerTabId;
+  const openerIsExtensionPage = tabs.find((t) => t.id === opener)?.url?.startsWith('chrome-extension://');
   if (!placement && source !== undefined && order.includes(source)) {
     placement = childPlacement(source);
+  } else if (!placement && openerIsExtensionPage && !isNewTabPage(tab) && order.includes(opener)) {
+    // A link on an extension page, which Chrome doesn't report as opened by
+    // a page. Tabs opened in other ways while one is active nest here too.
+    placement = childPlacement(opener);
   } else if (!placement && settings.newTabAsChild && isNewTabPage(tab) && order.includes(opener)) {
     // Ctrl+T with "Open new tabs as children" on.
     placement = childPlacement(opener);
@@ -524,7 +530,7 @@ async function setAllCollapsed(windowId, collapsed) {
   await commit(windowId);
 }
 
-async function newChildTab(parentId, url, active = true) {
+async function newChildTab(parentId, url) {
   const { tab, order, descendants } = await subtreeOf(parentId);
   const pinnedCount = (await chrome.tabs.query({ windowId: tab.windowId, pinned: true })).length;
   const last = descendants.length ? descendants[descendants.length - 1] : parentId;
@@ -532,7 +538,7 @@ async function newChildTab(parentId, url, active = true) {
     windowId: tab.windowId,
     index: pinnedCount + order.indexOf(last) + 1,
     url,
-    active,
+    active: true,
   });
   pendingPlacements.set(created.id, childPlacement(parentId));
 }
@@ -604,7 +610,7 @@ async function handleMessage(message) {
     case 'move-to-new-window':
       return moveTreesToWindow(message.ids, null, { targetId: null, position: 'end' });
     case 'new-child-tab':
-      return newChildTab(message.tabId, message.url, message.active ?? true);
+      return newChildTab(message.tabId, message.url);
     case 'open-url':
       return openUrlAt(message);
     case 'duplicate':
@@ -628,8 +634,9 @@ async function handleMessage(message) {
 
 const on = (event, handler) => event.addListener((...args) => enqueue(() => handler(...args)));
 chrome.tabs.onCreated.addListener((tab) => {
-  // The opener only matters for Ctrl+T tabs with "Open new tabs as children"
-  // on. onCreated can fire before Chrome sets openerTabId, so read the tab
+  // The opener matters for links on extension pages and for Ctrl+T tabs with
+  // "Open new tabs as children" on. onCreated can fire before Chrome sets
+  // openerTabId, so read the tab
   // again right away: Chrome forgets openers once tabs get moved, so waiting
   // for the queue could be too late.
   const latest = tab.openerTabId === undefined ? chrome.tabs.get(tab.id).catch(() => null) : null;
