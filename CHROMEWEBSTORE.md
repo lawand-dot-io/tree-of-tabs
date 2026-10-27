@@ -5,11 +5,6 @@
 Everything needed to fill in the Chrome Web Store Developer Dashboard. Copy each
 field from here.
 
-## Still needed before submitting
-
-- [ ] Enter the privacy policy URL (see [Privacy Policy](#privacy-policy)) in the dashboard
-- [ ] Once the listing is live: put its link in the README's Install section and in the repository's About box
-
 ## Store Listing
 
 **Extension Name**
@@ -173,11 +168,6 @@ version.
 **Contact Email**: support@lawand.io (shown publicly; Google also sends policy
 notices to it)
 
-**Trader status**: not a trader. Tree of Tabs is free, and so are the Mac apps
-the settings page mentions. Switch to trader in the dashboard once you start
-selling them (your address and contact details are then shown publicly on the
-listing).
-
 **Support URL**: https://github.com/lawand-dot-io/tree-of-tabs/issues
 
 **Homepage URL**: https://lawand.io
@@ -219,9 +209,6 @@ zip -r tree-of-tabs-v1.0.0.zip manifest.json LICENSE icons src -x "*.DS_Store"
 - For the same reason, a new window starts without the tree; the user opens it
   with the toolbar button or shortcut (reported as Chromium issue 578112289).
 - Requires Chrome 116 or newer.
-- Web history disclosure: open tabs' addresses are only handled on the device, so
-  "Web history" is answered No above. If a reviewer counts storing tab addresses
-  locally as handling web history, check that box and add the same explanation.
 
 ### Rejection History
 
