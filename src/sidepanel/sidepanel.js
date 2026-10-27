@@ -74,6 +74,7 @@ function render(pinnedTabs) {
   };
   tree.roots.forEach((id) => walk(id, 0));
   markGroupRuns();
+  markSplitPairs();
 
   renderPinned(pinnedTabs);
   renderRows();
@@ -85,6 +86,29 @@ function render(pinnedTabs) {
   }
   if (focusedId === null || !rowEls.has(focusedId)) focusedId = activeId;
   for (const [id, el] of rowEls) el.tabIndex = id === focusedId ? 0 : -1;
+}
+
+/** A tab's split view (two tabs shown side by side), or null. */
+const splitOf = (tab) => ((tab?.splitViewId ?? -1) === -1 ? null : tab.splitViewId);
+
+/**
+ * Whether the user selected this tab (Ctrl/Cmd+click or Shift+click). Chrome
+ * also marks the other half of the active split view as highlighted, but
+ * that isn't a selection: actions on the active tab shouldn't reach it.
+ */
+function isSelected(tab) {
+  if (!tab?.highlighted || tab.active) return !!tab?.highlighted;
+  const split = splitOf(tab);
+  return split === null || split !== splitOf([...tabsById.values()].find((t) => t.active));
+}
+
+/** The two halves of a split view are next to each other; join their rows. */
+function markSplitPairs() {
+  visible.forEach((row, i) => {
+    const split = splitOf(tabsById.get(row.id));
+    row.splitFirst = split !== null && splitOf(tabsById.get(visible[i + 1]?.id)) === split;
+    row.splitLast = split !== null && splitOf(tabsById.get(visible[i - 1]?.id)) === split;
+  });
 }
 
 /**
@@ -182,7 +206,11 @@ function updateRow(el, tab, row) {
   if (!tab) return;
   el.style.setProperty('--depth', row.depth);
   el.classList.toggle('active', tab.active);
-  el.classList.toggle('highlighted', tab.highlighted && !tab.active);
+  el.classList.toggle('highlighted', isSelected(tab) && !tab.active);
+  el.classList.toggle('split-first', !!row.splitFirst);
+  el.classList.toggle('split-last', !!row.splitLast);
+  // The other half of the split view you're looking at.
+  el.classList.toggle('split-partner', !tab.active && tab.highlighted && !isSelected(tab));
   el.classList.toggle('has-children', row.hasChildren);
   el.classList.toggle('collapsed', row.collapsed);
   el.classList.toggle('loading', tab.status === 'loading');
@@ -295,7 +323,7 @@ function toggleHighlighted(id) {
   const tabs = [...tabsById.values()];
   const active = tabs.find((t) => t.active);
   if (!active || id === active.id) return;
-  const selected = new Set(tabs.filter((t) => t.highlighted).map((t) => t.id));
+  const selected = new Set(tabs.filter(isSelected).map((t) => t.id));
   if (selected.has(id)) selected.delete(id);
   else selected.add(id);
   highlight(active, [...selected]);
@@ -319,8 +347,8 @@ function highlight(active, ids) {
 
 function selectedIdsFor(id) {
   const tab = tabsById.get(id);
-  const highlighted = visible.map((r) => tabsById.get(r.id)).filter((t) => t?.highlighted);
-  return tab?.highlighted && highlighted.length > 1 ? highlighted.map((t) => t.id) : [id];
+  const selected = visible.map((r) => tabsById.get(r.id)).filter(isSelected);
+  return isSelected(tab) && selected.length > 1 ? selected.map((t) => t.id) : [id];
 }
 
 function newTab() {
@@ -349,8 +377,8 @@ function onPointerDown(event) {
   if (event.shiftKey) return selectRange(id);
   // Keep a multi-selection alive so it can be dragged; activate on click.
   const tab = tabsById.get(id);
-  const multi = [...tabsById.values()].filter((t) => t.highlighted).length > 1;
-  if (!(multi && tab?.highlighted)) activate(id);
+  const multi = [...tabsById.values()].filter(isSelected).length > 1;
+  if (!(multi && isSelected(tab))) activate(id);
 }
 
 function onClick(event) {

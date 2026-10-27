@@ -130,11 +130,30 @@ body {
   z-index: -1;
 }
 
+/* The two halves of a split view share one shape, on a soft surface. */
+.tab.split-first::after,
+.tab.split-last::after {
+  background: var(--split-bg);
+}
+
+.tab.split-first::after {
+  bottom: 0;
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.tab.split-last::after {
+  top: 0;
+  border-start-start-radius: 0;
+  border-start-end-radius: 0;
+}
+
 .tab:hover::after {
   background: var(--hover);
 }
 
-.tab.highlighted::after {
+.tab.highlighted::after,
+.tab.split-partner::after {
   background: var(--selected-bg);
 }
 
