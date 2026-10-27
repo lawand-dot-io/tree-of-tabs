@@ -163,7 +163,6 @@ function tabTitle(tab) {
 function updateRow(el, tab, row) {
   if (!tab) return;
   el.style.setProperty('--depth', row.depth);
-  el.classList.toggle('root', row.depth === 0);
   el.classList.toggle('active', tab.active);
   el.classList.toggle('highlighted', tab.highlighted && !tab.active);
   el.classList.toggle('has-children', row.hasChildren);

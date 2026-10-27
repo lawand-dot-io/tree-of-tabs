@@ -61,8 +61,8 @@ Built with [Claude Code](https://claude.com/claude-code).
   extensions reopen the side panel by themselves
   ([Chromium issue 578117954](https://issues.chromium.org/issues/578117954)),
   so after full screen you bring it back with the toolbar button or Alt+Shift+T.
-- Child tabs show a short dash for each level, like an outline, so you can
-  tell at a glance how deep a tab is.
+- Thin guide lines run down from each parent, so you can see which tabs
+  belong to it, even several levels deep.
 - Pinned tabs show as a row of icons at the top, tab group colors show as a
   bar on each tab, and a spinner shows while a page loads.
 

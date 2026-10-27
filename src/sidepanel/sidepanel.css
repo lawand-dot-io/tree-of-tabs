@@ -105,26 +105,23 @@ body {
   padding-inline: calc(var(--row-start) + var(--depth) * var(--indent)) 4px;
   border-radius: 8px;
   outline-offset: -2px;
+  /* Guide lines: one per level, running down from the middle of each
+     ancestor's arrow (or its icon, with collapsing off). Rows touch, so the
+     lines join up into one line per branch. */
+  background: repeating-linear-gradient(90deg, var(--guide) 0 1px, transparent 1px var(--indent))
+    calc(var(--row-start) + 7.5px) 0 / calc(var(--depth) * var(--indent)) 100% no-repeat;
 }
 
-/* Children get a short dash for each level in their indentation, like an
-   outline, each under the middle of an ancestor's arrow. A child without
-   children gets one more dash where its own arrow would be. */
-.tab:not(.root) {
-  --dashes: var(--depth);
-  background: repeating-linear-gradient(90deg, var(--dash) 0 6px, transparent 6px var(--indent))
-    calc(var(--row-start) + 5px) 50% / calc(var(--dashes) * var(--indent)) 1px no-repeat;
-}
-
-:root:not(.no-collapsing) .tab:not(.root, .has-children) {
-  --dashes: calc(var(--depth) + 1);
-}
-
-/* A thin gap between rows, without a dead zone for drag and drop. */
+/* A thin gap between rows, without a dead zone for drag and drop. In child
+   rows the highlight starts 4.5px after the last guide line, so it covers
+   the arrow, icon, title and buttons but never the lines to its left. */
 .tab::after {
   content: '';
   position: absolute;
   inset: 1px 0;
+  inset-inline-start: calc(
+    min(var(--depth), 1) * (var(--row-start) + 12px + (var(--depth) - 1) * var(--indent))
+  );
   border-radius: 8px;
   z-index: -1;
 }
