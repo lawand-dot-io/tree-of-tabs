@@ -1,5 +1,10 @@
 :root {
   --indent: 16px;
+  /* Space before the first icon in a row. The arrow and the close button's
+     X are drawn with about 5px of empty space inside their 16px boxes, so
+     4px here leaves about 9px of visible space on each side. Without the
+     arrow, the favicon (which fills its box) needs the full 9px. */
+  --row-start: 4px;
   --row-height: 32px;
   --tree-padding: 6px;
 }
@@ -97,7 +102,7 @@ body {
   align-items: center;
   gap: 6px;
   height: var(--row-height);
-  padding-inline: calc(4px + var(--depth) * var(--indent)) 4px;
+  padding-inline: calc(var(--row-start) + var(--depth) * var(--indent)) 4px;
   border-radius: 8px;
   outline-offset: -2px;
 }
@@ -323,8 +328,12 @@ body {
 }
 
 /* Line the + up with the tab icons when there is no arrow before them. */
+:root.no-collapsing {
+  --row-start: 9px;
+}
+
 .no-collapsing .new-tab {
-  padding-inline-start: 4px;
+  padding-inline-start: var(--row-start);
 }
 
 .new-tab:hover {

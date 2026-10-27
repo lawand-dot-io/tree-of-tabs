@@ -664,8 +664,9 @@ function showTreeDropIndicator({ targetId, position, el }) {
     return;
   }
   const indent = settings.indent;
-  // Tree padding, row padding, then the twisty and its gap when shown.
-  const base = 6 + 4 + (settings.disableCollapsing ? 0 : 16 + 6);
+  // Tree padding, then the row's start padding (--row-start in the CSS) and
+  // the twisty with its gap when shown.
+  const base = 6 + (settings.disableCollapsing ? 9 : 4 + 16 + 6);
   let depth = 0;
   let top;
   const scrollerTop = scroller.getBoundingClientRect().top - scroller.scrollTop;
