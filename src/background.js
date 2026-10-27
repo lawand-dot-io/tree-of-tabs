@@ -33,8 +33,7 @@ const crossWindowMoves = new Map(); // tabId -> placement | null
 // bookmark), and for middle-clicked links it can name the wrong tab.
 const openedFrom = new Map(); // tabId -> source tabId
 
-// Ctrl+T tabs. Tabs opened from links can briefly have no URL at all, so an
-// empty URL does not count as a new tab page.
+// Blank new tabs (Ctrl+T), for the "Open new tabs as children" setting.
 const NEW_TAB_URLS = ['chrome://newtab/', 'chrome://new-tab-page/', 'chrome-search://local-ntp/local-ntp.html'];
 
 // --- Serialization -----------------------------------------------------------
@@ -111,10 +110,16 @@ async function applyOrder(windowId, desired) {
   }
 }
 
-let layoutRetryTimer = null;
+const layoutRetryTimers = new Map(); // windowId -> timer
 function retryLayoutLater(windowId) {
-  clearTimeout(layoutRetryTimer);
-  layoutRetryTimer = setTimeout(() => enqueue(() => relayout(windowId)), 300);
+  clearTimeout(layoutRetryTimers.get(windowId));
+  layoutRetryTimers.set(
+    windowId,
+    setTimeout(() => {
+      layoutRetryTimers.delete(windowId);
+      enqueue(() => relayout(windowId));
+    }, 300),
+  );
 }
 
 async function relayout(windowId) {
@@ -286,6 +291,7 @@ async function onCreated(createdTab, latest) {
   let placement = pendingPlacements.get(tab.id);
   pendingPlacements.delete(tab.id);
   const source = openedFrom.get(tab.id);
+  openedFrom.delete(tab.id);
   const opener = tab.openerTabId;
   if (!placement && source !== undefined && order.includes(source)) {
     placement = childPlacement(source);
@@ -312,8 +318,10 @@ const childPlacement = (parentId) => ({
  * order. If onCreated already placed the tab, nest it under its source now.
  */
 async function onOpenedFromPage(tabId, sourceId) {
+  // Not created yet: leave the entry for onCreated, which places it.
+  if (!state.parents.has(tabId)) return;
   openedFrom.delete(tabId);
-  if (!state.parents.has(tabId) || state.parents.get(tabId) === sourceId) return;
+  if (state.parents.get(tabId) === sourceId) return;
   const tab = await chrome.tabs.get(tabId).catch(() => null);
   if (!tab || tab.pinned) return;
   const { order } = await windowTabs(tab.windowId);
@@ -322,7 +330,20 @@ async function onOpenedFromPage(tabId, sourceId) {
   if (await applyMove(tab.windowId, [tabId], targetId, position)) await commit(tab.windowId);
 }
 
-async function onRemoved(tabId, { windowId, isWindowClosing }) {
+// When Chrome closes several tabs in one go ("Close other tabs", closing a
+// multi-selection), it reports them all at the same moment. Those are exactly
+// the tabs the user meant to close, so no extra branches close with them.
+// (Closing from the tree works out the branches itself, in closeTabs.)
+const removalTimes = [];
+function noteRemoval() {
+  const now = Date.now();
+  while (removalTimes.length && removalTimes[0] < now - 5000) removalTimes.shift();
+  removalTimes.push(now);
+  return now;
+}
+const closedWithOthers = (at) => removalTimes.filter((t) => Math.abs(t - at) <= 50).length > 1;
+
+async function onRemoved(tabId, { windowId, isWindowClosing }, removedAt) {
   if (!state.parents.has(tabId)) return;
   if (isWindowClosing) {
     // Keep the last snapshot of the window so it can be restored later.
@@ -332,7 +353,8 @@ async function onRemoved(tabId, { windowId, isWindowClosing }) {
   }
   const { order } = await windowTabs(windowId);
   const wasCollapsed = state.collapsed.has(tabId);
-  if (settings.onCloseParent === 'closeAll' || (wasCollapsed && settings.closeCollapsedTree)) {
+  const closesBranch = settings.onCloseParent === 'closeAll' || (wasCollapsed && settings.closeCollapsedTree);
+  if (closesBranch && !closedWithOthers(removedAt)) {
     const tree = buildTree([tabId, ...order], state.parents);
     const descendants = descendantsOf(tree, tabId);
     if (descendants.length) chrome.tabs.remove(descendants).catch(() => {});
@@ -618,7 +640,10 @@ chrome.webNavigation.onCreatedNavigationTarget.addListener(({ tabId, sourceTabId
   openedFrom.set(tabId, sourceTabId);
   enqueue(() => onOpenedFromPage(tabId, sourceTabId));
 });
-on(chrome.tabs.onRemoved, onRemoved);
+chrome.tabs.onRemoved.addListener((tabId, info) => {
+  const removedAt = noteRemoval();
+  enqueue(() => onRemoved(tabId, info, removedAt));
+});
 on(chrome.tabs.onMoved, onMoved);
 on(chrome.tabs.onUpdated, onUpdated);
 on(chrome.tabs.onActivated, onActivated);

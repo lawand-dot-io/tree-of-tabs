@@ -371,6 +371,50 @@ try {
     await settle();
   });
 
+  await check('closing several tabs at once closes only those, not their branches', async () => {
+    const alive = (ids) =>
+      worker.evaluate(
+        async (ids) => Promise.all(ids.map((id) => chrome.tabs.get(id).then(() => true, () => false))),
+        ids,
+      );
+    // Like Chrome's "Close other tabs" while keeping a child: its parent
+    // closes in the same moment, and the kept child must stay.
+    await worker.evaluate(() => chrome.storage.sync.set({ onCloseParent: 'closeAll' }));
+    const parentPage = await openRoot('Batch parent');
+    await openFrom(parentPage, 'Batch child');
+    await openRoot('Batch other');
+    await settle();
+    const [parent, child, other] = [
+      await idOf('Page Batch parent'),
+      await idOf('Page Batch child'),
+      await idOf('Page Batch other'),
+    ];
+    await worker.evaluate((ids) => chrome.tabs.remove(ids), [parent, other]);
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    assert.deepEqual(await alive([parent, child, other]), [false, true, false]);
+    await worker.evaluate(async (id) => {
+      await chrome.tabs.remove(id);
+      await chrome.storage.sync.remove('onCloseParent');
+    }, child);
+
+    // The same with a collapsed tree and the default settings.
+    const folded = await openRoot('Folded parent');
+    await openFrom(folded, 'Folded child');
+    await openRoot('Folded other');
+    await settle();
+    const [foldedParent, foldedChild, foldedOther] = [
+      await idOf('Page Folded parent'),
+      await idOf('Page Folded child'),
+      await idOf('Page Folded other'),
+    ];
+    await panel.evaluate((id) => chrome.runtime.sendMessage({ type: 'set-collapsed', tabId: id, collapsed: true }), foldedParent);
+    await worker.evaluate((ids) => chrome.tabs.remove(ids), [foldedParent, foldedOther]);
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    assert.deepEqual(await alive([foldedParent, foldedChild, foldedOther]), [false, true, false]);
+    await worker.evaluate((id) => chrome.tabs.remove(id), foldedChild);
+    await settle();
+  });
+
   await check('pinned tabs leave the tree and show in the pinned bar', async () => {
     await worker.evaluate(async (id) => chrome.tabs.update(id, { pinned: true }), await idOf('about:blank'));
     await settle();
@@ -583,6 +627,24 @@ try {
     const own = await openOwnPanel();
     await setState('fullscreen');
     await Promise.all([own.waitForEvent('close', { timeout: 5000 }), resize(own)]);
+  });
+
+  await check('a panel opened while already in full screen stays open when resized', async () => {
+    await setState('normal');
+    const own = await openOwnPanel();
+    // Opening a tab takes the test window out of full screen, so go full
+    // screen first and then load the panel, as if it were opened just now.
+    await setState('fullscreen');
+    await own.reload();
+    await own.waitForSelector('.tab');
+    assert.equal(await worker.evaluate((id) => chrome.windows.get(id).then((w) => w.state), fullscreenWindow), 'fullscreen');
+    await resize(own);
+    await settled();
+    assert.equal(own.isClosed(), false, 'opening it on purpose in full screen keeps it');
+    await resize(own);
+    await settled();
+    assert.equal(own.isClosed(), false, 'resizing it keeps it too');
+    await own.close();
   });
 
   await check('choosing to keep it open leaves the panel open in full screen', async () => {

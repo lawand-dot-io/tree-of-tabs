@@ -817,13 +817,22 @@ async function showShortcut() {
   if (shortcut) el.append(' or ', Object.assign(document.createElement('kbd'), { textContent: shortcut }));
 }
 
-function watchFullscreen() {
+async function watchFullscreen() {
   showShortcut();
+  const isFullscreen = async () => (await chrome.windows.get(windowId).catch(() => null))?.state === 'fullscreen';
+  // Act only when the window goes full screen. A panel the user opens, or
+  // resizes, while the window is already full screen stays open.
+  let wasFullscreen = await isFullscreen();
   addEventListener('resize', async () => {
-    const win = await chrome.windows.get(windowId).catch(() => null);
-    const fullscreen = win?.state === 'fullscreen';
-    if (!settings.fullscreenChoiceMade) showNotice(fullscreen);
-    else if (fullscreen && settings.hideInFullscreen) window.close();
+    const fullscreen = await isFullscreen();
+    const entered = fullscreen && !wasFullscreen;
+    wasFullscreen = fullscreen;
+    if (!settings.fullscreenChoiceMade) {
+      if (entered) showNotice(true);
+      else if (!fullscreen) showNotice(false);
+    } else if (entered && settings.hideInFullscreen) {
+      window.close();
+    }
   });
   const choose = async (hide) => {
     await chrome.storage.sync.set({ hideInFullscreen: hide, fullscreenChoiceMade: true });
@@ -870,7 +879,7 @@ async function main() {
     if (message?.type === 'tree-changed' && forThisWindow(message.windowId)) scheduleRefresh();
   });
 
-  if (!forced) watchFullscreen();
+  if (!forced) await watchFullscreen();
   await refresh();
 }
 

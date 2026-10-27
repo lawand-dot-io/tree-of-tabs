@@ -16,7 +16,9 @@ tree in Chrome's own side panel, styled to match the browser.
   - drop on the top or bottom edge to place it before or after as a sibling
     (dropping between a parent and its first child makes it the first child),
   - drop on the empty space below the tabs to make it a top-level tree,
-  - drop onto the pinned bar to pin, or drag a pinned tab into the tree to unpin it.
+  - drop onto the pinned bar (shown once at least one tab is pinned) to pin,
+    or drag a pinned tab into the tree to unpin it. To pin the first tab, use
+    **Pin** in the right-click menu.
 
   The whole subtree moves with the tab you drag. With several tabs selected
   (Ctrl/Cmd+click or Shift+click), they all move together. You can also drag
