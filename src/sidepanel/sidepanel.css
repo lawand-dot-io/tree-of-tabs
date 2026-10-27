@@ -179,6 +179,11 @@ body {
   visibility: visible;
 }
 
+/* With collapsing turned off there is no arrow, and no space kept for one. */
+.no-collapsing .twisty {
+  display: none;
+}
+
 .twisty:hover {
   background: var(--hover-strong);
 }
@@ -315,6 +320,11 @@ body {
   padding-inline: 24px 4px;
   border-radius: 8px;
   color: var(--text-secondary);
+}
+
+/* Line the + up with the tab icons when there is no arrow before them. */
+.no-collapsing .new-tab {
+  padding-inline-start: 4px;
 }
 
 .new-tab:hover {

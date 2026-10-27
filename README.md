@@ -25,6 +25,9 @@ tree in Chrome's own side panel, styled to match the browser.
 - **Collapse and expand** subtrees with the arrow. A collapsed tree shows how
   many tabs it hides, and it expands again when one of its hidden tabs gets
   focus (for example through Ctrl+Tab).
+- **Never collapse**: if you don't use collapsing, turn it off in Settings.
+  The arrows and the collapse menu items go away and every tree stays
+  expanded.
 - **Closing a parent** promotes its first child, like Tree Style Tab does.
   Closing a collapsed parent closes its hidden tabs too. Both are configurable.
 - **Context menu**: new child tab, reload, duplicate, pin, mute, collapse or

@@ -12,6 +12,12 @@ function write(field, value) {
   else field.value = String(value);
 }
 
+// Settings about collapsed trees don't apply while collapsing is turned off.
+function showCollapsingRows() {
+  const off = document.querySelector('[name=disableCollapsing]').checked;
+  for (const row of document.querySelectorAll('[data-needs-collapsing]')) row.hidden = off;
+}
+
 const settings = await loadSettings();
 for (const field of fields) {
   write(field, settings[field.name]);
@@ -20,5 +26,7 @@ for (const field of fields) {
     // Choosing here counts as answering the panel's first full screen question.
     if (field.name === 'hideInFullscreen') change.fullscreenChoiceMade = true;
     chrome.storage.sync.set(change);
+    showCollapsingRows();
   });
 }
+showCollapsingRows();

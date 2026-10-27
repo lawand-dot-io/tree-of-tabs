@@ -67,7 +67,7 @@ function render(pinnedTabs) {
   visible = [];
   const walk = (id, depth) => {
     const kids = tree.children.get(id);
-    const isCollapsed = kids.length > 0 && collapsed.has(id);
+    const isCollapsed = kids.length > 0 && collapsed.has(id) && !settings.disableCollapsing;
     const hidden = isCollapsed ? descendantsOf(tree, id).length : 0;
     visible.push({ id, depth, hasChildren: kids.length > 0, collapsed: isCollapsed, hidden });
     if (!isCollapsed) for (const kid of kids) walk(kid, depth + 1);
@@ -250,6 +250,7 @@ function closeTab(id) {
 }
 
 function toggleCollapsed(id) {
+  if (settings.disableCollapsing) return;
   const isCollapsed = collapsed.has(id);
   // Update right away so the click feels instant; the worker confirms.
   if (isCollapsed) collapsed.delete(id);
@@ -429,7 +430,7 @@ treeEl.addEventListener('keydown', (event) => {
     case 'ArrowLeft': {
       handled();
       const parent = tree.parentOf.get(id);
-      if (row.hasChildren && !row.collapsed) toggleCollapsed(id);
+      if (row.hasChildren && !row.collapsed && !settings.disableCollapsing) toggleCollapsed(id);
       else if (parent !== null) focusRow(parent);
       break;
     }
@@ -484,10 +485,9 @@ function tabMenuItems(id) {
     {
       label: row?.collapsed ? 'Expand tree' : 'Collapse tree',
       action: () => toggleCollapsed(id),
-      hidden: !hasChildren,
+      hidden: !hasChildren || settings.disableCollapsing,
     },
-    { label: 'Collapse all', action: () => send({ type: 'set-all-collapsed', windowId, collapsed: true }) },
-    { label: 'Expand all', action: () => send({ type: 'set-all-collapsed', windowId, collapsed: false }) },
+    ...collapseAllItems(),
     {
       label: 'Indent',
       action: () => send({ type: 'indent', tabId: id }),
@@ -514,12 +514,19 @@ function tabMenuItems(id) {
   ];
 }
 
+function collapseAllItems() {
+  const hidden = settings.disableCollapsing;
+  return [
+    { label: 'Collapse all', action: () => send({ type: 'set-all-collapsed', windowId, collapsed: true }), hidden },
+    { label: 'Expand all', action: () => send({ type: 'set-all-collapsed', windowId, collapsed: false }), hidden },
+  ];
+}
+
 function windowMenuItems() {
   return [
     { label: 'New tab', action: newTab },
     'separator',
-    { label: 'Collapse all', action: () => send({ type: 'set-all-collapsed', windowId, collapsed: true }) },
-    { label: 'Expand all', action: () => send({ type: 'set-all-collapsed', windowId, collapsed: false }) },
+    ...collapseAllItems(),
     'separator',
     { label: 'Settings', action: () => chrome.runtime.openOptionsPage() },
   ];
@@ -657,7 +664,8 @@ function showTreeDropIndicator({ targetId, position, el }) {
     return;
   }
   const indent = settings.indent;
-  const base = 6 + 4 + 16 + 6; // Tree padding, row padding, twisty, gap.
+  // Tree padding, row padding, then the twisty and its gap when shown.
+  const base = 6 + 4 + (settings.disableCollapsing ? 0 : 16 + 6);
   let depth = 0;
   let top;
   const scrollerTop = scroller.getBoundingClientRect().top - scroller.scrollTop;
@@ -828,6 +836,7 @@ function applySettings(next) {
   settings = next;
   document.documentElement.style.setProperty('--indent', `${settings.indent}px`);
   document.documentElement.classList.toggle('compact', settings.density === 'compact');
+  document.documentElement.classList.toggle('no-collapsing', settings.disableCollapsing);
 }
 
 async function main() {

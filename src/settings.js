@@ -13,6 +13,9 @@ export const DEFAULTS = {
   indent: 16,
   // 'comfortable' (32px rows) or 'compact' (26px rows).
   density: 'comfortable',
+  // Turn collapsing off entirely: no arrows, no collapse menu items, and
+  // every tree stays expanded.
+  disableCollapsing: false,
   // Close the side panel while its window is full screen (videos, F11).
   hideInFullscreen: true,
   // Whether the user has picked hideInFullscreen yet. Until then, the first
