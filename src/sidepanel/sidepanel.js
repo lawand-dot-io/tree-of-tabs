@@ -137,7 +137,7 @@ function createRow(id) {
   el.draggable = true;
   el.setAttribute('role', 'treeitem');
   el.innerHTML = `
-    <button class="twisty" tabindex="-1" aria-label="Expand or collapse">${icon('chevron')}</button>
+    <button class="twisty" tabindex="-1">${icon('chevron')}</button>
     <span class="icon">
       <img class="favicon" alt="" draggable="false">
       <span class="fallback-icon">${icon('globe')}</span>
@@ -194,6 +194,9 @@ function updateRow(el, tab, row) {
   el.setAttribute('aria-selected', tab.active);
   if (row.hasChildren) el.setAttribute('aria-expanded', !row.collapsed);
   else el.removeAttribute('aria-expanded');
+  const twisty = el.querySelector('.twisty');
+  twisty.title = row.collapsed ? 'Expand' : 'Collapse';
+  twisty.setAttribute('aria-label', twisty.title);
 
   const title = tabTitle(tab);
   const titleEl = el.querySelector('.title');

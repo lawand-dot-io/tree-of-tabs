@@ -185,8 +185,10 @@ try {
     await parentRow.locator('.title').hover();
     assert.equal(await twisty.isVisible(), true, 'pointing at the row');
     assert.equal(await favicon.isVisible(), false, 'the arrow replaces the icon');
+    assert.equal(await twisty.getAttribute('title'), 'Collapse');
     await twisty.click();
     await settle();
+    assert.equal(await twisty.getAttribute('title'), 'Expand');
     await panel.mouse.move(300, 630);
     assert.equal(await twisty.isVisible(), false, 'collapsed: only the count shows');
     await parentRow.hover();
