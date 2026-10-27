@@ -111,6 +111,11 @@ body {
     calc(var(--row-start) + 7.5px) 0 / calc(var(--depth) * var(--indent)) 100% no-repeat;
 }
 
+/* The layout stays the same without them, so turning them off moves nothing. */
+.no-guide-lines .tab {
+  background: none;
+}
+
 /* A thin gap between rows, without a dead zone for drag and drop. In child
    rows the highlight starts 2px after the line right next to the tab (its
    parent's guide line, or its group's line, which is 3px wide). */

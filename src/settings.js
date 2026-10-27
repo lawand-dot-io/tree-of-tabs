@@ -14,6 +14,9 @@ export const DEFAULTS = {
   indent: 20,
   // 'comfortable' (32px rows) or 'compact' (26px rows).
   density: 'comfortable',
+  // Hide the gray guide lines between parents and children. Tab group
+  // lines still show.
+  hideGuideLines: false,
   // Turn collapsing off entirely: no arrows, no collapse menu items, and
   // every tree stays expanded.
   disableCollapsing: false,

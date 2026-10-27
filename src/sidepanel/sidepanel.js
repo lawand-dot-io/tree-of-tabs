@@ -903,6 +903,7 @@ function applySettings(next) {
   document.documentElement.style.setProperty('--indent', `${settings.indent}px`);
   document.documentElement.classList.toggle('compact', settings.density === 'compact');
   document.documentElement.classList.toggle('no-collapsing', settings.disableCollapsing);
+  document.documentElement.classList.toggle('no-guide-lines', settings.hideGuideLines);
 }
 
 async function main() {

@@ -233,6 +233,18 @@ try {
     assert.equal(await parentRow.locator('.twisty').isVisible(), true, 'arrows come back');
   });
 
+  await check('guide lines show by default and can be hidden', async () => {
+    const lines = () =>
+      panel.$$eval('.tab', (rows) => rows.filter((row) => getComputedStyle(row).backgroundImage !== 'none').length);
+    assert.ok((await lines()) > 0, 'shown by default');
+    await worker.evaluate(() => chrome.storage.sync.set({ hideGuideLines: true }));
+    await settle();
+    assert.equal(await lines(), 0, 'hidden');
+    await worker.evaluate(() => chrome.storage.sync.remove('hideGuideLines'));
+    await settle();
+    assert.ok((await lines()) > 0, 'shown again');
+  });
+
   await check('dragging a tab onto another makes it a child', async () => {
     await drag('about:blank', await rowSelector('Page A-child-child'), 0.5);
     await settle();

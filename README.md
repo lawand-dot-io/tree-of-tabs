@@ -64,7 +64,7 @@ Built with [Claude Code](https://claude.com/claude-code).
   ([Chromium issue 578117954](https://issues.chromium.org/issues/578117954)),
   so after full screen you bring it back with the toolbar button or Alt+Shift+T.
 - Thin guide lines run down from each parent, so you can see which tabs
-  belong to it, even several levels deep.
+  belong to it, even several levels deep. You can hide them in Settings.
 - Pinned tabs show as a row of icons at the top, tab group colors show as a
   bar on each tab, and a spinner shows while a page loads.
 
