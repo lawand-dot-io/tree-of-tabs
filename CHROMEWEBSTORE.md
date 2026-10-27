@@ -8,7 +8,6 @@ field from here.
 ## Still needed before submitting
 
 - [ ] Decide whether to declare yourself a trader under EU rules (see [Developer Info](#developer-info))
-- [ ] At least one screenshot (see [Graphics & Assets](#graphics--assets))
 - [ ] Enter the privacy policy URL (see [Privacy Policy](#privacy-policy)) in the dashboard
 - [ ] Once the listing is live: put its link in the README's Install section and in the repository's About box
 
@@ -79,25 +78,23 @@ English
 | Asset | Dimensions | Status | Filename |
 |-------|-----------|--------|----------|
 | Store Icon | 128×128 PNG | ✅ Ready | `icons/icon128.png` |
-| Screenshot 1 | 1280×800 | ⬜ Not created | |
-| Screenshot 2 | 1280×800 | ⬜ Not created | |
-| Screenshot 3 | 1280×800 | ⬜ Not created | |
-| Small Promo Tile | 440×280 | ⬜ Not created | |
-| Marquee Promo Tile | 1400×560 | ⬜ Not created | |
+| Screenshot 1: tabs nest | 1280×800 | ✅ Ready | `docs/store/screenshot-1-nest.png` |
+| Screenshot 2: drag | 1280×800 | ✅ Ready | `docs/store/screenshot-2-drag.png` |
+| Screenshot 3: collapse | 1280×800 | ✅ Ready | `docs/store/screenshot-3-collapse.png` |
+| Screenshot 4: menu | 1280×800 | ✅ Ready | `docs/store/screenshot-4-menu.png` |
+| Screenshot 5: dark mode | 1280×800 | ✅ Ready | `docs/store/screenshot-5-dark.png` |
+| Small Promo Tile | 440×280 | ✅ Ready | `docs/store/promo-tile.png` |
+| Marquee Promo Tile | 1400×560 | ⬜ Optional, only used if the store features the extension | |
+
+Upload the screenshots in this order. `tools/make-store-images.py` rebuilds
+them from the panel captures in `docs/store/raw/`.
 
 ### Screenshot Notes
 
-Take these in a real browser window at 1280×800, with the side panel open and a
-realistic set of tabs (avoid sites whose names or logos could be read as an
-endorsement).
-
-1. The tree next to a page: two or three branches, one of them two levels deep,
-   with the active tab highlighted.
-2. Drag and drop in progress: a tab being dropped into another branch, with the
-   blue drop line or the highlighted target visible.
-3. The right-click menu open on a tab with children.
-4. Dark mode.
-5. The settings page.
+Each screenshot shows the real panel, captured with made-up tabs and plain
+letter icons (no real sites, so nothing reads as an endorsement), next to a
+headline. To show it in a real browser window instead, take screenshots at
+1280×800 in Chrome with the side panel open.
 
 ## Permissions Justification
 
