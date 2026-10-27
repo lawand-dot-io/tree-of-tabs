@@ -14,9 +14,6 @@ export const DEFAULTS = {
   indent: 16,
   // 'comfortable' (32px rows) or 'compact' (26px rows).
   density: 'comfortable',
-  // Turn collapsing off entirely: no arrows, no collapse menu items, and
-  // every tree stays expanded.
-  disableCollapsing: false,
   // Advanced: closing a window's last tab from the tree opens a new tab
   // first, so the window stays open (Chrome normally closes it).
   keepWindowOnLastTab: false,

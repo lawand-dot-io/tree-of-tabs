@@ -23,4 +23,4 @@ assignees: ''
 - Operating system:
 
 **Settings you changed** (if any)
-<!-- For example "Turn off collapsing" or "Close its children too". -->
+<!-- For example "Close its children too" or "Keep the window open". -->

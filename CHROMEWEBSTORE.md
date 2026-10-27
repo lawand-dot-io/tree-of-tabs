@@ -31,7 +31,7 @@ FEATURES
 • Automatic nesting: links you open in a new tab, middle-clicked links and pages that open tabs show up under the tab they came from. Tabs you open yourself, from the address bar, a bookmark or a new tab, start their own tree.
 • Drag and drop: drop a tab onto another to nest it, between tabs to reorder it, or below the list to start a new tree. The whole branch moves with it, and you can drag several selected tabs at once or move them to another window.
 • Stays in step with your tabs: the tree and the order of tabs at the top of the window always match. Moving a tab at the top moves its branch too.
-• Collapse branches you are not using, with a count of the tabs inside. If you never collapse, you can turn collapsing off entirely.
+• Collapse branches you are not using, with a count of the tabs inside. Arrows only show where they're needed, so the tree stays calm.
 • Closing a parent tab keeps its branch together: its first child takes its place. You can also choose to close the whole branch with it.
 • Pinned tabs show as a row of icons at the top. Tab group colors appear next to each tab.
 • New tab button: click it to start a new tree, or middle-click or right-click it to open a tab under the current one.
@@ -227,7 +227,7 @@ zip -r tree-of-tabs-v1.0.0.zip manifest.json LICENSE icons src -x "*.DS_Store"
 
 | Version | Date | Changes | Status |
 |---------|------|---------|--------|
-| 1.0.0 | 2026-10-27 | First release: tab tree in the side panel, automatic nesting, drag and drop, choice of what happens to a closed parent's children, optionally keeping a window open when its last tab is closed from the tree, collapsing (or turning it off), pinned tabs, tab group colors, right-click actions, keyboard navigation, hiding during full screen, tree restored after restart | Draft |
+| 1.0.0 | 2026-10-27 | First release: tab tree in the side panel, automatic nesting, drag and drop, choice of what happens to a closed parent's children, optionally keeping a window open when its last tab is closed from the tree, collapsing, pinned tabs, tab group colors, right-click actions, keyboard navigation, hiding during full screen, tree restored after restart | Draft |
 
 ## Review Notes
 
