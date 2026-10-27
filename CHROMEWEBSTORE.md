@@ -173,7 +173,11 @@ notices to it)
 
 **Support URL**: https://github.com/lawand-dot-io/tree-of-tabs/issues
 
-**Homepage URL**: https://lawand.io
+**Official URL**: lawand.io (verified in Google Search Console)
+
+**Homepage URL**: https://github.com/lawand-dot-io/tree-of-tabs
+
+**Mature content**: No
 
 ## Packaging
 
