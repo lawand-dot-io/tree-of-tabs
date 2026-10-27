@@ -26,32 +26,14 @@ body {
   flex-direction: column;
 }
 
-/* --- Top bar: pinned tabs, then the collapse and expand buttons -------------- */
-
-.top-bar {
-  display: flex;
-  align-items: flex-start;
-  gap: 2px;
-  padding: 6px var(--tree-padding);
-  border-bottom: 1px solid var(--divider);
-}
-
-.top-bar[hidden] {
-  display: none;
-}
-
-/* With nothing pinned, just the buttons: a slim row with no divider, right
-   under Chrome's own header and its close button. */
-.top-bar:has(.pinned:empty) {
-  padding-block: 2px 0;
-  border-bottom: 0;
-}
+/* --- Pinned tabs ------------------------------------------------------------ */
 
 .pinned {
-  flex: 1;
   display: flex;
   flex-wrap: wrap;
   gap: 2px;
+  padding: 6px var(--tree-padding);
+  border-bottom: 1px solid var(--divider);
 }
 
 .pinned:empty {
@@ -95,41 +77,6 @@ body {
   height: 6px;
   border-radius: 50%;
   background: var(--accent);
-}
-
-.tree-actions {
-  display: flex;
-  gap: 2px;
-  margin-inline-start: auto;
-}
-
-.no-collapsing .tree-actions {
-  display: none;
-}
-
-.tool-button {
-  display: grid;
-  place-items: center;
-  width: 28px;
-  height: 28px;
-  margin-top: 2px; /* Centered on the first row of 32px pinned tabs. */
-  padding: 0;
-  border: 0;
-  border-radius: 8px;
-  background: none;
-  color: var(--text-secondary);
-}
-
-.tool-button:hover:not(:disabled) {
-  background: var(--hover);
-}
-
-.tool-button:active:not(:disabled) {
-  background: var(--pressed);
-}
-
-.tool-button:disabled {
-  color: var(--text-disabled);
 }
 
 /* --- Tree ------------------------------------------------------------------- */

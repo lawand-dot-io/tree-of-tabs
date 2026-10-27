@@ -5,9 +5,6 @@ import { icon } from './icons.js';
 const DRAG_TYPE = 'application/x-tree-of-tabs';
 
 const pinnedEl = document.getElementById('pinned');
-const topBarEl = document.getElementById('top-bar');
-const collapseAllEl = document.getElementById('collapse-all');
-const expandAllEl = document.getElementById('expand-all');
 const scroller = document.getElementById('scroller');
 const treeEl = document.getElementById('tree');
 const newTabEl = document.getElementById('new-tab');
@@ -79,7 +76,6 @@ function render(pinnedTabs) {
 
   renderPinned(pinnedTabs);
   renderRows();
-  renderTopBar(pinnedTabs);
 
   const active = [...tabsById.values()].find((t) => t.active);
   if (active && active.id !== activeId) {
@@ -88,14 +84,6 @@ function render(pinnedTabs) {
   }
   if (focusedId === null || !rowEls.has(focusedId)) focusedId = activeId;
   for (const [id, el] of rowEls) el.tabIndex = id === focusedId ? 0 : -1;
-}
-
-function renderTopBar(pinnedTabs) {
-  const parents = [...tree.children].filter(([, kids]) => kids.length).map(([id]) => id);
-  collapseAllEl.disabled = !parents.some((id) => !collapsed.has(id));
-  expandAllEl.disabled = !parents.some((id) => collapsed.has(id));
-  // With collapsing off and nothing pinned, the bar would be empty.
-  topBarEl.hidden = settings.disableCollapsing && !pinnedTabs.length;
 }
 
 function syncChildren(container, elements) {
@@ -552,18 +540,13 @@ function tabMenuItems(id) {
   ];
 }
 
-const setAllCollapsed = (value) => send({ type: 'set-all-collapsed', windowId, collapsed: value });
-
 function collapseAllItems() {
   const hidden = settings.disableCollapsing;
   return [
-    { label: 'Collapse all', action: () => setAllCollapsed(true), hidden },
-    { label: 'Expand all', action: () => setAllCollapsed(false), hidden },
+    { label: 'Collapse all', action: () => send({ type: 'set-all-collapsed', windowId, collapsed: true }), hidden },
+    { label: 'Expand all', action: () => send({ type: 'set-all-collapsed', windowId, collapsed: false }), hidden },
   ];
 }
-
-collapseAllEl.addEventListener('click', () => setAllCollapsed(true));
-expandAllEl.addEventListener('click', () => setAllCollapsed(false));
 
 function newTabMenuItems() {
   return [
@@ -901,8 +884,6 @@ function applySettings(next) {
 
 async function main() {
   newTabEl.querySelector('.new-tab-icon').innerHTML = icon('add');
-  collapseAllEl.innerHTML = icon('unfoldLess', 20);
-  expandAllEl.innerHTML = icon('unfoldMore', 20);
   // ?windowId= shows another window's tabs (used by the end-to-end test).
   const forced = Number(new URLSearchParams(location.search).get('windowId'));
   windowId = forced || (await chrome.windows.getCurrent()).id;
