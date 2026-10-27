@@ -1,19 +1,17 @@
 # Tree of Tabs
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/social-preview-dark.png">
+  <img src="docs/social-preview.png" alt="Tree of Tabs: see your tabs as a tree in Chrome's side panel. Free and open source. Next to it, the side panel with tabs nested under the tabs they were opened from.">
+</picture>
+
 See your tabs as a tree in Chrome's side panel. Tabs you open from a page nest
 under it, so you can always tell where a tab came from and which tabs belong
 together. Drag tabs to reorganize them, and collapse the trees you're not using.
 It works like Firefox's [Tree Style Tab](https://github.com/piroor/treestyletab),
 and looks like part of Chrome.
 
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/screenshot-dark.png">
-    <img src="docs/screenshot-light.png" width="320" alt="The Tree of Tabs side panel: tabs nested under the tabs they were opened from, with guide lines, a tab group and a collapsed tree">
-  </picture>
-</p>
-
-Free and open source. Built with [Claude Code](https://claude.com/claude-code).
+Built with [Claude Code](https://claude.com/claude-code).
 
 ## Install
 
@@ -140,8 +138,9 @@ test/
   e2e/run.js         loads the extension into Chromium and drives real tabs
 CHROMEWEBSTORE.md    everything for the Chrome Web Store listing and how to package
 PRIVACY.md           the privacy policy the store listing links to
-docs/                README screenshots and the repository's social preview
+docs/                screenshots, the README banner and social preview, release notes
 tools/make-icons.mjs regenerates icons/ (needs Playwright)
+tools/make-social-preview.py  rebuilds the banner from docs/screenshot-*.png
 tools/chrome-devtools-mcp.sh  starts the Chrome DevTools MCP server (see below)
 ```
 
