@@ -39,6 +39,16 @@ function updateDisabledRows() {
   }
 }
 
+// Pages can't link to chrome:// addresses, so open it as a tab. With this
+// page as its opener, it nests under it like the other links here. Set up
+// first, before settings load, so even a very quick click works.
+const appearanceLink = document.getElementById('appearance-link');
+appearanceLink.addEventListener('click', async (event) => {
+  event.preventDefault();
+  const current = await chrome.tabs.getCurrent();
+  chrome.tabs.create({ url: appearanceLink.href, openerTabId: current?.id });
+});
+
 const settings = await loadSettings();
 for (const field of fields) {
   write(field, settings[field.name]);
@@ -51,15 +61,6 @@ for (const field of fields) {
   });
 }
 updateDisabledRows();
-
-// Pages can't link to chrome:// addresses, so open it as a tab. With this
-// page as its opener, it nests under it like the other links here.
-const appearanceLink = document.getElementById('appearance-link');
-appearanceLink.addEventListener('click', async (event) => {
-  event.preventDefault();
-  const current = await chrome.tabs.getCurrent();
-  chrome.tabs.create({ url: appearanceLink.href, openerTabId: current?.id });
-});
 
 // Taskbar, mentioned at the bottom, is a Mac app, so only Macs show that sentence.
 const { os } = await chrome.runtime.getPlatformInfo();

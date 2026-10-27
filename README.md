@@ -51,7 +51,8 @@ Built with [Claude Code](https://claude.com/claude-code).
 - **New tab button**: click it for a new tree. Middle-click it, or right-click
   it and pick from the menu, for a new tab under the current tab.
 - **Keyboard**: arrow keys move through the tree, Left and Right collapse and
-  expand, Enter activates, Delete closes, Shift+F10 opens the menu.
+  expand, Enter activates (on a split view, it switches to the other half),
+  Delete closes, Shift+F10 opens the menu.
   Alt+Shift+T toggles the panel; you can change it at `chrome://extensions/shortcuts`.
 - **Persistence**: the tree survives service worker restarts, extension
   updates and browser restarts. After a browser restart it is matched back to
