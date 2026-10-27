@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
   - name: Feature request
-    url: https://github.com/lawand-dot-io/chrome-tree-style-tab/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+requests%22+sort%3Atop
+    url: https://github.com/lawand-dot-io/tree-of-tabs/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+requests%22+sort%3Atop
     about: Suggest an idea in Discussions.

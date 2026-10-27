@@ -55,8 +55,8 @@ PERMISSIONS
 • "Read your browsing history": Tree of Tabs needs the titles and addresses of your open tabs to show them in the tree and to know which tab a new tab was opened from. It does not read the content of any page, and it does not see the history of pages you closed.
 
 SUPPORT
-Found a bug? Report it at https://github.com/lawand-dot-io/chrome-tree-style-tab/issues
-Have an idea? Suggest a feature at https://github.com/lawand-dot-io/chrome-tree-style-tab/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+requests%22+sort%3Atop
+Found a bug? Report it at https://github.com/lawand-dot-io/tree-of-tabs/issues
+Have an idea? Suggest a feature at https://github.com/lawand-dot-io/tree-of-tabs/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+requests%22+sort%3Atop
 ```
 
 **Category**
@@ -208,7 +208,7 @@ notices to it)
 rules. If you declare yes, your address and contact details are shown publicly on
 the listing.
 
-**Support URL**: https://github.com/lawand-dot-io/chrome-tree-style-tab/issues
+**Support URL**: https://github.com/lawand-dot-io/tree-of-tabs/issues
 
 **Homepage URL**: https://lawand.io
 
