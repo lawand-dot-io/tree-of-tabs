@@ -1,5 +1,5 @@
 """Builds the Chrome Web Store images in docs/store/: five 1280x800
-screenshots and the 440x280 promo tile. Each screenshot puts a headline next
+screenshots, the 440x280 small promo tile and the 1400x560 marquee tile. Each screenshot puts a headline next
 to a capture of the panel from docs/store/raw/ (taken at twice the size).
 Headlines break where the \\n are; the text below them wraps by itself.
 Needs Pillow and the Inter font. The store wants images without transparency,
@@ -95,6 +95,23 @@ def promo_tile():
     canvas.save(os.path.join(OUT, 'promo-tile.png'), optimize=True)
 
 
+def marquee_tile():
+    """The large tile the store shows if it features the extension, in the banner's style."""
+    colors = THEMES['light']
+    W, H = 1400, 560
+    canvas = Image.new('RGB', (W, H), colors['bg'])
+    panel = Image.open(os.path.join(OUT, 'raw/panel-nest.png')).convert('RGB')
+    canvas = card(canvas, panel, colors, x=W - 520 - 120, y=60, width=520, radius=24)
+    draw = ImageDraw.Draw(canvas)
+    logo = icon(112)
+    canvas.paste(logo, (120, 96), logo)
+    draw.text((118, 236), 'Tree of Tabs', font=font('InterDisplay-Bold.otf', 80), fill=colors['title'])
+    for i, line in enumerate(['See your tabs as a tree', 'in Chrome\u2019s side panel.']):
+        draw.text((121, 344 + 44 * i), line, font=font('Inter-Regular.otf', 32), fill=colors['text'])
+    canvas.save(os.path.join(OUT, 'marquee-tile.png'), optimize=True)
+
+
 for number, shot in enumerate(SHOTS, 1):
     screenshot(number, *shot)
 promo_tile()
+marquee_tile()

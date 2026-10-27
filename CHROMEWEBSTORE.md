@@ -81,7 +81,7 @@ English
 | Screenshot 4: menu | 1280×800 | ✅ Ready | `docs/store/screenshot-4-menu.png` |
 | Screenshot 5: dark mode | 1280×800 | ✅ Ready | `docs/store/screenshot-5-dark.png` |
 | Small Promo Tile | 440×280 | ✅ Ready | `docs/store/promo-tile.png` |
-| Marquee Promo Tile | 1400×560 | ⬜ Optional, only used if the store features the extension | |
+| Marquee Promo Tile | 1400×560 | ✅ Ready | `docs/store/marquee-tile.png` |
 
 Upload the screenshots in this order. `tools/make-store-images.py` rebuilds
 them from the panel captures in `docs/store/raw/`.
