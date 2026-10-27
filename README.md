@@ -149,6 +149,10 @@ the one before it. Moves the worker makes itself are recorded, so their
   when you click or press a shortcut. So a new window starts without the tree;
   open it with the toolbar button or Alt+Shift+T
   ([Chromium issue 578112289](https://issues.chromium.org/issues/578112289)).
+- Chrome doesn't tell extensions when a tab is opened from a link on an
+  extension's page, so those tabs start their own tree. Tab Tree's own
+  settings page opens its links as children itself; other extensions' pages
+  can't be handled.
 - Chrome's horizontal tab strip can't be hidden by an extension.
 - Collapsing a tree only hides tabs in the panel. Chrome has no API for
   hiding tabs in the tab strip.

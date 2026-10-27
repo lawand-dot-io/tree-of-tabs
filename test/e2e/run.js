@@ -415,6 +415,36 @@ try {
     await settle();
   });
 
+  await check('links on the settings page open as its children', async () => {
+    const optionsUrl = `chrome-extension://${extensionId}/src/options/options.html`;
+    const [options] = await Promise.all([
+      context.waitForEvent('page'),
+      worker.evaluate(({ url, windowId }) => chrome.tabs.create({ url, windowId }), { url: optionsUrl, windowId: mainWindowId }),
+    ]);
+    await options.waitForLoadState();
+    // Point the links at local pages; the test can't reach the real sites.
+    await options.evaluate((base) => {
+      document.querySelectorAll('.about a').forEach((a, i) => (a.href = `${base}/Settings link ${i}`));
+    }, base);
+    const optionsId = await worker.evaluate(async (url) => (await chrome.tabs.query({ url }))[0].id, optionsUrl);
+    await options.click('.about a >> nth=0');
+    await options.click('.about a >> nth=1', { button: 'middle' });
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    const opened = await worker.evaluate(async (optionsId) => {
+      const { tree } = await chrome.storage.session.get('tree');
+      const parents = new Map(tree.parents);
+      const tabs = (await chrome.tabs.query({})).filter((t) => (t.pendingUrl || t.url).includes('Settings%20link'));
+      return tabs.map((t) => ({ child: parents.get(t.id) === optionsId, active: t.active }))
+        .sort((a, b) => Number(b.active) - Number(a.active));
+    }, optionsId);
+    assert.deepEqual(opened, [{ child: true, active: true }, { child: true, active: false }]);
+    await worker.evaluate(async (optionsId) => {
+      const tabs = (await chrome.tabs.query({})).filter((t) => (t.pendingUrl || t.url).includes('Settings%20link'));
+      await chrome.tabs.remove([optionsId, ...tabs.map((t) => t.id)]);
+    }, optionsId);
+    await settle();
+  });
+
   await check('pinned tabs leave the tree and show in the pinned bar', async () => {
     await worker.evaluate(async (id) => chrome.tabs.update(id, { pinned: true }), await idOf('about:blank'));
     await settle();

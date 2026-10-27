@@ -524,7 +524,7 @@ async function setAllCollapsed(windowId, collapsed) {
   await commit(windowId);
 }
 
-async function newChildTab(parentId, url) {
+async function newChildTab(parentId, url, active = true) {
   const { tab, order, descendants } = await subtreeOf(parentId);
   const pinnedCount = (await chrome.tabs.query({ windowId: tab.windowId, pinned: true })).length;
   const last = descendants.length ? descendants[descendants.length - 1] : parentId;
@@ -532,7 +532,7 @@ async function newChildTab(parentId, url) {
     windowId: tab.windowId,
     index: pinnedCount + order.indexOf(last) + 1,
     url,
-    active: true,
+    active,
   });
   pendingPlacements.set(created.id, childPlacement(parentId));
 }
@@ -604,7 +604,7 @@ async function handleMessage(message) {
     case 'move-to-new-window':
       return moveTreesToWindow(message.ids, null, { targetId: null, position: 'end' });
     case 'new-child-tab':
-      return newChildTab(message.tabId, message.url);
+      return newChildTab(message.tabId, message.url, message.active ?? true);
     case 'open-url':
       return openUrlAt(message);
     case 'duplicate':
