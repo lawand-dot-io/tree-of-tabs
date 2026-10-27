@@ -163,12 +163,16 @@ body {
 /* Tab group color: one continuous line along the group's tabs (see
    markGroupRuns). It covers the guide line left of the group's shallowest
    tabs, centered on it, or sits on the leading edge for top-level tabs. */
+.tab[data-group-color] {
+  --group-x: calc(
+    min(var(--group-level), 1) * (var(--row-start) + 6.5px + (var(--group-level) - 1) * var(--indent))
+  );
+}
+
 .tab[data-group-color]::before {
   content: '';
   position: absolute;
-  left: calc(
-    min(var(--group-level), 1) * (var(--row-start) + 6.5px + (var(--group-level) - 1) * var(--indent))
-  );
+  left: var(--group-x);
   top: 0;
   bottom: 0;
   width: 3px;
@@ -187,6 +191,13 @@ body {
 
 .tab.group-first.group-last::before {
   border-radius: 2px;
+}
+
+/* When the group's line is right next to a tab (no guide lines between
+   them), the tab's highlight starts at the line, so the line becomes its
+   colored edge, as it is for top-level tabs. */
+.tab.group-adjacent::after {
+  inset-inline-start: var(--group-x);
 }
 
 .twisty {
