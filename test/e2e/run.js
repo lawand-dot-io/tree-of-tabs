@@ -800,6 +800,13 @@ try {
     await panel.locator('.tab').nth(3).click({ button: 'right' });
     await panel.screenshot({ path: path.join(shots, 'panel-menu-dark.png') });
     await panel.keyboard.press('Escape');
+    // The slim top row when nothing is pinned.
+    await worker.evaluate(async (windowId) => {
+      for (const tab of await chrome.tabs.query({ windowId, pinned: true })) await chrome.tabs.update(tab.id, { pinned: false });
+    }, mainWindowId);
+    await settle();
+    await panel.emulateMedia({ colorScheme: 'light' });
+    await panel.screenshot({ path: path.join(shots, 'panel-nothing-pinned.png') });
   }
   await check('the panel reported no errors', async () => {
     assert.deepEqual(panelErrors, []);
