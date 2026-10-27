@@ -7,7 +7,7 @@ field from here.
 
 ## Still needed before submitting
 
-- [ ] Publisher name, contact email and support URL (see [Developer Info](#developer-info))
+- [ ] Publisher name and contact email (see [Developer Info](#developer-info))
 - [ ] At least one screenshot (see [Graphics & Assets](#graphics--assets))
 - [ ] Host the privacy policy below at a public URL and put the link in the dashboard
 - [ ] Choose visibility (public or unlisted)
@@ -55,7 +55,8 @@ PERMISSIONS
 • "Read your browsing history": Tab Tree needs the titles and addresses of your open tabs to show them in the tree and to know which tab a new tab was opened from. It does not read the content of any page, and it does not see the history of pages you closed.
 
 SUPPORT
-Found a bug or have an idea? Contact the developer through the support link on this page.
+Found a bug? Report it at https://github.com/lawand-dot-io/chrome-tree-style-tab/issues
+Have an idea? Suggest a feature at https://github.com/lawand-dot-io/chrome-tree-style-tab/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+requests%22+sort%3Atop
 ```
 
 **Category**
@@ -203,10 +204,9 @@ Contact
 **Contact Email**: to fill in. It is shown publicly, and Google sends policy notices
 to it, so use an address that is checked.
 
-**Support URL / Email**: to fill in. The GitHub repository's Issues page works if
-the repository is public.
+**Support URL**: https://github.com/lawand-dot-io/chrome-tree-style-tab/issues
 
-**Homepage URL**: optional, for example the GitHub repository.
+**Homepage URL**: https://lawand.io
 
 ## Packaging
 

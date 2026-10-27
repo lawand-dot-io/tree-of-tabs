@@ -51,3 +51,7 @@ for (const field of fields) {
   });
 }
 updateDisabledRows();
+
+// The apps mentioned at the bottom are Mac apps, so the line only shows on a Mac.
+const { os } = await chrome.runtime.getPlatformInfo();
+document.getElementById('mac-apps').hidden = os !== 'mac';

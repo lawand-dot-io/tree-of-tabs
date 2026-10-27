@@ -3,7 +3,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for the idea! Please first [search existing feature requests](https://github.com/lawand-dot-io/chrome-tree-style-tab/discussions/categories/feature-requests). If your idea is already there, add a 👍 or a comment to it instead of opening a new one: that helps show what people want most.
+        Thanks for the idea! Please first [search existing feature requests](https://github.com/lawand-dot-io/chrome-tree-style-tab/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+requests%22+sort%3Atop). If your idea is already there, add a 👍 or a comment to it instead of opening a new one: that helps show what people want most.
   - type: checkboxes
     attributes:
       label: Before posting
