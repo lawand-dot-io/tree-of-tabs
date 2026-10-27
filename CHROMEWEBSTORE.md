@@ -26,7 +26,7 @@ FEATURES
 • Stays in step with your tabs: the tree and the order of tabs at the top of the window always match. Moving a tab at the top moves its branch too.
 • Collapse branches you are not using: point at a tab and its icon turns into an arrow. A collapsed branch shows a count of the tabs inside. If you never collapse, you can turn collapsing off entirely.
 • Closing a parent tab keeps its branch together: its first child takes its place. You can also choose to close the whole branch with it.
-• Pinned tabs show as a row of icons at the top. Tab group colors appear next to each tab.
+• Pinned tabs show as a row of icons at the top. Tab groups show as a colored line along their tabs.
 • Split views (two tabs side by side) show as one row and move together, so the tree never breaks them apart.
 • New tab button: click it to start a new tree, or middle-click or right-click it to open a tab under the current one.
 • Right-click a tab for quick actions: new tab inside this branch, reload, duplicate, pin, mute, indent or outdent, move a branch to a new window, close a branch, close all other tabs or the tabs below.
@@ -49,6 +49,9 @@ Tree of Tabs never sends your tabs or browsing anywhere. It keeps the shape of y
 
 PERMISSIONS
 • "Read your browsing history": Tree of Tabs needs the titles and addresses of your open tabs to show them in the tree and to know which tab a new tab was opened from. It does not read the content of any page, and it does not see the history of pages you closed.
+
+OPEN SOURCE
+Tree of Tabs is free and open source: https://github.com/lawand-dot-io/tree-of-tabs
 
 SUPPORT
 Found a bug? Report it at https://github.com/lawand-dot-io/tree-of-tabs/issues
