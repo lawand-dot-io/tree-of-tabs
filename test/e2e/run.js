@@ -546,6 +546,11 @@ try {
       chrome.tabs.query = async (q) => (await query(q)).map(patch);
       chrome.tabs.get = async (id) => patch(await get(id));
       chrome.tabs.move = (id, props) => (self.moved.push(...[id].flat()), move(id, props));
+      const duplicate = chrome.tabs.duplicate.bind(chrome.tabs);
+      self.duplicated = [];
+      chrome.tabs.duplicate = (id) => (self.duplicated.push(id), duplicate(id));
+      const unsimulate = self.unsimulate;
+      self.unsimulate = () => (unsimulate(), Object.assign(chrome.tabs, { duplicate }));
     };
     await worker.evaluate(simulate, [left, right]);
     const [splitPanel] = await Promise.all([
@@ -590,6 +595,21 @@ try {
     assert.deepEqual(await titles(), ['other', 'left', 'right', 'child']);
     const moved = await worker.evaluate(() => self.moved);
     assert.ok(!moved.includes(left) && !moved.includes(right), `moved ${moved}`);
+
+    // Duplicating a half can't use Chrome's duplicate, which would put the
+    // copy between the halves: the copy opens after the split view's tree.
+    await splitPanel.locator('.tab.split .part').first().click({ button: 'right' });
+    await splitPanel.locator('.menu-item', { hasText: 'Duplicate' }).click();
+    await settle();
+    assert.deepEqual(await titles(), ['other', 'left', 'right', 'child', 'left']);
+    assert.deepEqual(await worker.evaluate(() => self.duplicated), []);
+    const copy = (await worker.evaluate(
+      async (windowId) => (await chrome.tabs.query({ windowId })).sort((a, b) => a.index - b.index).at(-1).id,
+      windowId,
+    ));
+    assert.equal((await parents()).get(copy), null, 'a sibling of the split view, like a duplicate');
+    await worker.evaluate((id) => chrome.tabs.remove(id), copy);
+    await settle();
 
     // Each half has its own menu: Close closes just that half, and the other
     // one carries on with the children.

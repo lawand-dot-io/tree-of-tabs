@@ -623,17 +623,17 @@ async function setAllCollapsed(windowId, collapsed) {
   await commit(windowId);
 }
 
+/** Opens a tab right after `id`'s whole tree, where Chrome won't need to move it. */
+async function createAfterTree(id, props) {
+  const { tab, order, descendants } = await subtreeOf(id);
+  const pinnedCount = (await chrome.tabs.query({ windowId: tab.windowId, pinned: true })).length;
+  const last = descendants.length ? descendants[descendants.length - 1] : id;
+  return chrome.tabs.create({ windowId: tab.windowId, index: pinnedCount + order.indexOf(last) + 1, active: true, ...props });
+}
+
 async function newChildTab(parentId, url) {
   parentId = itemOf(parentId);
-  const { tab, order, descendants } = await subtreeOf(parentId);
-  const pinnedCount = (await chrome.tabs.query({ windowId: tab.windowId, pinned: true })).length;
-  const last = descendants.length ? descendants[descendants.length - 1] : parentId;
-  const created = await chrome.tabs.create({
-    windowId: tab.windowId,
-    index: pinnedCount + order.indexOf(last) + 1,
-    url,
-    active: true,
-  });
+  const created = await createAfterTree(parentId, { url });
   pendingPlacements.set(created.id, childPlacement(parentId));
 }
 
@@ -669,9 +669,26 @@ async function closeTabs(ids, keep = []) {
 /** Duplicates land right after the original's tree, as its next sibling. */
 async function duplicateTabs(ids) {
   for (const id of ids) {
-    const copy = await chrome.tabs.duplicate(id).catch(() => null);
+    const copy = inSplit(id) ? await duplicateSplitTab(id) : await chrome.tabs.duplicate(id).catch(() => null);
     if (copy) pendingPlacements.set(copy.id, { targetId: itemOf(id), position: 'afterTree' });
   }
+}
+
+/**
+ * Chrome puts a duplicate right next to its original, which for a split
+ * view's tab can be between its halves, and that ends the split view. So a
+ * split tab's copy is a new tab with the same address, opened after the
+ * split view's tree. Unlike a real duplicate, it starts without the
+ * original's back and forward history.
+ */
+async function duplicateSplitTab(id) {
+  const original = await chrome.tabs.get(id).catch(() => null);
+  if (!original) return null;
+  const copy = await createAfterTree(itemOf(id), { url: original.url || original.pendingUrl });
+  if (original.groupId !== -1 && copy.groupId !== original.groupId) {
+    await chrome.tabs.group({ groupId: original.groupId, tabIds: copy.id }).catch(() => {});
+  }
+  return copy;
 }
 
 async function openUrlAt({ windowId, url, targetId, position }) {
