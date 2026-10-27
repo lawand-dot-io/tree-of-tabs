@@ -199,7 +199,7 @@ support@lawand.io
 
 ## Developer Info
 
-**Publisher Name**: Lawand
+**Publisher Name**: Lawand Dalatieh
 
 **Contact Email**: support@lawand.io (shown publicly; Google also sends policy
 notices to it)
