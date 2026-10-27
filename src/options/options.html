@@ -42,7 +42,7 @@
             <option value="closeAll">Close its children too</option>
           </select>
         </label>
-        <label class="row">
+        <label class="row" data-needs-collapsing>
           <span class="label">
             Close the whole tree when its collapsed parent is closed
             <span class="hint">Hidden tabs close with the parent you can see</span>
@@ -69,6 +69,13 @@
           </select>
         </label>
         <label class="row">
+          <span class="label">
+            Turn off collapsing
+            <span class="hint">Removes the arrows and the collapse options, and keeps every tree expanded</span>
+          </span>
+          <input type="checkbox" name="disableCollapsing" class="switch" />
+        </label>
+        <label class="row" data-needs-collapsing>
           <span class="label">
             Expand a collapsed tree when one of its tabs is selected
             <span class="hint">For example when switching tabs with Ctrl+Tab</span>

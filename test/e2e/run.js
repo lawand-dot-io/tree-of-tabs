@@ -191,6 +191,41 @@ try {
     await settle();
   });
 
+  await check('turning collapsing off expands trees and removes the collapse controls', async () => {
+    const collapsedIds = async () => (await worker.evaluate(() => chrome.storage.session.get('tree'))).tree.collapsed;
+    const parentRow = panel.locator('.tab', { hasText: 'Page A' }).first();
+    await parentRow.hover();
+    await parentRow.locator('.twisty').click();
+    await settle();
+    assert.equal((await collapsedIds()).length, 1, 'collapsed before the change');
+
+    await worker.evaluate(() => chrome.storage.sync.set({ disableCollapsing: true }));
+    await settle();
+    assert.deepEqual(await collapsedIds(), [], 'collapsed trees expand');
+    const titles = await panel.$$eval('.tab .title', (els) => els.map((e) => e.textContent));
+    assert.ok(titles.includes('Page A-child-child'), 'hidden tabs are shown again');
+    assert.equal(await panel.locator('.twisty:visible').count(), 0, 'no arrows');
+
+    await parentRow.click({ button: 'right' });
+    const labels = await panel.$$eval('.menu-item', (items) => items.map((item) => item.textContent));
+    await panel.keyboard.press('Escape');
+    assert.ok(!labels.some((label) => /collapse|expand/i.test(label)), labels.join(', '));
+
+    // Nothing else can collapse a tree either: not the keyboard, not a message.
+    await parentRow.focus();
+    await panel.keyboard.press('ArrowLeft');
+    const id = Number(await parentRow.getAttribute('data-id'));
+    await panel.evaluate((id) => chrome.runtime.sendMessage({ type: 'set-collapsed', tabId: id, collapsed: true }), id);
+    await panel.evaluate((windowId) => chrome.runtime.sendMessage({ type: 'set-all-collapsed', windowId, collapsed: true }), mainWindowId);
+    await settle();
+    assert.deepEqual(await collapsedIds(), []);
+
+    await worker.evaluate(() => chrome.storage.sync.set({ disableCollapsing: false }));
+    await settle();
+    await parentRow.hover();
+    assert.equal(await parentRow.locator('.twisty').isVisible(), true, 'arrows come back');
+  });
+
   await check('dragging a tab onto another makes it a child', async () => {
     await drag('about:blank', await rowSelector('Page A-child-child'), 0.5);
     await settle();

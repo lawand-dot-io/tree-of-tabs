@@ -273,6 +273,7 @@ async function init() {
     const { order } = await windowTabs(windowId);
     for (const [id, parent] of sanitize(order, state.parents)) state.parents.set(id, parent);
   }
+  if (settings.disableCollapsing) state.collapsed.clear();
   ready = true;
   await commit();
 }
@@ -494,7 +495,14 @@ async function moveTreesToWindow(ids, windowId, placement) {
 }
 
 /** With collapsing turned off, every tree is expanded and stays that way. */
+async function expandEverything() {
+  if (!state.collapsed.size) return;
+  state.collapsed.clear();
+  await commit();
+}
+
 async function setCollapsed(tabId, collapsed) {
+  if (collapsed && settings.disableCollapsing) return;
   if (collapsed) state.collapsed.add(tabId);
   else state.collapsed.delete(tabId);
   const tab = await chrome.tabs.get(tabId).catch(() => null);
@@ -510,6 +518,7 @@ async function setCollapsed(tabId, collapsed) {
 }
 
 async function setAllCollapsed(windowId, collapsed) {
+  if (collapsed && settings.disableCollapsing) return;
   const { order } = await windowTabs(windowId);
   const tree = buildTree(order, state.parents);
   for (const id of order) {
@@ -662,6 +671,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 onSettingsChanged((next) => {
   settings = next;
+  if (settings.disableCollapsing) enqueue(expandEverything);
 });
 
 // Clicking the toolbar button toggles the side panel.

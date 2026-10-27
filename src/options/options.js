@@ -27,11 +27,16 @@ function setRowDisabled(row, reason) {
 }
 
 function updateDisabledRows() {
+  const collapsingOff = document.querySelector('[name=disableCollapsing]').checked;
   const closeAll = document.querySelector('[name=onCloseParent]').value === 'closeAll';
-  setRowDisabled(
-    document.querySelector('[name=closeCollapsedTree]').closest('.row'),
-    closeAll ? 'Not needed: closing a parent already closes its children' : null,
-  );
+  for (const row of document.querySelectorAll('[data-needs-collapsing]')) {
+    const field = row.querySelector('[name]').name;
+    let reason = collapsingOff ? 'Not available while “Turn off collapsing” is on' : null;
+    if (!reason && field === 'closeCollapsedTree' && closeAll) {
+      reason = 'Not needed: closing a parent already closes its children';
+    }
+    setRowDisabled(row, reason);
+  }
 }
 
 const settings = await loadSettings();
