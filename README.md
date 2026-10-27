@@ -101,7 +101,7 @@ test/
   tree.test.js       unit tests for tree.js
   e2e/run.js         loads the extension into Chromium and drives real tabs
 CHROMEWEBSTORE.md    everything for the Chrome Web Store listing and how to package
-tools/make-icons.py  regenerates icons/
+tools/make-icons.mjs regenerates icons/ (needs Playwright)
 tools/chrome-devtools-mcp.sh  starts the Chrome DevTools MCP server (see below)
 ```
 
