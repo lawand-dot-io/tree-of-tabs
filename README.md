@@ -4,6 +4,8 @@ Tree style tabs for Chrome, modeled on Firefox's
 [Tree Style Tab](https://github.com/piroor/treestyletab). Your tabs show as a
 tree in Chrome's own side panel, styled to match the browser.
 
+Built with [Claude Code](https://claude.com/claude-code).
+
 ## Features
 
 - **Tabs a page opens become its children.** That covers links opened in a
