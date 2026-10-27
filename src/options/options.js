@@ -12,10 +12,23 @@ function write(field, value) {
   else field.value = String(value);
 }
 
-// Settings about collapsed trees don't apply while collapsing is turned off.
-function showCollapsingRows() {
+// Settings about collapsed trees don't apply while collapsing is turned off:
+// they stay visible but disabled, with a note saying why.
+function updateCollapsingRows() {
   const off = document.querySelector('[name=disableCollapsing]').checked;
-  for (const row of document.querySelectorAll('[data-needs-collapsing]')) row.hidden = off;
+  for (const row of document.querySelectorAll('[data-needs-collapsing]')) {
+    row.classList.toggle('disabled', off);
+    row.querySelector('[name]').disabled = off;
+    let note = row.querySelector('.disabled-note');
+    if (!note) {
+      note = Object.assign(document.createElement('span'), {
+        className: 'disabled-note',
+        textContent: 'Not available while “Turn off collapsing” is on',
+      });
+      row.querySelector('.label').append(note);
+    }
+    note.hidden = !off;
+  }
 }
 
 const settings = await loadSettings();
@@ -26,7 +39,7 @@ for (const field of fields) {
     // Choosing here counts as answering the panel's first full screen question.
     if (field.name === 'hideInFullscreen') change.fullscreenChoiceMade = true;
     chrome.storage.sync.set(change);
-    showCollapsingRows();
+    updateCollapsingRows();
   });
 }
-showCollapsingRows();
+updateCollapsingRows();

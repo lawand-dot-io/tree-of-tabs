@@ -12,6 +12,7 @@
   --bg: #ffffff;
   --text: #1f1f1f;
   --text-secondary: #474747;
+  --text-disabled: rgb(31 31 31 / 0.38);
   --hover: rgb(31 31 31 / 0.06);
   --hover-strong: rgb(31 31 31 / 0.1);
   --pressed: rgb(31 31 31 / 0.12);
@@ -44,6 +45,7 @@
     --bg: #282a2c;
     --text: #e3e3e3;
     --text-secondary: #c4c7c5;
+    --text-disabled: rgb(227 227 227 / 0.38);
     --hover: rgb(227 227 227 / 0.07);
     --hover-strong: rgb(227 227 227 / 0.12);
     --pressed: rgb(227 227 227 / 0.14);
