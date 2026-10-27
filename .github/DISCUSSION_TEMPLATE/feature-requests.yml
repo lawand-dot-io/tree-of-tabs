@@ -1,0 +1,22 @@
+title: "[Feature] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the idea! Please first [search existing feature requests](https://github.com/lawand-dot-io/chrome-tree-style-tab/discussions/categories/feature-requests). If your idea is already there, add a 👍 or a comment to it instead of opening a new one: that helps show what people want most.
+  - type: checkboxes
+    attributes:
+      label: Before posting
+      options:
+        - label: I searched the existing feature requests and didn't find this one.
+          required: true
+  - type: textarea
+    attributes:
+      label: What would you like Tab Tree to do?
+      description: Describe the feature as you would use it.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Why would it help you?
+      description: The situation where you miss it. This often matters more than the exact solution.
