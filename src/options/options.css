@@ -9,9 +9,20 @@ main {
 }
 
 h1 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin: 8px 0 16px;
   font-size: 22px;
   font-weight: 400;
+}
+
+/* The 128px icon has 16px of transparent padding; the negative margin
+   trims it, so the tree itself lines up with the cards below. */
+h1 img {
+  width: 40px;
+  height: 40px;
+  margin: -5px;
 }
 
 h2 {
