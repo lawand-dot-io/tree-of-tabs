@@ -31,7 +31,7 @@ FEATURES
 • Automatic nesting: links you open in a new tab, middle-clicked links and pages that open tabs show up under the tab they came from. Tabs you open yourself, from the address bar, a bookmark or a new tab, start their own tree.
 • Drag and drop: drop a tab onto another to nest it, between tabs to reorder it, or below the list to start a new tree. The whole branch moves with it, and you can drag several selected tabs at once or move them to another window.
 • Stays in step with your tabs: the tree and the order of tabs at the top of the window always match. Moving a tab at the top moves its branch too.
-• Collapse branches you are not using: point at a tab's icon and it turns into an arrow. A collapsed branch shows a count of the tabs inside. If you never collapse, you can turn collapsing off entirely.
+• Collapse branches you are not using: point at a tab and its icon turns into an arrow. A collapsed branch shows a count of the tabs inside. If you never collapse, you can turn collapsing off entirely.
 • Closing a parent tab keeps its branch together: its first child takes its place. You can also choose to close the whole branch with it.
 • Pinned tabs show as a row of icons at the top. Tab group colors appear next to each tab.
 • New tab button: click it to start a new tree, or middle-click or right-click it to open a tab under the current one.

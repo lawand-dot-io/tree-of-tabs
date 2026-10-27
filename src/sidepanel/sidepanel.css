@@ -194,8 +194,8 @@ body {
 }
 
 /* The arrow takes no space of its own: it sits on top of the icon and
-   only shows while you point at a parent's icon, which it then replaces.
-   A collapsed tree is marked by its count. */
+   only shows while you point at a parent's row (or reach it with the
+   keyboard), replacing the icon. A collapsed tree is marked by its count. */
 .twisty {
   position: absolute;
   left: calc(var(--row-start) + var(--depth) * var(--indent));
@@ -215,13 +215,12 @@ body {
   color: inherit;
 }
 
-/* Once the arrow shows it is under the pointer, so it stays while you
-   point at either of them. With collapsing turned off it never shows. */
-:root:not(.no-collapsing) .tab.has-children:has(.icon:hover, .twisty:hover) .twisty {
+/* With collapsing turned off it never shows. */
+:root:not(.no-collapsing) .tab.has-children:is(:hover, :focus-visible) .twisty {
   visibility: visible;
 }
 
-:root:not(.no-collapsing) .tab.has-children:has(.icon:hover, .twisty:hover) .icon {
+:root:not(.no-collapsing) .tab.has-children:is(:hover, :focus-visible) .icon {
   visibility: hidden;
 }
 

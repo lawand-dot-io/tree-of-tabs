@@ -112,13 +112,6 @@ try {
       return `.tab[data-id="${rows.find((el) => el.querySelector('.title').textContent === text).dataset.id}"]`;
     }, text);
 
-  // Points at a row's icon, where a parent's arrow appears (over the icon,
-  // which is why Playwright's own hover() refuses: the arrow covers it).
-  const pointAtIcon = async (row) => {
-    const box = await row.locator('.icon').boundingBox();
-    await panel.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
-  };
-
   // Opens a tab the way people do: by clicking (or middle-clicking) a link
   // on a page. Every test page has one link; `name` points it somewhere.
   const openFrom = async (page, name, { middle = false } = {}) => {
@@ -172,7 +165,7 @@ try {
 
   await check('collapsing hides descendants and shows a count', async () => {
     const parentRow = panel.locator('.tab', { hasText: 'Page A' }).first();
-    await pointAtIcon(parentRow); // The icon turns into the arrow.
+    await parentRow.hover(); // The icon turns into the arrow.
     await parentRow.locator('.twisty').click();
     await settle();
     const titles = await panel.$$eval('.tab .title', (els) => els.map((e) => e.textContent));
@@ -182,22 +175,21 @@ try {
     await settle();
   });
 
-  await check("a parent's arrow shows only while pointing at its icon, in place of the icon", async () => {
+  await check("a parent's icon turns into its arrow only while pointing at the row", async () => {
     const parentRow = panel.locator('.tab', { hasText: 'Page A' }).first();
     const twisty = parentRow.locator('.twisty');
     const favicon = parentRow.locator('.icon');
     await panel.mouse.move(300, 630);
     assert.equal(await twisty.isVisible(), false, 'not pointed at');
+    assert.equal(await favicon.isVisible(), true);
     await parentRow.locator('.title').hover();
-    assert.equal(await twisty.isVisible(), false, 'pointing at the title');
-    await pointAtIcon(parentRow);
-    assert.equal(await twisty.isVisible(), true, 'pointing at the icon');
+    assert.equal(await twisty.isVisible(), true, 'pointing at the row');
     assert.equal(await favicon.isVisible(), false, 'the arrow replaces the icon');
     await twisty.click();
     await settle();
     await panel.mouse.move(300, 630);
     assert.equal(await twisty.isVisible(), false, 'collapsed: only the count shows');
-    await pointAtIcon(parentRow);
+    await parentRow.hover();
     await twisty.click();
     await settle();
   });
@@ -205,7 +197,7 @@ try {
   await check('turning collapsing off expands trees and removes the collapse controls', async () => {
     const collapsedIds = async () => (await worker.evaluate(() => chrome.storage.session.get('tree'))).tree.collapsed;
     const parentRow = panel.locator('.tab', { hasText: 'Page A' }).first();
-    await pointAtIcon(parentRow);
+    await parentRow.hover();
     await parentRow.locator('.twisty').click();
     await settle();
     assert.equal((await collapsedIds()).length, 1, 'collapsed before the change');
@@ -216,8 +208,8 @@ try {
     const titles = await panel.$$eval('.tab .title', (els) => els.map((e) => e.textContent));
     assert.ok(titles.includes('Page A-child-child'), 'hidden tabs are shown again');
     assert.equal(await panel.locator('.twisty:visible').count(), 0, 'no arrows');
-    await pointAtIcon(parentRow);
-    assert.equal(await panel.locator('.twisty:visible').count(), 0, 'not even when pointing at an icon');
+    await parentRow.hover();
+    assert.equal(await panel.locator('.twisty:visible').count(), 0, 'not even when pointing at a parent');
 
     await parentRow.click({ button: 'right' });
     const labels = await panel.$$eval('.menu-item', (items) => items.map((item) => item.textContent));
@@ -235,7 +227,7 @@ try {
 
     await worker.evaluate(() => chrome.storage.sync.set({ disableCollapsing: false }));
     await settle();
-    await pointAtIcon(parentRow);
+    await parentRow.hover();
     assert.equal(await parentRow.locator('.twisty').isVisible(), true, 'arrows come back');
   });
 
