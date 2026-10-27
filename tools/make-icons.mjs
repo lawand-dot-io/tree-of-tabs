@@ -15,24 +15,10 @@ const TRUNK = '#93603d';
 const LEAVES = ['#1e8e3e', '#34a853', '#188038'];
 const LINES = '#e6f4ea';
 
-// A browser tab sitting on (cx, base): rounded top corners and small
-// flared feet where it meets the tab strip.
-function tab(cx, base, w, h, r, f) {
-  const x0 = cx - w / 2;
-  const x1 = cx + w / 2;
-  const top = base - h;
-  return (
-    `M${x0 - f} ${base} A${f} ${f} 0 0 0 ${x0} ${base - f} ` +
-    `L${x0} ${top + r} A${r} ${r} 0 0 1 ${x0 + r} ${top} ` +
-    `L${x1 - r} ${top} A${r} ${r} 0 0 1 ${x1} ${top + r} ` +
-    `L${x1} ${base - f} A${f} ${f} 0 0 0 ${x1 + f} ${base} Z`
-  );
-}
-
 // detail: draw a favicon and title inside each tab (only at larger sizes).
 // bold: thicker wood, so it stays visible at 16 and 32 pixels.
 function svg({ detail, bold }) {
-  const w = 40;
+  const w = 44;
   const h = 27;
   const t = bold ? 7 : 4; // Half the trunk's width at the top.
   const branch = bold ? 11 : 7;
@@ -43,7 +29,8 @@ function svg({ detail, bold }) {
   ];
   const leaves = tabs
     .map(({ cx, base, color }) => {
-      let out = `<path d="${tab(cx, base, w, h, 7, 5)}" fill="${color}"/>`;
+      // A tab with every corner rounded, its bottom edge resting at base.
+      let out = `<rect x="${cx - w / 2}" y="${base - h}" width="${w}" height="${h}" rx="7" fill="${color}"/>`;
       if (detail) {
         const x0 = cx - w / 2;
         const mid = base - h / 2 + 1;
