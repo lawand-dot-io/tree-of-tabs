@@ -137,6 +137,12 @@ body {
   color: var(--active-text);
 }
 
+/* The guide lines stop at highlighted rows instead of crossing them. */
+.tab.active,
+.tab.highlighted {
+  background: none;
+}
+
 .tree {
   isolation: isolate;
 }
