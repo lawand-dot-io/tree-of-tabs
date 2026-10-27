@@ -39,6 +39,7 @@ FEATURES
 • Looks like part of the browser, in light and dark mode.
 • Full screen videos get the whole screen: the tree can hide itself when a page goes full screen.
 • Remembers your tree when you restart the browser.
+• Optional: keep a window open when you close its last tab from the tree.
 
 HOW TO USE
 1. Click the Tab Tree button in the toolbar (or use its keyboard shortcut) to open the tree in the side panel.
@@ -220,7 +221,7 @@ zip -r tab-tree-v0.1.0.zip manifest.json icons src -x "*.DS_Store"
 
 | Version | Date | Changes | Status |
 |---------|------|---------|--------|
-| 0.1.0 | 2026-10-27 | First release: tab tree in the side panel, automatic nesting, drag and drop, choice of what happens to a closed parent's children, collapsing (or turning it off), pinned tabs, tab group colors, right-click actions, keyboard navigation, hiding during full screen, tree restored after restart | Draft |
+| 0.1.0 | 2026-10-27 | First release: tab tree in the side panel, automatic nesting, drag and drop, choice of what happens to a closed parent's children, optionally keeping a window open when its last tab is closed from the tree, collapsing (or turning it off), pinned tabs, tab group colors, right-click actions, keyboard navigation, hiding during full screen, tree restored after restart | Draft |
 
 ## Review Notes
 

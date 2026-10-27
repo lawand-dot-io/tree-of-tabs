@@ -34,6 +34,10 @@ tree in Chrome's own side panel, styled to match the browser.
   Settings can instead move all its children up a level, or close them along
   with it. Closing a collapsed parent closes its hidden tabs too (also
   configurable).
+- **Keep the window open** (advanced, off by default): closing a window's
+  last tab from the tree opens a new tab first instead of closing the window.
+  Closing it from Chrome's own tab strip or with the keyboard shortcut still
+  closes the window; extensions can't change that.
 - **Context menu**: new child tab, reload, duplicate, pin, mute, collapse or
   expand all, indent and outdent, move a tree to a new window, close children,
   close tree.

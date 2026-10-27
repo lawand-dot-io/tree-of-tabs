@@ -245,8 +245,10 @@ function activate(id) {
   quietly(chrome.tabs.update(id, { active: true }));
 }
 
+// Closing goes through the worker, which knows which branches close along
+// and whether the window must be kept open.
 function closeTab(id) {
-  quietly(chrome.tabs.remove(id));
+  send({ type: 'close-tabs', ids: [id] });
 }
 
 function toggleCollapsed(id) {
@@ -508,7 +510,7 @@ function tabMenuItems(id) {
     'separator',
     { label: 'Close children', action: () => send({ type: 'close-children', tabId: id }), hidden: !hasChildren },
     { label: 'Close tree', action: () => send({ type: 'close-tree', tabId: id }), hidden: !hasChildren },
-    { label: many ? 'Close tabs' : 'Close', action: () => quietly(chrome.tabs.remove(ids)) },
+    { label: many ? 'Close tabs' : 'Close', action: () => send({ type: 'close-tabs', ids }) },
     'separator',
     { label: 'Settings', action: () => chrome.runtime.openOptionsPage() },
   ];

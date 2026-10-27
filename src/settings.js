@@ -17,6 +17,9 @@ export const DEFAULTS = {
   // Turn collapsing off entirely: no arrows, no collapse menu items, and
   // every tree stays expanded.
   disableCollapsing: false,
+  // Advanced: closing a window's last tab from the tree opens a new tab
+  // first, so the window stays open (Chrome normally closes it).
+  keepWindowOnLastTab: false,
   // Close the side panel while its window is full screen (videos, F11).
   hideInFullscreen: true,
   // Whether the user has picked hideInFullscreen yet. Until then, the first

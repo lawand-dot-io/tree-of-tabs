@@ -515,6 +515,30 @@ async function newChildTab(parentId, url) {
   pendingPlacements.set(created.id, childPlacement(parentId));
 }
 
+/**
+ * Closes tabs for the tree, together with any branches that close with their
+ * parent (see onRemoved). With "keep the window open" on, a window that
+ * would lose all its tabs gets a new tab first.
+ */
+async function closeTabs(ids) {
+  const tabs = (await Promise.all(ids.map((id) => chrome.tabs.get(id).catch(() => null)))).filter(Boolean);
+  if (!tabs.length) return;
+  const closing = new Set(tabs.map((t) => t.id));
+  for (const windowId of new Set(tabs.map((t) => t.windowId))) {
+    const { tabs: all, order } = await windowTabs(windowId);
+    const tree = buildTree(order, state.parents);
+    for (const id of [...closing]) {
+      const closesBranch =
+        settings.onCloseParent === 'closeAll' || (state.collapsed.has(id) && settings.closeCollapsedTree);
+      if (closesBranch && tree.children.has(id)) descendantsOf(tree, id).forEach((d) => closing.add(d));
+    }
+    if (settings.keepWindowOnLastTab && all.every((t) => closing.has(t.id))) {
+      await chrome.tabs.create({ windowId, active: true });
+    }
+  }
+  await chrome.tabs.remove([...closing]).catch(() => {});
+}
+
 /** Duplicates land right after the original's tree, as its next sibling. */
 async function duplicateTabs(ids) {
   for (const id of ids) {
@@ -567,12 +591,12 @@ async function handleMessage(message) {
       return indent(message.tabId);
     case 'outdent':
       return outdent(message.tabId);
+    case 'close-tabs':
+      return closeTabs(message.ids);
     case 'close-tree':
     case 'close-children': {
       const { descendants } = await subtreeOf(message.tabId);
-      const ids = message.type === 'close-tree' ? [message.tabId, ...descendants] : descendants;
-      if (ids.length) await chrome.tabs.remove(ids);
-      return;
+      return closeTabs(message.type === 'close-tree' ? [message.tabId, ...descendants] : descendants);
     }
   }
 }

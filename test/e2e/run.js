@@ -324,6 +324,53 @@ try {
     await settle();
   });
 
+  await check('closing the last tab from the tree keeps the window only when the setting is on', async () => {
+    const openWindow = async (name) => {
+      const [page] = await Promise.all([
+        context.waitForEvent('page'),
+        worker.evaluate((url) => chrome.windows.create({ url }), `${base}/${encodeURIComponent(name)}`),
+      ]);
+      await page.waitForLoadState();
+      const tabId = await idOf(`Page ${name}`);
+      const windowId = await worker.evaluate(async (id) => (await chrome.tabs.get(id)).windowId, tabId);
+      return { page, tabId, windowId };
+    };
+    const closeFromTree = (ids) => panel.evaluate((ids) => chrome.runtime.sendMessage({ type: 'close-tabs', ids }), ids);
+    const windowTabs = (windowId) =>
+      worker.evaluate((id) => chrome.tabs.query({ windowId: id }).then((tabs) => tabs.map((t) => t.pendingUrl || t.url)), windowId);
+    const windowExists = (windowId) => worker.evaluate((id) => chrome.windows.get(id).then(() => true, () => false), windowId);
+
+    // Off (the default): the window closes with its last tab, as in Chrome.
+    const plain = await openWindow('Last tab plain');
+    await closeFromTree([plain.tabId]);
+    await settle();
+    assert.equal(await windowExists(plain.windowId), false);
+
+    // On: a new tab takes the last tab's place and the window stays.
+    await worker.evaluate(() => chrome.storage.sync.set({ keepWindowOnLastTab: true }));
+    const kept = await openWindow('Last tab kept');
+    await closeFromTree([kept.tabId]);
+    await settle();
+    assert.equal(await windowExists(kept.windowId), true);
+    assert.deepEqual(await windowTabs(kept.windowId), ['chrome://newtab/']);
+
+    // On, with a branch that closes along with its parent.
+    await worker.evaluate(() => chrome.storage.sync.set({ onCloseParent: 'closeAll' }));
+    const branch = await openWindow('Last branch');
+    await openFrom(branch.page, 'Last branch child');
+    await settle();
+    await closeFromTree([branch.tabId]);
+    await settle();
+    assert.equal(await windowExists(branch.windowId), true);
+    assert.deepEqual(await windowTabs(branch.windowId), ['chrome://newtab/']);
+
+    await worker.evaluate(async (ids) => {
+      await Promise.all(ids.map((id) => chrome.windows.remove(id)));
+      await chrome.storage.sync.remove(['keepWindowOnLastTab', 'onCloseParent']);
+    }, [kept.windowId, branch.windowId]);
+    await settle();
+  });
+
   await check('pinned tabs leave the tree and show in the pinned bar', async () => {
     await worker.evaluate(async (id) => chrome.tabs.update(id, { pinned: true }), await idOf('about:blank'));
     await settle();
