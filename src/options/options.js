@@ -12,22 +12,30 @@ function write(field, value) {
   else field.value = String(value);
 }
 
-// Settings about collapsed trees don't apply while collapsing is turned off:
-// they stay visible but disabled, with a note saying why.
-function updateCollapsingRows() {
-  const off = document.querySelector('[name=disableCollapsing]').checked;
+// Settings that don't apply because of another one stay visible but
+// disabled, with a note saying why.
+function setRowDisabled(row, reason) {
+  row.classList.toggle('disabled', !!reason);
+  row.querySelector('[name]').disabled = !!reason;
+  let note = row.querySelector('.disabled-note');
+  if (!note) {
+    note = Object.assign(document.createElement('span'), { className: 'disabled-note' });
+    row.querySelector('.label').append(note);
+  }
+  note.textContent = reason ?? '';
+  note.hidden = !reason;
+}
+
+function updateDisabledRows() {
+  const collapsingOff = document.querySelector('[name=disableCollapsing]').checked;
+  const closeAll = document.querySelector('[name=onCloseParent]').value === 'closeAll';
   for (const row of document.querySelectorAll('[data-needs-collapsing]')) {
-    row.classList.toggle('disabled', off);
-    row.querySelector('[name]').disabled = off;
-    let note = row.querySelector('.disabled-note');
-    if (!note) {
-      note = Object.assign(document.createElement('span'), {
-        className: 'disabled-note',
-        textContent: 'Not available while “Turn off collapsing” is on',
-      });
-      row.querySelector('.label').append(note);
+    const field = row.querySelector('[name]').name;
+    let reason = collapsingOff ? 'Not available while “Turn off collapsing” is on' : null;
+    if (!reason && field === 'closeCollapsedTree' && closeAll) {
+      reason = 'Not needed: closing a parent already closes its children';
     }
-    note.hidden = !off;
+    setRowDisabled(row, reason);
   }
 }
 
@@ -39,7 +47,7 @@ for (const field of fields) {
     // Choosing here counts as answering the panel's first full screen question.
     if (field.name === 'hideInFullscreen') change.fullscreenChoiceMade = true;
     chrome.storage.sync.set(change);
-    updateCollapsingRows();
+    updateDisabledRows();
   });
 }
-updateCollapsingRows();
+updateDisabledRows();

@@ -239,6 +239,35 @@ try {
     );
   });
 
+  await check('with "Close its children too", closing a parent closes its whole branch', async () => {
+    await worker.evaluate(() => chrome.storage.sync.set({ onCloseParent: 'closeAll' }));
+    const ids = await worker.evaluate(async ({ base, windowId }) => {
+      const open = (path, openerTabId) =>
+        chrome.tabs.create({ windowId, url: base + path, openerTabId, active: false }).then((t) => t.id);
+      const parent = await open('/Close parent');
+      const child = await open('/Close child', parent);
+      const grandchild = await open('/Close grandchild', child);
+      const sibling = await open('/Close sibling', parent);
+      const bystander = await open('/Bystander');
+      return { parent, child, grandchild, sibling, bystander };
+    }, { base, windowId: mainWindowId });
+    await settle();
+    await worker.evaluate((id) => chrome.tabs.remove(id), ids.parent);
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    const alive = await worker.evaluate(
+      async (ids) => Object.fromEntries(await Promise.all(
+        Object.entries(ids).map(async ([name, id]) => [name, !!(await chrome.tabs.get(id).catch(() => null))]),
+      )),
+      ids,
+    );
+    assert.deepEqual(alive, { parent: false, child: false, grandchild: false, sibling: false, bystander: true });
+    await worker.evaluate(async (id) => {
+      await chrome.tabs.remove(id);
+      await chrome.storage.sync.remove('onCloseParent');
+    }, ids.bystander);
+    await settle();
+  });
+
   await check('pinned tabs leave the tree and show in the pinned bar', async () => {
     await worker.evaluate(async (id) => chrome.tabs.update(id, { pinned: true }), await idOf('about:blank'));
     await settle();

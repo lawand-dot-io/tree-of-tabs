@@ -1,7 +1,8 @@
 export const DEFAULTS = {
   // Where a tab opened from another tab goes: 'end' (last child) or 'first'.
   childPosition: 'end',
-  // What happens to the children of a closed parent: 'promoteFirst' or 'promoteAll'.
+  // What happens to the children of a closed parent: 'promoteFirst',
+  // 'promoteAll', or 'closeAll' (they close with it).
   onCloseParent: 'promoteFirst',
   // Closing a collapsed parent closes the whole hidden subtree.
   closeCollapsedTree: true,

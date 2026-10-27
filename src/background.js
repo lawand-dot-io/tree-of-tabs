@@ -128,7 +128,11 @@ async function applyMove(windowId, ids, targetId, position) {
   return true;
 }
 
-function releaseTab(tabId, order, mode = settings.onCloseParent) {
+function releaseTab(tabId, order) {
+  // With 'closeAll' the children of a closed tab are closing too; a tab that
+  // is pinned or moved to another window stays open, so its children stay
+  // and the first one takes its place.
+  const mode = settings.onCloseParent === 'promoteAll' ? 'promoteAll' : 'promoteFirst';
   for (const [id, parent] of releaseChildren(order, state.parents, tabId, mode)) {
     state.parents.set(id, parent);
   }
@@ -303,10 +307,10 @@ async function onRemoved(tabId, { windowId, isWindowClosing }) {
   }
   const { order } = await windowTabs(windowId);
   const wasCollapsed = state.collapsed.has(tabId);
-  if (wasCollapsed && settings.closeCollapsedTree) {
+  if (settings.onCloseParent === 'closeAll' || (wasCollapsed && settings.closeCollapsedTree)) {
     const tree = buildTree([tabId, ...order], state.parents);
-    const hidden = descendantsOf(tree, tabId);
-    if (hidden.length) chrome.tabs.remove(hidden).catch(() => {});
+    const descendants = descendantsOf(tree, tabId);
+    if (descendants.length) chrome.tabs.remove(descendants).catch(() => {});
   }
   releaseTab(tabId, order);
   state.parents.delete(tabId);

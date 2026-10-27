@@ -32,7 +32,7 @@ FEATURES
 • Drag and drop: drop a tab onto another to nest it, between tabs to reorder it, or below the list to start a new tree. The whole branch moves with it, and you can drag several selected tabs at once or move them to another window.
 • Stays in step with your tabs: the tree and the order of tabs at the top of the window always match. Moving a tab at the top moves its branch too.
 • Collapse branches you are not using, with a count of the tabs inside. If you never collapse, you can turn collapsing off entirely.
-• Closing a parent tab keeps its branch together: its first child takes its place.
+• Closing a parent tab keeps its branch together: its first child takes its place. You can also choose to close the whole branch with it.
 • Pinned tabs show as a row of icons at the top. Tab group colors appear next to each tab.
 • Right-click a tab for quick actions: new tab inside this branch, reload, duplicate, pin, mute, indent or outdent, move a branch to a new window, close a branch.
 • Keyboard friendly: move through the tree with the arrow keys, open the menu with Shift+F10, and show or hide the tree with a keyboard shortcut (Alt+Shift+T by default, Option+Shift+T on a Mac).
@@ -219,7 +219,7 @@ zip -r tab-tree-v0.1.0.zip manifest.json icons src -x "*.DS_Store"
 
 | Version | Date | Changes | Status |
 |---------|------|---------|--------|
-| 0.1.0 | 2026-10-27 | First release: tab tree in the side panel, automatic nesting, drag and drop, collapsing (or turning it off), pinned tabs, tab group colors, right-click actions, keyboard navigation, hiding during full screen, tree restored after restart | Draft |
+| 0.1.0 | 2026-10-27 | First release: tab tree in the side panel, automatic nesting, drag and drop, choice of what happens to a closed parent's children, collapsing (or turning it off), pinned tabs, tab group colors, right-click actions, keyboard navigation, hiding during full screen, tree restored after restart | Draft |
 
 ## Review Notes
 

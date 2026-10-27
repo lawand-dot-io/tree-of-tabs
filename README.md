@@ -29,7 +29,9 @@ tree in Chrome's own side panel, styled to match the browser.
   The arrows and the collapse menu items go away and every tree stays
   expanded.
 - **Closing a parent** promotes its first child, like Tree Style Tab does.
-  Closing a collapsed parent closes its hidden tabs too. Both are configurable.
+  Settings can instead move all its children up a level, or close them along
+  with it. Closing a collapsed parent closes its hidden tabs too (also
+  configurable).
 - **Context menu**: new child tab, reload, duplicate, pin, mute, collapse or
   expand all, indent and outdent, move a tree to a new window, close children,
   close tree.
