@@ -150,11 +150,12 @@ select {
   margin: 0 0 6px;
 }
 
-.about a {
+/* Every link on the page, including the chrome:// one in the tip. */
+a {
   color: var(--accent);
   text-decoration: none;
 }
 
-.about a:hover {
+a:hover {
   text-decoration: underline;
 }
