@@ -339,8 +339,10 @@ async function onOpenedFromPage(tabId, sourceId) {
 // When Chrome closes several tabs in one go ("Close other tabs", closing a
 // multi-selection), it reports them all at the same moment. Those are exactly
 // the tabs the user meant to close, so no extra branches close with them.
-// (Closing from the tree works out the branches itself, in closeTabs.)
+// Closing from the tree works out the branches itself, in closeTabs, and
+// marks those tabs in closedByTree.
 const removalTimes = [];
+const closedByTree = new Set();
 function noteRemoval() {
   const now = Date.now();
   while (removalTimes.length && removalTimes[0] < now - 5000) removalTimes.shift();
@@ -350,6 +352,7 @@ function noteRemoval() {
 const closedWithOthers = (at) => removalTimes.filter((t) => Math.abs(t - at) <= 50).length > 1;
 
 async function onRemoved(tabId, { windowId, isWindowClosing }, removedAt) {
+  const branchHandled = closedByTree.delete(tabId);
   if (!state.parents.has(tabId)) return;
   if (isWindowClosing) {
     // Keep the last snapshot of the window so it can be restored later.
@@ -360,7 +363,7 @@ async function onRemoved(tabId, { windowId, isWindowClosing }, removedAt) {
   const { order } = await windowTabs(windowId);
   const wasCollapsed = state.collapsed.has(tabId);
   const closesBranch = settings.onCloseParent === 'closeAll' || (wasCollapsed && settings.closeCollapsedTree);
-  if (closesBranch && !closedWithOthers(removedAt)) {
+  if (closesBranch && !branchHandled && !closedWithOthers(removedAt)) {
     const tree = buildTree([tabId, ...order], state.parents);
     const descendants = descendantsOf(tree, tabId);
     if (descendants.length) chrome.tabs.remove(descendants).catch(() => {});
@@ -545,10 +548,11 @@ async function newChildTab(parentId, url) {
 
 /**
  * Closes tabs for the tree, together with any branches that close with their
- * parent (see onRemoved). With "keep the window open" on, a window that
- * would lose all its tabs gets a new tab first.
+ * parent (see onRemoved), but never the tabs in `keep` ("Close other tabs").
+ * With "keep the window open" on, a window that would lose all its tabs gets
+ * a new tab first.
  */
-async function closeTabs(ids) {
+async function closeTabs(ids, keep = []) {
   const tabs = (await Promise.all(ids.map((id) => chrome.tabs.get(id).catch(() => null)))).filter(Boolean);
   if (!tabs.length) return;
   const closing = new Set(tabs.map((t) => t.id));
@@ -558,12 +562,14 @@ async function closeTabs(ids) {
     for (const id of [...closing]) {
       const closesBranch =
         settings.onCloseParent === 'closeAll' || (state.collapsed.has(id) && settings.closeCollapsedTree);
-      if (closesBranch && tree.children.has(id)) descendantsOf(tree, id).forEach((d) => closing.add(d));
+      if (!closesBranch || !tree.children.has(id)) continue;
+      for (const d of descendantsOf(tree, id)) if (!keep.includes(d)) closing.add(d);
     }
     if (settings.keepWindowOnLastTab && all.every((t) => closing.has(t.id))) {
       await chrome.tabs.create({ windowId, active: true });
     }
   }
+  closing.forEach((id) => closedByTree.add(id));
   await chrome.tabs.remove([...closing]).catch(() => {});
 }
 
@@ -620,7 +626,7 @@ async function handleMessage(message) {
     case 'outdent':
       return outdent(message.tabId);
     case 'close-tabs':
-      return closeTabs(message.ids);
+      return closeTabs(message.ids, message.keep);
     case 'close-tree':
     case 'close-children': {
       const { descendants } = await subtreeOf(message.tabId);

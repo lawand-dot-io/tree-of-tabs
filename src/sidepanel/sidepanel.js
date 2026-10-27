@@ -478,6 +478,10 @@ function tabMenuItems(id) {
   const siblings = parent === null || parent === undefined ? tree.roots : tree.children.get(parent);
   const ids = selectedIdsFor(id);
   const many = ids.length > 1;
+  // Like Chrome's "Close other tabs" and "Close tabs to the right", pinned tabs stay.
+  const last = Math.max(...ids.map((x) => tabsById.get(x)?.index ?? -1));
+  const others = [...tabsById.values()].filter((t) => !t.pinned && !ids.includes(t.id)).map((t) => t.id);
+  const below = others.filter((x) => tabsById.get(x).index > last);
   return [
     { label: 'New tab as child', action: () => send({ type: 'new-child-tab', tabId: id }), hidden: tab.pinned },
     { label: 'New tab', action: newTab },
@@ -521,6 +525,16 @@ function tabMenuItems(id) {
     { label: 'Close children', action: () => send({ type: 'close-children', tabId: id }), hidden: !hasChildren },
     { label: 'Close tree', action: () => send({ type: 'close-tree', tabId: id }), hidden: !hasChildren },
     { label: many ? 'Close tabs' : 'Close', action: () => send({ type: 'close-tabs', ids }) },
+    {
+      label: 'Close other tabs',
+      action: () => send({ type: 'close-tabs', ids: others, keep: ids }),
+      disabled: !others.length,
+    },
+    {
+      label: 'Close tabs below',
+      action: () => send({ type: 'close-tabs', ids: below, keep: ids }),
+      disabled: !below.length,
+    },
     'separator',
     { label: 'Settings', action: () => chrome.runtime.openOptionsPage() },
   ];

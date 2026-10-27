@@ -44,7 +44,8 @@ Built with [Claude Code](https://claude.com/claude-code).
   closes the window; extensions can't change that.
 - **Context menu**: new child tab, reload, duplicate, pin, mute, collapse or
   expand all, indent and outdent, move a tree to a new window, close children,
-  close tree.
+  close tree, close other tabs, close tabs below. Like Chrome's own menu, the
+  last two leave pinned tabs open.
 - **New tab button**: click it for a new tree. Middle-click it, or right-click
   it and pick from the menu, for a new tab under the current tab.
 - **Keyboard**: arrow keys move through the tree, Left and Right collapse and

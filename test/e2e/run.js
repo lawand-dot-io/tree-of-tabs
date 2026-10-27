@@ -417,6 +417,67 @@ try {
     await settle();
   });
 
+  await check('"Close other tabs" and "Close tabs below" keep the chosen tab and pinned tabs', async () => {
+    // In a window of its own, with its own panel, so the main window's tabs stay.
+    await worker.evaluate(() => chrome.storage.sync.set({ onCloseParent: 'closeAll' }));
+    const [firstPage, windowId] = await Promise.all([
+      context.waitForEvent('page'),
+      worker.evaluate(async (url) => (await chrome.windows.create({ url })).id, `${base}/Others parent`),
+    ]);
+    await firstPage.waitForLoadState();
+    const openIn = async (name, extra = {}) => {
+      const [opened] = await Promise.all([
+        context.waitForEvent('page'),
+        worker.evaluate((args) => chrome.tabs.create({ active: false, ...args }), { windowId, url: `${base}/${name}`, ...extra }),
+      ]);
+      await opened.waitForLoadState();
+      return opened;
+    };
+    await openFrom(firstPage, 'Others child'); // The tab to keep, under a parent that closes.
+    // Only the parent closes, by itself, so the kept child can't slip in with its branch.
+    await openIn('Others pinned', { pinned: true });
+    await settle();
+    const titles = () =>
+      worker.evaluate(
+        async (windowId) => (await chrome.tabs.query({ windowId })).sort((a, b) => a.index - b.index).map((t) => t.title),
+        windowId,
+      );
+    const [otherPanel] = await Promise.all([
+      context.waitForEvent('page'),
+      worker.evaluate(
+        (url) => chrome.windows.create({ url, type: 'popup', width: 320, height: 640 }),
+        panelUrl.replace(`windowId=${mainWindowId}`, `windowId=${windowId}`),
+      ),
+    ]);
+    await otherPanel.waitForLoadState();
+    await settle();
+    const menu = async (title, item) => {
+      await otherPanel.locator('.tab', { hasText: title }).click({ button: 'right' });
+      await otherPanel.locator('.menu-item', { hasText: item }).click();
+      await new Promise((resolve) => setTimeout(resolve, 800));
+    };
+
+    await menu('Page Others child', 'Close other tabs');
+    assert.deepEqual(await titles(), ['Page Others pinned', 'Page Others child']);
+
+    await openIn('Others second');
+    await openIn('Others third');
+    await openIn('Others fourth');
+    await settle();
+    await menu('Page Others second', 'Close tabs below');
+    assert.deepEqual(await titles(), ['Page Others pinned', 'Page Others child', 'Page Others second']);
+
+    await otherPanel.locator('.tab', { hasText: 'Page Others second' }).click({ button: 'right' });
+    assert.ok(await otherPanel.locator('.menu-item', { hasText: 'Close tabs below' }).isDisabled(), 'nothing below');
+    await otherPanel.keyboard.press('Escape');
+    await otherPanel.close();
+    await worker.evaluate(async (windowId) => {
+      await chrome.windows.remove(windowId);
+      await chrome.storage.sync.remove('onCloseParent');
+    }, windowId);
+    await settle();
+  });
+
   await check('links on the settings page open as its children', async () => {
     const optionsUrl = `chrome-extension://${extensionId}/src/options/options.html`;
     const [options] = await Promise.all([
