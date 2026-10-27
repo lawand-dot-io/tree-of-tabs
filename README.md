@@ -6,9 +6,11 @@ tree in Chrome's own side panel, styled to match the browser.
 
 ## Features
 
-- **Tabs opened from a tab become its children.** That covers link clicks,
-  middle clicks and pages that open new tabs. Blank new tabs (Ctrl+T) start
-  their own tree, and a setting can make them children too.
+- **Tabs a page opens become its children.** That covers links opened in a
+  new tab, middle clicks and pages that open new tabs. Tabs you open from the
+  browser itself (the address bar, bookmarks, an extension's options page)
+  start their own tree. So do blank new tabs (Ctrl+T), unless a setting makes
+  them children.
 - **Drag and drop** in the panel:
   - drop on the middle of a tab to make it a child,
   - drop on the top or bottom edge to place it before or after as a sibling

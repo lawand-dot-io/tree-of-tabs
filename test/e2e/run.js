@@ -112,11 +112,27 @@ try {
       return `.tab[data-id="${rows.find((el) => el.querySelector('.title').textContent === text).dataset.id}"]`;
     }, text);
 
-  // Headless Chromium uses the active tab as the opener of every new tab, so
-  // focus the page before clicking its link.
-  const clickLink = async (page) => {
-    await page.bringToFront();
-    const [opened] = await Promise.all([context.waitForEvent('page'), page.click('#child')]);
+  // Opens a tab the way people do: by clicking (or middle-clicking) a link
+  // on a page. Every test page has one link; `name` points it somewhere.
+  const openFrom = async (page, name, { middle = false } = {}) => {
+    if (name) await page.evaluate((href) => (document.getElementById('child').href = href), `/${encodeURIComponent(name)}`);
+    const [opened] = await Promise.all([
+      context.waitForEvent('page'),
+      page.click('#child', middle ? { button: 'middle' } : {}),
+    ]);
+    await opened.waitForLoadState();
+    return opened;
+  };
+  const clickLink = (page) => openFrom(page);
+  // A tab that no page opened, like one from the address bar.
+  const openRoot = async (name) => {
+    const [opened] = await Promise.all([
+      context.waitForEvent('page'),
+      worker.evaluate(
+        ({ url, windowId }) => chrome.tabs.create({ windowId, url, active: false }),
+        { url: `${base}/${encodeURIComponent(name)}`, windowId: mainWindowId },
+      ),
+    ]);
     await opened.waitForLoadState();
     return opened;
   };
@@ -241,17 +257,15 @@ try {
 
   await check('with "Close its children too", closing a parent closes its whole branch', async () => {
     await worker.evaluate(() => chrome.storage.sync.set({ onCloseParent: 'closeAll' }));
-    const ids = await worker.evaluate(async ({ base, windowId }) => {
-      const open = (path, openerTabId) =>
-        chrome.tabs.create({ windowId, url: base + path, openerTabId, active: false }).then((t) => t.id);
-      const parent = await open('/Close parent');
-      const child = await open('/Close child', parent);
-      const grandchild = await open('/Close grandchild', child);
-      const sibling = await open('/Close sibling', parent);
-      const bystander = await open('/Bystander');
-      return { parent, child, grandchild, sibling, bystander };
-    }, { base, windowId: mainWindowId });
+    const parentPage = await openRoot('Close parent');
+    const childPage = await openFrom(parentPage, 'Close child');
+    await openFrom(childPage, 'Close grandchild', { middle: true });
+    await openFrom(parentPage, 'Close sibling', { middle: true });
+    await openRoot('Bystander');
     await settle();
+    const ids = {};
+    for (const name of ['parent', 'child', 'grandchild', 'sibling']) ids[name] = await idOf(`Page Close ${name}`);
+    ids.bystander = await idOf('Page Bystander');
     await worker.evaluate((id) => chrome.tabs.remove(id), ids.parent);
     await new Promise((resolve) => setTimeout(resolve, 800));
     const alive = await worker.evaluate(
@@ -265,6 +279,31 @@ try {
       await chrome.tabs.remove(id);
       await chrome.storage.sync.remove('onCloseParent');
     }, ids.bystander);
+    await settle();
+  });
+
+  await check('tabs the browser or another extension opens are not children', async () => {
+    const parentOf = (url) =>
+      worker.evaluate(async (url) => {
+        const [tab] = await chrome.tabs.query({ url });
+        const { tree } = await chrome.storage.session.get('tree');
+        return { id: tab?.id, parent: new Map(tree.parents).get(tab?.id) };
+      }, url);
+    // Chrome gives these an opener (the active tab), but no page opened them.
+    await panel.evaluate(() => chrome.runtime.openOptionsPage());
+    await settle();
+    const options = await parentOf(`chrome-extension://${extensionId}/src/options/options.html`);
+    assert.ok(options.id, 'the options page opened');
+    assert.equal(options.parent, null, 'the options page is not a child');
+    const created = await worker.evaluate(async (windowId) => {
+      const [active] = await chrome.tabs.query({ windowId, active: true });
+      const tab = await chrome.tabs.create({ windowId, url: 'about:blank', openerTabId: active.id, active: false });
+      await new Promise((resolve) => setTimeout(resolve, 400));
+      const { tree } = await chrome.storage.session.get('tree');
+      return { id: tab.id, parent: new Map(tree.parents).get(tab.id) };
+    }, mainWindowId);
+    assert.equal(created.parent, null, 'a tab another extension opens is not a child');
+    await worker.evaluate((ids) => chrome.tabs.remove(ids), [options.id, created.id]);
     await settle();
   });
 
@@ -358,17 +397,16 @@ try {
   });
 
   await check('tabs opened in quick succession keep their parents', async () => {
-    await worker.evaluate(async ({ base, windowId }) => {
-      const open = (path, openerTabId) =>
-        chrome.tabs.create({ windowId, url: base + path, openerTabId, active: false });
-      const docs = await open('/Project docs');
-      const spec = await open('/Design spec', docs.id);
-      await open('/Review comments', spec.id);
-      await open('/Meeting notes', docs.id);
-      const news = await open('/News');
-      await open('/Article about browsers', news.id);
-      await open('/Another article', news.id);
-    }, { base, windowId: mainWindowId });
+    const docs = await openRoot('Project docs');
+    const spec = await openFrom(docs, 'Design spec');
+    await openFrom(spec, 'Review comments', { middle: true });
+    await openFrom(docs, 'Meeting notes', { middle: true });
+    const news = await openRoot('News');
+    // Two middle clicks right after each other, without waiting for the tabs.
+    for (const name of ['Article about browsers', 'Another article']) {
+      await news.evaluate((href) => (document.getElementById('child').href = href), `/${encodeURIComponent(name)}`);
+      await news.click('#child', { button: 'middle' });
+    }
     await new Promise((resolve) => setTimeout(resolve, 1200));
     const lines = (await outline()).split('\n').slice(3);
     assert.deepEqual(lines, [

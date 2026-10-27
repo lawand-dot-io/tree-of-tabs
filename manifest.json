@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "description": "See your tabs as a tree in the side panel. Tabs you open from a page nest under it, and you can drag them to reorganize.",
   "minimum_chrome_version": "116",
-  "permissions": ["tabs", "tabGroups", "sidePanel", "storage", "favicon"],
+  "permissions": ["tabs", "webNavigation", "tabGroups", "sidePanel", "storage", "favicon"],
   "background": {
     "service_worker": "src/background.js",
     "type": "module"

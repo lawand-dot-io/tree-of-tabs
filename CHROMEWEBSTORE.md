@@ -28,7 +28,7 @@ See your tabs as a tree in the side panel. Tabs you open from a page nest under 
 See your tabs as a tree in the side panel. Every tab you open from a page appears nested under that page, so you can always tell where a tab came from and which tabs belong together.
 
 FEATURES
-• Automatic nesting: links you open in a new tab, middle-clicked links and pages that open tabs show up under the tab they came from.
+• Automatic nesting: links you open in a new tab, middle-clicked links and pages that open tabs show up under the tab they came from. Tabs you open yourself, from the address bar, a bookmark or a new tab, start their own tree.
 • Drag and drop: drop a tab onto another to nest it, between tabs to reorder it, or below the list to start a new tree. The whole branch moves with it, and you can drag several selected tabs at once or move them to another window.
 • Stays in step with your tabs: the tree and the order of tabs at the top of the window always match. Moving a tab at the top moves its branch too.
 • Collapse branches you are not using, with a count of the tabs inside. If you never collapse, you can turn collapsing off entirely.
@@ -101,13 +101,14 @@ web pages. There is no `scripting`, `history`, `bookmarks` or `<all_urls>`.
 
 | Permission | Type | Justification |
 |------------|------|---------------|
-| `tabs` | permissions | The tree shows every open tab with its title, website address and icon, so it needs those three properties of each tab. It also needs to know which tab a new tab was opened from, to nest it under that tab. The tree's actions (activate, move, close, reload, duplicate, pin and mute tabs) act on the user's own tabs when they click, drag or use the menu. Tab content is never read. |
+| `tabs` | permissions | The tree shows every open tab with its title, website address and icon, so it needs those three properties of each tab. The tree's actions (activate, move, close, reload, duplicate, pin and mute tabs) act on the user's own tabs when they click, drag or use the menu. Tab content is never read. |
+| `webNavigation` | permissions | Tells the extension when a page opens a new tab (a link opened in a new tab, a middle-clicked link, or a page opening a window), and which tab that page is in. That is how a new tab gets nested under the page it came from, while tabs the user opens from the address bar, a bookmark or the browser's menus start their own tree. Only that event is used; the extension doesn't track the pages visited. |
 | `tabGroups` | permissions | Reads the color of each tab group so the tree can show a matching color bar next to tabs that are in a group. Groups are never changed. |
 | `sidePanel` | permissions | The tree is displayed in the browser's side panel. Clicking the toolbar button or pressing the keyboard shortcut opens it, and it closes itself when a page goes full screen if the user chose that. |
 | `storage` | permissions | Saves the tree's structure (which tab is nested under which, and which branches are collapsed) so it survives restarts, and saves the user's settings, such as where new child tabs go and the row spacing. |
 | `favicon` | permissions | Shows each tab's website icon from the browser's own icon cache. This is how browser pages and tabs that have been put to sleep still get their icon, without downloading anything. |
 
-The install prompt shows `tabs` as "Read your browsing history". The detailed
+The install prompt shows `tabs` and `webNavigation` together as "Read your browsing history". The detailed
 description explains this in plain words.
 
 ## Privacy & Data Use

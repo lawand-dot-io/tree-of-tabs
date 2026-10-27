@@ -26,6 +26,12 @@ const expectedMoves = new Map(); // tabId -> { count, until }
 const pendingPlacements = new Map(); // tabId -> { targetId, position }
 // Tabs we are moving to another window together with their subtrees.
 const crossWindowMoves = new Map(); // tabId -> placement | null
+// Tabs that a page opened (a link, a middle click, a script), with the tab
+// whose page opened them. Only these become children of another tab. A
+// tab's openerTabId is not enough: Chrome also sets it, to whatever tab is
+// active, for tabs opened from its own interface (an options page, a
+// bookmark), and for middle-clicked links it can name the wrong tab.
+const openedFrom = new Map(); // tabId -> source tabId
 
 // Ctrl+T tabs. Tabs opened from links can briefly have no URL at all, so an
 // empty URL does not count as a new tab page.
@@ -279,14 +285,13 @@ async function onCreated(createdTab, latest) {
 
   let placement = pendingPlacements.get(tab.id);
   pendingPlacements.delete(tab.id);
+  const source = openedFrom.get(tab.id);
   const opener = tab.openerTabId;
-  if (
-    !placement &&
-    opener !== undefined &&
-    order.includes(opener) &&
-    (settings.newTabAsChild || !isNewTabPage(tab))
-  ) {
-    placement = { targetId: opener, position: settings.childPosition === 'first' ? 'firstChild' : 'inside' };
+  if (!placement && source !== undefined && order.includes(source)) {
+    placement = childPlacement(source);
+  } else if (!placement && settings.newTabAsChild && isNewTabPage(tab) && order.includes(opener)) {
+    // Ctrl+T with "Open new tabs as children" on.
+    placement = childPlacement(opener);
   }
 
   if (placement) {
@@ -295,6 +300,26 @@ async function onCreated(createdTab, latest) {
     state.parents.set(tab.id, inferParent(order, state.parents, tab.id));
   }
   await commit(tab.windowId);
+}
+
+const childPlacement = (parentId) => ({
+  targetId: parentId,
+  position: settings.childPosition === 'first' ? 'firstChild' : 'inside',
+});
+
+/**
+ * Chrome reports that a page opened a tab right around onCreated, in either
+ * order. If onCreated already placed the tab, nest it under its source now.
+ */
+async function onOpenedFromPage(tabId, sourceId) {
+  openedFrom.delete(tabId);
+  if (!state.parents.has(tabId) || state.parents.get(tabId) === sourceId) return;
+  const tab = await chrome.tabs.get(tabId).catch(() => null);
+  if (!tab || tab.pinned) return;
+  const { order } = await windowTabs(tab.windowId);
+  if (!order.includes(sourceId)) return; // Opened from a pinned tab or another window.
+  const { targetId, position } = childPlacement(sourceId);
+  if (await applyMove(tab.windowId, [tabId], targetId, position)) await commit(tab.windowId);
 }
 
 async function onRemoved(tabId, { windowId, isWindowClosing }) {
@@ -487,10 +512,7 @@ async function newChildTab(parentId, url) {
     url,
     active: true,
   });
-  pendingPlacements.set(created.id, {
-    targetId: parentId,
-    position: settings.childPosition === 'first' ? 'firstChild' : 'inside',
-  });
+  pendingPlacements.set(created.id, childPlacement(parentId));
 }
 
 async function openUrlAt({ windowId, url, targetId, position }) {
@@ -550,11 +572,17 @@ async function handleMessage(message) {
 
 const on = (event, handler) => event.addListener((...args) => enqueue(() => handler(...args)));
 chrome.tabs.onCreated.addListener((tab) => {
-  // For tabs created through the API, onCreated fires before Chrome sets
-  // openerTabId. Read the tab again right away: Chrome forgets openers once
-  // tabs get moved, so waiting for the queue could be too late.
+  // The opener only matters for Ctrl+T tabs with "Open new tabs as children"
+  // on. onCreated can fire before Chrome sets openerTabId, so read the tab
+  // again right away: Chrome forgets openers once tabs get moved, so waiting
+  // for the queue could be too late.
   const latest = tab.openerTabId === undefined ? chrome.tabs.get(tab.id).catch(() => null) : null;
   enqueue(() => onCreated(tab, latest));
+});
+chrome.webNavigation.onCreatedNavigationTarget.addListener(({ tabId, sourceTabId }) => {
+  // Recorded right away so a queued onCreated for this tab can use it.
+  openedFrom.set(tabId, sourceTabId);
+  enqueue(() => onOpenedFromPage(tabId, sourceTabId));
 });
 on(chrome.tabs.onRemoved, onRemoved);
 on(chrome.tabs.onMoved, onMoved);
