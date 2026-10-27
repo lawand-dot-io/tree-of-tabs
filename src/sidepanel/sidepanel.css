@@ -107,10 +107,17 @@ body {
   outline-offset: -2px;
 }
 
-/* A thin line between top-level trees. It sits in the 1px gap above the
-   row, so it never crosses a highlighted row. */
-.tab.root:not(:first-child) {
-  background: linear-gradient(var(--guide), var(--guide)) 0 0 / 100% 1px no-repeat;
+/* Children get a short dash for each level in their indentation, like an
+   outline, each under the middle of an ancestor's arrow. A child without
+   children gets one more dash where its own arrow would be. */
+.tab:not(.root) {
+  --dashes: var(--depth);
+  background: repeating-linear-gradient(90deg, var(--dash) 0 6px, transparent 6px var(--indent))
+    calc(var(--row-start) + 5px) 50% / calc(var(--dashes) * var(--indent)) 1px no-repeat;
+}
+
+:root:not(.no-collapsing) .tab:not(.root, .has-children) {
+  --dashes: calc(var(--depth) + 1);
 }
 
 /* A thin gap between rows, without a dead zone for drag and drop. */
