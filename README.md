@@ -28,10 +28,11 @@ Built with [Claude Code](https://claude.com/claude-code).
 - **The native tab strip stays in sync.** Tree order and Chrome's tab order
   always match. Moving a tab in the tab strip moves its subtree too, and its
   new parent comes from where you dropped it.
-- **Collapse and expand** subtrees with the arrow. To keep the tree calm, an
-  expanded tree shows its arrow only when you point at it; a collapsed tree
-  always shows it, with how many tabs it hides. A collapsed tree expands again
-  when one of its hidden tabs gets focus (for example through Ctrl+Tab).
+- **Collapse and expand** a subtree by pointing at its parent's icon: the icon
+  turns into an arrow you can click (or use Left and Right on the keyboard).
+  There is no arrow otherwise, so the tree stays calm. A collapsed tree shows
+  how many tabs it hides, and it expands again when one of its hidden tabs gets
+  focus (for example through Ctrl+Tab).
 - **Never collapse**: if you don't use collapsing, turn it off in Settings.
   The arrows and the collapse menu items go away and every tree stays
   expanded.

@@ -1,10 +1,9 @@
 :root {
   --indent: 16px;
-  /* Space before the first icon in a row. The arrow and the close button's
-     X are drawn with about 5px of empty space inside their 16px boxes, so
-     4px here leaves about 9px of visible space on each side. Without the
-     arrow, the favicon (which fills its box) needs the full 9px. */
-  --row-start: 4px;
+  /* Space before the favicon, which fills its 16px box. The close button's
+     X is drawn with about 5px of empty space inside its box, so with the 4px
+     after it there is about 9px of visible space on each side. */
+  --row-start: 9px;
   --row-height: 32px;
   --tree-padding: 6px;
 }
@@ -106,7 +105,7 @@ body {
   border-radius: 8px;
   outline-offset: -2px;
   /* Guide lines: one per level, running down from the middle of each
-     ancestor's arrow (or its icon, with collapsing off). Rows touch, so the
+     ancestor's icon. Rows touch, so the
      lines join up into one line per branch. */
   background: repeating-linear-gradient(90deg, var(--guide) 0 1px, transparent 1px var(--indent))
     calc(var(--row-start) + 7.5px) 0 / calc(var(--depth) * var(--indent)) 100% no-repeat;
@@ -194,8 +193,12 @@ body {
   border-radius: 2px;
 }
 
+/* The arrow takes no space of its own: it sits on top of the icon and
+   only shows while you point at a parent's icon, which it then replaces.
+   A collapsed tree is marked by its count. */
 .twisty {
-  flex: none;
+  position: absolute;
+  left: calc(var(--row-start) + var(--depth) * var(--indent));
   display: grid;
   place-items: center;
   width: 16px;
@@ -212,18 +215,14 @@ body {
   color: inherit;
 }
 
-/* An expanded tree already shows its children and the guide line below
-   it, so its arrow only appears on hover (or keyboard focus), to collapse
-   it. A collapsed tree always shows its arrow, next to the count. */
-.tab.has-children.collapsed .twisty,
-.tab.has-children:hover .twisty,
-.tab.has-children:focus-visible .twisty {
+/* Once the arrow shows it is under the pointer, so it stays while you
+   point at either of them. With collapsing turned off it never shows. */
+:root:not(.no-collapsing) .tab.has-children:has(.icon:hover, .twisty:hover) .twisty {
   visibility: visible;
 }
 
-/* With collapsing turned off there is no arrow, and no space kept for one. */
-.no-collapsing .twisty {
-  display: none;
+:root:not(.no-collapsing) .tab.has-children:has(.icon:hover, .twisty:hover) .icon {
+  visibility: hidden;
 }
 
 .twisty:hover {
@@ -359,18 +358,9 @@ body {
   gap: 6px;
   height: var(--row-height);
   margin: 2px var(--tree-padding) 0;
-  padding-inline: 24px 4px;
+  padding-inline: var(--row-start) 4px;
   border-radius: 8px;
   color: var(--text-secondary);
-}
-
-/* Line the + up with the tab icons when there is no arrow before them. */
-:root.no-collapsing {
-  --row-start: 9px;
-}
-
-.no-collapsing .new-tab {
-  padding-inline-start: var(--row-start);
 }
 
 .new-tab:hover {
