@@ -214,14 +214,14 @@ Only these go in the ZIP: `manifest.json`, `icons/` and `src/`. The tests, tools
 `.claude/`, `.mcp.json`, `package.json`, `README.md` and this file stay out.
 
 ```sh
-zip -r tab-tree-v0.1.0.zip manifest.json icons src -x "*.DS_Store"
+zip -r tab-tree-v1.0.0.zip manifest.json icons src -x "*.DS_Store"
 ```
 
 ## Version History
 
 | Version | Date | Changes | Status |
 |---------|------|---------|--------|
-| 0.1.0 | 2026-10-27 | First release: tab tree in the side panel, automatic nesting, drag and drop, choice of what happens to a closed parent's children, optionally keeping a window open when its last tab is closed from the tree, collapsing (or turning it off), pinned tabs, tab group colors, right-click actions, keyboard navigation, hiding during full screen, tree restored after restart | Draft |
+| 1.0.0 | 2026-10-27 | First release: tab tree in the side panel, automatic nesting, drag and drop, choice of what happens to a closed parent's children, optionally keeping a window open when its last tab is closed from the tree, collapsing (or turning it off), pinned tabs, tab group colors, right-click actions, keyboard navigation, hiding during full screen, tree restored after restart | Draft |
 
 ## Review Notes
 
