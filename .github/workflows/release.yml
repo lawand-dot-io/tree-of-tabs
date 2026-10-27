@@ -1,11 +1,13 @@
-# Pushing a version tag (v1.0.1, matching manifest.json) builds the ZIP for
-# the Chrome Web Store and publishes it as a GitHub release, with the notes
-# from docs/releases/<tag>.md.
+# Publishes a GitHub release with the ZIP for the Chrome Web Store, and the
+# notes from docs/releases/v<version>.md. Either push a version tag (v1.0.1,
+# matching manifest.json), or run this workflow from the Actions tab, which
+# tags the version in manifest.json itself.
 name: Release
 
 on:
   push:
     tags: ['v*']
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -18,22 +20,24 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Check that the tag matches the manifest's version
+      - name: Work out the version
         run: |
           version="$(node -p "require('./manifest.json').version")"
-          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+          if [ "$GITHUB_EVENT_NAME" = push ] && [ "v$version" != "$GITHUB_REF_NAME" ]; then
             echo "Tag $GITHUB_REF_NAME doesn't match version $version in manifest.json"
             exit 1
           fi
+          echo "TAG=v$version" >> "$GITHUB_ENV"
       - name: Unit tests
         run: npm test
       - name: Build the store ZIP
-        run: zip -r "tree-of-tabs-$GITHUB_REF_NAME.zip" manifest.json LICENSE icons src -x "*.DS_Store"
+        run: zip -r "tree-of-tabs-$TAG.zip" manifest.json LICENSE icons src -x "*.DS_Store"
       - name: Publish the release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          notes="docs/releases/$GITHUB_REF_NAME.md"
+          notes="docs/releases/$TAG.md"
           if [ -f "$notes" ]; then set -- --notes-file "$notes"; else set -- --generate-notes; fi
-          gh release create "$GITHUB_REF_NAME" "tree-of-tabs-$GITHUB_REF_NAME.zip" \
-            --title "Tree of Tabs ${GITHUB_REF_NAME#v}" "$@"
+          # Creates the tag on this commit too, when the workflow was started by hand.
+          gh release create "$TAG" "tree-of-tabs-$TAG.zip" --target "$GITHUB_SHA" \
+            --title "Tree of Tabs ${TAG#v}" "$@"

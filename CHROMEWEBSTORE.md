@@ -192,9 +192,10 @@ Only these go in the ZIP: `manifest.json`, `LICENSE`, `icons/` and `src/`. The t
 docs, `.claude/`, `.github/`, `.mcp.json`, `package.json`, the README, PRIVACY.md,
 SECURITY.md and this file stay out.
 
-The release workflow builds this ZIP for you: bump `version` in manifest.json,
-add release notes as `docs/releases/v<version>.md`, then push a tag such as
-`v1.0.1`. GitHub then publishes the release with the ZIP attached, ready to
+The Release workflow builds this ZIP for you: bump `version` in manifest.json,
+add release notes as `docs/releases/v<version>.md`, then open the repository's
+Actions tab, pick **Release** and click **Run workflow** (or push a tag such as
+`v1.0.1`). GitHub then publishes the release with the ZIP attached, ready to
 upload to the store. By hand:
 
 ```sh

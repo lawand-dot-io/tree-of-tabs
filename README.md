@@ -152,8 +152,10 @@ node test/e2e/run.js shots/ # also saves light and dark screenshots
 ```
 
 GitHub runs both test suites on every push and pull request
-(`.github/workflows/test.yml`). Pushing a version tag such as `v1.0.1` builds the
-store ZIP and publishes it as a GitHub release (`.github/workflows/release.yml`).
+(`.github/workflows/test.yml`). The Release workflow
+(`.github/workflows/release.yml`) builds the store ZIP and publishes it as a
+GitHub release: run it from the Actions tab, or push a version tag such as
+`v1.0.1`.
 
 ### Chrome DevTools MCP server
 
