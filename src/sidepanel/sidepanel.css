@@ -160,16 +160,33 @@ body {
   box-shadow: inset 0 0 0 2px var(--accent);
 }
 
-/* Tab group color, shown as a bar on the leading edge. */
+/* Tab group color: one continuous line along the group's tabs (see
+   markGroupRuns). It covers the guide line left of the group's shallowest
+   tabs, centered on it, or sits on the leading edge for top-level tabs. */
 .tab[data-group-color]::before {
   content: '';
   position: absolute;
-  left: 0;
-  top: 7px;
-  bottom: 7px;
+  left: calc(
+    min(var(--group-level), 1) * (var(--row-start) + 6.5px + (var(--group-level) - 1) * var(--indent))
+  );
+  top: 0;
+  bottom: 0;
   width: 3px;
-  border-radius: 2px;
   background: var(--group-color);
+}
+
+.tab.group-first::before {
+  top: 7px;
+  border-radius: 2px 2px 0 0;
+}
+
+.tab.group-last::before {
+  bottom: 7px;
+  border-radius: 0 0 2px 2px;
+}
+
+.tab.group-first.group-last::before {
+  border-radius: 2px;
 }
 
 .twisty {

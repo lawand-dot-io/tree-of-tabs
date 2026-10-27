@@ -73,6 +73,7 @@ function render(pinnedTabs) {
     if (!isCollapsed) for (const kid of kids) walk(kid, depth + 1);
   };
   tree.roots.forEach((id) => walk(id, 0));
+  markGroupRuns();
 
   renderPinned(pinnedTabs);
   renderRows();
@@ -84,6 +85,23 @@ function render(pinnedTabs) {
   }
   if (focusedId === null || !rowEls.has(focusedId)) focusedId = activeId;
   for (const [id, el] of rowEls) el.tabIndex = id === focusedId ? 0 : -1;
+}
+
+/**
+ * Each run of rows in the same tab group gets one continuous colored line.
+ * It takes the place of the guide line just left of the run's shallowest
+ * tabs, or runs along the leading edge when those are top-level tabs.
+ */
+function markGroupRuns() {
+  const groupOf = (row) => (row && groups.has(tabsById.get(row.id)?.groupId) ? tabsById.get(row.id).groupId : null);
+  let start = 0;
+  for (let i = 0; i <= visible.length; i++) {
+    if (i < visible.length && groupOf(visible[i]) === groupOf(visible[start])) continue;
+    const run = visible.slice(start, i);
+    const level = Math.min(...run.map((row) => row.depth));
+    run.forEach((row, k) => Object.assign(row, { groupLevel: level, groupFirst: k === 0, groupLast: k === run.length - 1 }));
+    start = i;
+  }
 }
 
 function syncChildren(container, elements) {
@@ -197,9 +215,12 @@ function updateRow(el, tab, row) {
   if (group) {
     el.dataset.groupColor = group.color;
     el.style.setProperty('--group-color', `var(--group-${group.color})`);
+    el.style.setProperty('--group-level', row.groupLevel);
   } else {
     delete el.dataset.groupColor;
   }
+  el.classList.toggle('group-first', !!group && row.groupFirst);
+  el.classList.toggle('group-last', !!group && row.groupLast);
 }
 
 function renderPinned(pinnedTabs) {
