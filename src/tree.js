@@ -114,6 +114,7 @@ export function inferParent(order, parents, id) {
 
 /**
  * Plans moving `ids` (each with its whole subtree) relative to `targetId`.
+ * `partners` are the second tabs of split views (see joinSplits).
  *
  * Positions:
  *   before     - sibling right before the target
@@ -128,9 +129,13 @@ export function inferParent(order, parents, id) {
  * Returns { order, parents } describing the whole window afterwards, or null
  * when the move is impossible (dropping a tree into itself).
  */
-export function planMove(order, parents, { ids, targetId = null, position, collapsed = new Set() }) {
+export function planMove(order, parents, { ids, targetId = null, position, collapsed = new Set(), partners = new Set() }) {
   const tree = buildTree(order, parents);
   const { parentOf } = tree;
+  // A split view moves, and is dropped onto, as one item: its head.
+  const itemOf = (id) => (partners.has(id) ? parentOf.get(id) ?? id : id);
+  ids = ids.map(itemOf);
+  if (targetId !== null) targetId = itemOf(targetId);
   const moving = new Set(ids.filter((id) => tree.children.has(id)));
   if (!moving.size) return null;
 
@@ -151,11 +156,13 @@ export function planMove(order, parents, { ids, targetId = null, position, colla
 
   let newParent;
   let index;
-  const targetKids = targetId === null ? [] : tree.children.get(targetId);
+  // A split view's partner isn't a child the user sees, so it doesn't count.
+  const ownKids = (id) => (tree.children.get(id) ?? []).filter((kid) => !partners.has(kid));
+  const targetKids = targetId === null ? [] : ownKids(targetId);
   switch (position) {
     case 'inside':
       newParent = targetId;
-      index = targetKids.length;
+      index = tree.children.get(targetId).length;
       break;
     case 'firstChild':
       newParent = targetId;
@@ -180,6 +187,8 @@ export function planMove(order, parents, { ids, targetId = null, position, colla
       index = tree.roots.length;
   }
 
+  // Nothing goes between a split view's head and its partner.
+  if (index === 0 && partners.has(siblingsOf(newParent)[0])) index = 1;
   siblingsOf(newParent).splice(index, 0, ...tops);
   for (const id of tops) parentOf.set(id, newParent);
   return { order: flatten(tree), parents: new Map(order.map((id) => [id, parentOf.get(id)])) };
@@ -205,4 +214,80 @@ export function releaseChildren(order, parents, id, mode) {
     for (const kid of kids.slice(1)) changes.set(kid, kids[0]);
   }
   return changes;
+}
+
+// --- Split views ----------------------------------------------------------------
+// Chrome can show two tabs of a window side by side, as a split view. It keeps
+// them next to each other in the tab strip, and ends the split when an
+// extension moves either of them or puts another tab between them. So the
+// tree treats a split view as one item: the second tab (the partner) is the
+// first child of the first one (the head), has no children of its own, and
+// nothing is placed between them.
+
+/**
+ * The split views in `order`, as [head, partner] pairs in tab order. Tabs
+ * pair up by their split view id, even when something briefly sits between
+ * them (a tab Chrome just opened there, which the worker then moves out).
+ */
+export function splitPairs(order, splitOf) {
+  const firsts = new Map();
+  const pairs = [];
+  for (const id of order) {
+    const split = splitOf(id);
+    if (split === null) continue;
+    if (!firsts.has(split)) firsts.set(split, id);
+    else if (firsts.get(split) !== null) pairs.push([firsts.get(split), id]), firsts.set(split, null);
+  }
+  return pairs;
+}
+
+/** Parent changes that make each split view one item (see above). */
+export function joinSplits(parents, pairs) {
+  const changes = new Map();
+  const parentOf = (id) => (changes.has(id) ? changes.get(id) : parents.get(id) ?? null);
+  for (const [head, partner] of pairs) {
+    let parent = parentOf(head);
+    if (parent === partner) parent = parentOf(partner) === head ? null : parentOf(partner);
+    if (parentOf(head) !== parent) changes.set(head, parent);
+    if (parentOf(partner) !== head) changes.set(partner, head);
+    // The partner's children become the item's children.
+    for (const id of new Set([...parents.keys(), ...changes.keys()])) {
+      if (id !== head && parentOf(id) === partner) changes.set(id, head);
+    }
+  }
+  return changes;
+}
+
+/**
+ * Plans single-tab moves that turn the order `current` into `target`, each
+ * as { id, index } with the index the tab ends up at. Tabs in `fixed` (those
+ * in split views) are never moved: the tabs around them move instead. That
+ * works as long as the fixed tabs keep their order among themselves; when
+ * they can't, they move too and `keptFixed` is false.
+ */
+export function planMoves(current, target, fixed = new Set()) {
+  const order = current.slice();
+  const moves = [];
+  const fixedNow = order.filter((id) => fixed.has(id));
+  const fixedThen = target.filter((id) => fixed.has(id));
+  const keptFixed = fixedNow.length === fixedThen.length && fixedNow.every((id, i) => id === fixedThen[i]);
+  const move = (id, index) => {
+    order.splice(order.indexOf(id), 1);
+    order.splice(index, 0, id);
+    moves.push({ id, index });
+  };
+  for (let i = 0; i < target.length; i++) {
+    while (order[i] !== target[i]) {
+      if (!keptFixed || !fixed.has(target[i])) {
+        move(target[i], i);
+        break;
+      }
+      // A fixed tab belongs here: move the tab in its way past it, and past
+      // any fixed tabs right after it, so it never lands inside a split view.
+      let after = order.indexOf(target[i]);
+      while (fixed.has(order[after + 1])) after++;
+      move(order[i], after);
+    }
+  }
+  return { moves, keptFixed };
 }

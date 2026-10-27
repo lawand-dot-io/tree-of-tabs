@@ -6,9 +6,12 @@ import {
   descendantsOf,
   flatten,
   inferParent,
+  joinSplits,
   planMove,
+  planMoves,
   releaseChildren,
   sanitize,
+  splitPairs,
 } from '../src/tree.js';
 
 // Builds { order, parents } from an indented outline such as
@@ -196,4 +199,95 @@ test('releaseChildren can move all children up a level', () => {
   const order = fixture.order.filter((id) => id !== 'B');
   const changes = releaseChildren(order, fixture.parents, 'B', 'promoteAll');
   assert.deepEqual([...changes], [['C', 'A']]);
+});
+
+// --- Split views ----------------------------------------------------------------
+
+// H and P form a split view: P is H's first child (see joinSplits).
+const split = outline(`
+A
+H
+ P
+ X
+ Y
+B
+`);
+const partners = new Set(['P']);
+
+test('splitPairs pairs tabs that share a split view', () => {
+  const splits = { H: 7, P: 7, Q: 9 };
+  assert.deepEqual(splitPairs(['A', 'H', 'P', 'Q', 'B'], (id) => splits[id] ?? null), [['H', 'P']]);
+  // Even with a tab briefly between them.
+  assert.deepEqual(splitPairs(['H', 'X', 'P'], (id) => splits[id] ?? null), [['H', 'P']]);
+});
+
+test('joinSplits makes the partner the head\'s first child, with no children', () => {
+  // P was made a sibling with a child of its own, and H a child of... nothing.
+  const { order, parents } = outline(`
+H
+P
+ Z
+`);
+  for (const [id, parent] of joinSplits(parents, [['H', 'P']])) parents.set(id, parent);
+  assert.equal(draw(order, parents), ['H', ' P', ' Z'].join('\n'));
+
+  // The head had been nested under its own partner.
+  const nested = new Map([['H', 'P'], ['P', 'A'], ['A', null]]);
+  for (const [id, parent] of joinSplits(nested, [['H', 'P']])) nested.set(id, parent);
+  assert.deepEqual([...nested], [['H', 'A'], ['P', 'H'], ['A', null]]);
+});
+
+test('planMove never puts a tab between a split view\'s halves', () => {
+  for (const position of ['firstChild', 'after']) {
+    const plan = planMove(split.order, split.parents, { ids: ['B'], targetId: 'H', position, partners });
+    assert.deepEqual(plan.order, ['A', 'H', 'P', 'B', 'X', 'Y'], position);
+    assert.equal(plan.parents.get('B'), 'H');
+  }
+});
+
+test('planMove treats a split view as one item', () => {
+  // Moving or targeting the partner means the whole item.
+  let plan = planMove(split.order, split.parents, { ids: ['P'], position: 'end', partners });
+  assert.deepEqual(plan.order, ['A', 'B', 'H', 'P', 'X', 'Y']);
+  plan = planMove(split.order, split.parents, { ids: ['A'], targetId: 'P', position: 'inside', partners });
+  assert.equal(plan.parents.get('A'), 'H');
+  // Only the partner as a child: dropping after the item makes a sibling.
+  const lone = outline(`
+H
+ P
+B
+`);
+  plan = planMove(lone.order, lone.parents, { ids: ['B'], targetId: 'H', position: 'after', partners });
+  assert.equal(plan.parents.get('B'), null);
+});
+
+test('planMoves reorders around split view tabs without moving them', () => {
+  const check = (current, target) => {
+    const { moves, keptFixed } = planMoves(current, target, new Set(['H', 'P']));
+    assert.equal(keptFixed, true);
+    assert.ok(!moves.some((m) => m.id === 'H' || m.id === 'P'), JSON.stringify(moves));
+    const order = current.slice();
+    for (const { id, index } of moves) {
+      order.splice(order.indexOf(id), 1);
+      order.splice(index, 0, id);
+    }
+    assert.deepEqual(order, target);
+    // No step may put a tab between H and P.
+    const steps = current.slice();
+    for (const { id, index } of moves) {
+      steps.splice(steps.indexOf(id), 1);
+      steps.splice(index, 0, id);
+      assert.equal(steps[steps.indexOf('H') + 1], 'P', `after moving ${id}: ${steps}`);
+    }
+  };
+  check(['X', 'H', 'P'], ['H', 'P', 'X']);
+  check(['A', 'H', 'P', 'B', 'C'], ['H', 'P', 'A', 'C', 'B']);
+  check(['H', 'P', 'A', 'B'], ['A', 'B', 'H', 'P']);
+  check(['A', 'B', 'C', 'H', 'P'], ['C', 'H', 'P', 'B', 'A']);
+});
+
+test('planMoves moves split view tabs only when their order changes', () => {
+  const { moves, keptFixed } = planMoves(['H', 'P', 'K', 'Q'], ['K', 'Q', 'H', 'P'], new Set(['H', 'P', 'K', 'Q']));
+  assert.equal(keptFixed, false);
+  assert.ok(moves.length > 0);
 });

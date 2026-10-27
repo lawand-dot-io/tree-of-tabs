@@ -4,9 +4,12 @@ import {
   descendantsOf,
   flatten,
   inferParent,
+  joinSplits,
   planMove,
+  planMoves,
   releaseChildren,
   sanitize,
+  splitPairs,
 } from './tree.js';
 import { DEFAULTS, loadSettings, onSettingsChanged } from './settings.js';
 
@@ -15,6 +18,9 @@ import { DEFAULTS, loadSettings, onSettingsChanged } from './settings.js';
 const state = {
   parents: new Map(), // tabId -> parentId | null
   collapsed: new Set(), // tabIds whose subtree is collapsed
+  // Split views (two tabs Chrome shows side by side), each kept as one item
+  // of the tree: the partner is the head's first child (see tree.js).
+  splits: new Map(), // head tabId -> partner tabId
 };
 let settings = { ...DEFAULTS };
 let ready = false;
@@ -34,6 +40,9 @@ const crossWindowMoves = new Map(); // tabId -> placement | null
 // though, so for those the opener is used (see onCreated).
 const openedFrom = new Map(); // tabId -> source tabId
 
+// Windows where a split view ended, so its tabs need laying out again.
+const needsLayout = new Set();
+
 // Blank new tabs (Ctrl+T), for the "Open new tabs as children" setting.
 const NEW_TAB_URLS = ['chrome://newtab/', 'chrome://new-tab-page/', 'chrome-search://local-ntp/local-ntp.html'];
 
@@ -50,14 +59,60 @@ function enqueue(task) {
 
 // --- Window helpers ----------------------------------------------------------
 
+/** A window's tabs in order. Also keeps its split views joined, so every caller sees each as one item. */
 async function windowTabs(windowId) {
   const tabs = await chrome.tabs.query({ windowId });
   tabs.sort((a, b) => a.index - b.index);
-  return {
-    tabs,
-    order: tabs.filter((t) => !t.pinned).map((t) => t.id),
-    pinnedCount: tabs.filter((t) => t.pinned).length,
-  };
+  const order = tabs.filter((t) => !t.pinned).map((t) => t.id);
+  joinSplitViews(windowId, tabs, order);
+  return { tabs, order, pinnedCount: tabs.length - order.length };
+}
+
+const splitOf = (tab) => ((tab?.splitViewId ?? -1) === -1 ? null : tab.splitViewId);
+const partnerIds = () => new Set(state.splits.values());
+const isPartner = (id) => partnerIds().has(id);
+const inSplit = (id) => state.splits.has(id) || isPartner(id);
+/** The tab that stands for a split view in the tree (its head), or the tab itself. */
+function itemOf(id) {
+  for (const [head, partner] of state.splits) if (partner === id) return head;
+  return id;
+}
+
+/**
+ * Records the window's split views and keeps each one a single item (see
+ * joinSplits). When one ends, its partner becomes a tab of its own next to
+ * the head, which needs the window laid out again (done in commit).
+ */
+function joinSplitViews(windowId, tabs, order) {
+  const byId = new Map(tabs.map((t) => [t.id, t]));
+  const pairs = splitPairs(order, (id) => splitOf(byId.get(id)));
+  const paired = new Map(pairs);
+  for (const [head, partner] of state.splits) {
+    if ((!byId.has(head) && !byId.has(partner)) || paired.get(head) === partner) continue;
+    state.splits.delete(head);
+    if (byId.has(partner) && state.parents.has(partner)) {
+      state.parents.set(partner, byId.has(head) ? state.parents.get(head) ?? null : null);
+      needsLayout.add(windowId);
+    }
+  }
+  for (const [head, partner] of pairs) state.splits.set(head, partner);
+  for (const [id, parent] of joinSplits(state.parents, pairs)) {
+    if (state.parents.has(id)) state.parents.set(id, parent);
+  }
+}
+
+/**
+ * Pairs tabs into split views again after a move that had to separate them.
+ * Extensions can only do this from Chrome 155; before that they stay apart.
+ */
+async function rejoinSplits(pairs) {
+  if (!chrome.tabs.createSplit) return;
+  for (const [head, partner] of pairs) {
+    const [a, b] = await Promise.all([head, partner].map((id) => chrome.tabs.get(id).catch(() => null)));
+    if (!a || !b || a.windowId !== b.windowId || b.index !== a.index + 1) continue;
+    if (splitOf(a) !== null && splitOf(a) === splitOf(b)) continue;
+    await chrome.tabs.createSplit([head, partner]).catch(() => {});
+  }
 }
 
 function expectMove(tabId) {
@@ -77,25 +132,26 @@ function consumeExpectedMove(tabId) {
 const isDragError = (error) => /dragging/i.test(String(error?.message ?? error));
 
 /**
- * Moves tabs so the unpinned part of the window matches `desired`. Moves one
- * tab at a time from the front, which needs at most one move per tab.
+ * Moves tabs so the unpinned part of the window matches `desired`. Tabs in
+ * split views stay put whenever possible, since moving one ends its split
+ * view: the tabs around them move instead (see planMoves).
  */
 async function applyOrder(windowId, desired) {
   for (let attempt = 0; attempt < 3; attempt++) {
-    const { order, pinnedCount } = await windowTabs(windowId);
+    const { tabs, order, pinnedCount } = await windowTabs(windowId);
     const present = new Set(order);
     const target = desired.filter((id) => present.has(id));
     const placed = new Set(target);
     for (const id of order) if (!placed.has(id)) target.push(id);
 
-    const current = order.slice();
-    let moved = false;
-    for (let i = 0; i < target.length; i++) {
-      if (current[i] === target[i]) continue;
-      const id = target[i];
+    const fixed = new Set(tabs.filter((t) => !t.pinned && splitOf(t) !== null).map((t) => t.id));
+    const { moves, keptFixed } = planMoves(order, target, fixed);
+    if (!moves.length) return;
+    const separated = keptFixed ? [] : [...state.splits].filter(([head]) => present.has(head));
+    for (const { id, index } of moves) {
       expectMove(id);
       try {
-        await chrome.tabs.move(id, { index: pinnedCount + i });
+        await chrome.tabs.move(id, { index: pinnedCount + index });
       } catch (error) {
         expectedMoves.delete(id);
         // Chrome refuses to move tabs while the user drags one in the tab
@@ -103,11 +159,8 @@ async function applyOrder(windowId, desired) {
         if (isDragError(error)) return retryLayoutLater(windowId);
         throw error;
       }
-      current.splice(current.indexOf(id), 1);
-      current.splice(i, 0, id);
-      moved = true;
     }
-    if (!moved) return;
+    await rejoinSplits(separated);
   }
 }
 
@@ -132,7 +185,13 @@ async function relayout(windowId) {
 /** Applies a planMove() to the state and the tab strip. */
 async function applyMove(windowId, ids, targetId, position) {
   const { order } = await windowTabs(windowId);
-  const plan = planMove(order, state.parents, { ids, targetId, position, collapsed: state.collapsed });
+  const plan = planMove(order, state.parents, {
+    ids,
+    targetId,
+    position,
+    collapsed: state.collapsed,
+    partners: partnerIds(),
+  });
   if (!plan) return false;
   // Tabs whose onCreated is still queued are left for that handler.
   for (const [id, parent] of plan.parents) if (state.parents.has(id)) state.parents.set(id, parent);
@@ -154,14 +213,19 @@ function releaseTab(tabId, order) {
 
 async function persist() {
   await chrome.storage.session.set({
-    tree: { parents: [...state.parents], collapsed: [...state.collapsed] },
+    tree: { parents: [...state.parents], collapsed: [...state.collapsed], splits: [...state.splits] },
   });
 }
 
 /** Saves state, repairs anything inconsistent and tells open panels. */
 async function commit(windowId) {
   if (windowId !== undefined) {
-    const { order } = await windowTabs(windowId).catch(() => ({ order: [] }));
+    const tabsNow = () => windowTabs(windowId).catch(() => ({ order: [] }));
+    let { order } = await tabsNow();
+    if (needsLayout.delete(windowId)) {
+      await applyOrder(windowId, flatten(buildTree(order, state.parents)));
+      ({ order } = await tabsNow());
+    }
     for (const [id, parent] of sanitize(order, state.parents)) state.parents.set(id, parent);
   }
   await persist();
@@ -255,6 +319,7 @@ async function init() {
   if (tree) {
     state.parents = new Map(tree.parents);
     state.collapsed = new Set(tree.collapsed);
+    state.splits = new Map(tree.splits ?? []);
   } else if ((await chrome.storage.local.get('snapshots')).snapshots?.length) {
     // Browser startup or extension reload: rebuild the tree from the snapshot.
     await waitForStableTabs();
@@ -266,6 +331,7 @@ async function init() {
   const alive = new Set(tabs.map((t) => t.id));
   for (const id of state.parents.keys()) if (!alive.has(id)) state.parents.delete(id);
   for (const id of state.collapsed) if (!alive.has(id)) state.collapsed.delete(id);
+  for (const [head, partner] of state.splits) if (!alive.has(head) || !alive.has(partner)) state.splits.delete(head);
   for (const tab of tabs) {
     if (!state.parents.has(tab.id) || tab.pinned) state.parents.set(tab.id, null);
   }
@@ -276,6 +342,7 @@ async function init() {
   if (settings.disableCollapsing) state.collapsed.clear();
   ready = true;
   await commit();
+  for (const windowId of [...needsLayout]) await commit(windowId);
 }
 
 // --- Tab events --------------------------------------------------------------
@@ -293,6 +360,8 @@ async function onCreated(createdTab, latest) {
   pendingPlacements.delete(tab.id);
   const source = openedFrom.get(tab.id);
   openedFrom.delete(tab.id);
+  // A tab that opens as half of a split view stays where Chrome put it.
+  if (inSplit(tab.id)) return commit(tab.windowId);
   const opener = tab.openerTabId;
   const openerIsExtensionPage = tabs.find((t) => t.id === opener)?.url?.startsWith('chrome-extension://');
   if (!placement && source !== undefined && order.includes(source)) {
@@ -327,10 +396,11 @@ async function onOpenedFromPage(tabId, sourceId) {
   // Not created yet: leave the entry for onCreated, which places it.
   if (!state.parents.has(tabId)) return;
   openedFrom.delete(tabId);
-  if (state.parents.get(tabId) === sourceId) return;
+  if (state.parents.get(tabId) === itemOf(sourceId)) return;
   const tab = await chrome.tabs.get(tabId).catch(() => null);
   if (!tab || tab.pinned) return;
   const { order } = await windowTabs(tab.windowId);
+  if (inSplit(tabId)) return;
   if (!order.includes(sourceId)) return; // Opened from a pinned tab or another window.
   const { targetId, position } = childPlacement(sourceId);
   if (await applyMove(tab.windowId, [tabId], targetId, position)) await commit(tab.windowId);
@@ -354,11 +424,22 @@ const closedWithOthers = (at) => removalTimes.filter((t) => Math.abs(t - at) <= 
 async function onRemoved(tabId, { windowId, isWindowClosing }, removedAt) {
   const branchHandled = closedByTree.delete(tabId);
   if (!state.parents.has(tabId)) return;
+  const partner = state.splits.get(tabId);
+  for (const [head, p] of state.splits) if (head === tabId || p === tabId) state.splits.delete(head);
   if (isWindowClosing) {
     // Keep the last snapshot of the window so it can be restored later.
     state.parents.delete(tabId);
     state.collapsed.delete(tabId);
     return persist();
+  }
+  if (partner !== undefined && state.parents.has(partner)) {
+    // One half of a split view closed: the other half carries on as the
+    // item, with its place and its children. Nothing else closes with it.
+    state.parents.set(partner, state.parents.get(tabId) ?? null);
+    for (const [id, parent] of state.parents) if (parent === tabId) state.parents.set(id, partner);
+    if (state.collapsed.delete(tabId)) state.collapsed.add(partner);
+    state.parents.delete(tabId);
+    return commit(windowId);
   }
   const { order } = await windowTabs(windowId);
   const wasCollapsed = state.collapsed.has(tabId);
@@ -382,12 +463,15 @@ async function onMoved(tabId, { windowId }) {
   // from its neighbours and pull its subtree along behind it.
   const { order } = await windowTabs(windowId);
   if (!state.parents.has(tabId)) state.parents.set(tabId, null);
-  state.parents.set(tabId, inferParent(order, state.parents, tabId));
+  // A split view's partner moves with its head and keeps its place.
+  if (!isPartner(tabId)) state.parents.set(tabId, inferParent(order, state.parents, tabId));
   await applyOrder(windowId, flatten(buildTree(order, state.parents)));
   await commit(windowId);
 }
 
 async function onUpdated(tabId, change, tab) {
+  // A split view started or ended (commit notices which).
+  if (change.splitViewId !== undefined && change.pinned === undefined) return commit(tab.windowId);
   if (change.pinned === undefined) return;
   const { order } = await windowTabs(tab.windowId);
   if (change.pinned) {
@@ -403,7 +487,7 @@ async function onUpdated(tabId, change, tab) {
 async function onActivated({ tabId, windowId }) {
   if (!settings.autoExpandOnActivate) return;
   let changed = false;
-  for (const id of ancestorsOf(state.parents, tabId)) {
+  for (const id of ancestorsOf(state.parents, itemOf(tabId))) {
     if (state.collapsed.delete(id)) changed = true;
   }
   if (changed) await commit(windowId);
@@ -424,7 +508,7 @@ async function onAttached(tabId, { newWindowId }) {
     if (placement) await applyMove(newWindowId, [tabId], placement.targetId, placement.position);
   } else {
     const { order } = await windowTabs(newWindowId);
-    state.parents.set(tabId, inferParent(order, state.parents, tabId));
+    if (!isPartner(tabId)) state.parents.set(tabId, inferParent(order, state.parents, tabId));
   }
   await commit(newWindowId);
 }
@@ -463,6 +547,7 @@ async function moveTabs({ ids, sourceWindowId, windowId, targetId, position }) {
 
 /** Moves tabs with their subtrees to another window, or a new one. */
 async function moveTreesToWindow(ids, windowId, placement) {
+  ids = [...new Set(ids.map(itemOf))];
   const first = await chrome.tabs.get(ids[0]);
   const { order } = await windowTabs(first.windowId);
   const tree = buildTree(order, state.parents);
@@ -491,6 +576,8 @@ async function moveTreesToWindow(ids, windowId, placement) {
     for (const id of all) crossWindowMoves.delete(id);
     throw error;
   }
+  // Moving split views to another window separates them; pair them again.
+  await rejoinSplits([...state.splits].filter(([head]) => all.includes(head)));
   await commit(first.windowId);
 }
 
@@ -510,7 +597,7 @@ async function setCollapsed(tabId, collapsed) {
   // Collapsing a tree that holds the active tab moves focus to its root.
   if (collapsed) {
     const [active] = await chrome.tabs.query({ windowId: tab.windowId, active: true });
-    if (active && ancestorsOf(state.parents, active.id).includes(tabId)) {
+    if (active && ancestorsOf(state.parents, itemOf(active.id)).includes(tabId)) {
       await chrome.tabs.update(tabId, { active: true });
     }
   }
@@ -521,19 +608,23 @@ async function setAllCollapsed(windowId, collapsed) {
   if (collapsed && settings.disableCollapsing) return;
   const { order } = await windowTabs(windowId);
   const tree = buildTree(order, state.parents);
+  const partners = partnerIds();
   for (const id of order) {
-    if (collapsed && tree.children.get(id).length) state.collapsed.add(id);
+    // A split view's partner doesn't count as a child that collapsing hides.
+    if (collapsed && tree.children.get(id).some((kid) => !partners.has(kid))) state.collapsed.add(id);
     else state.collapsed.delete(id);
   }
   if (collapsed) {
     const [active] = await chrome.tabs.query({ windowId, active: true });
-    const root = active && [active.id, ...ancestorsOf(tree.parentOf, active.id)].pop();
-    if (root !== undefined && root !== active.id) await chrome.tabs.update(root, { active: true });
+    const item = active && itemOf(active.id);
+    const root = active && [item, ...ancestorsOf(tree.parentOf, item)].pop();
+    if (root !== undefined && root !== item) await chrome.tabs.update(root, { active: true });
   }
   await commit(windowId);
 }
 
 async function newChildTab(parentId, url) {
+  parentId = itemOf(parentId);
   const { tab, order, descendants } = await subtreeOf(parentId);
   const pinnedCount = (await chrome.tabs.query({ windowId: tab.windowId, pinned: true })).length;
   const last = descendants.length ? descendants[descendants.length - 1] : parentId;
@@ -563,6 +654,8 @@ async function closeTabs(ids, keep = []) {
       const closesBranch =
         settings.onCloseParent === 'closeAll' || (state.collapsed.has(id) && settings.closeCollapsedTree);
       if (!closesBranch || !tree.children.has(id)) continue;
+      // Closing one half of a split view leaves the item, and its branch, open.
+      if (state.splits.has(id) && !closing.has(state.splits.get(id))) continue;
       for (const d of descendantsOf(tree, id)) if (!keep.includes(d)) closing.add(d);
     }
     if (settings.keepWindowOnLastTab && all.every((t) => closing.has(t.id))) {
@@ -577,7 +670,7 @@ async function closeTabs(ids, keep = []) {
 async function duplicateTabs(ids) {
   for (const id of ids) {
     const copy = await chrome.tabs.duplicate(id).catch(() => null);
-    if (copy) pendingPlacements.set(copy.id, { targetId: id, position: 'afterTree' });
+    if (copy) pendingPlacements.set(copy.id, { targetId: itemOf(id), position: 'afterTree' });
   }
 }
 
@@ -587,9 +680,11 @@ async function openUrlAt({ windowId, url, targetId, position }) {
 }
 
 async function indent(tabId) {
+  tabId = itemOf(tabId);
   const { tab, tree } = await subtreeOf(tabId);
   const parent = tree.parentOf.get(tabId);
-  const siblings = parent === null ? tree.roots : tree.children.get(parent);
+  const partners = partnerIds();
+  const siblings = (parent === null ? tree.roots : tree.children.get(parent)).filter((id) => !partners.has(id));
   const previous = siblings[siblings.indexOf(tabId) - 1];
   if (previous === undefined) return;
   state.collapsed.delete(previous);
@@ -597,6 +692,7 @@ async function indent(tabId) {
 }
 
 async function outdent(tabId) {
+  tabId = itemOf(tabId);
   const { tab, tree } = await subtreeOf(tabId);
   const parent = tree.parentOf.get(tabId);
   if (parent === null) return;
@@ -629,8 +725,10 @@ async function handleMessage(message) {
       return closeTabs(message.ids, message.keep);
     case 'close-tree':
     case 'close-children': {
-      const { descendants } = await subtreeOf(message.tabId);
-      return closeTabs(message.type === 'close-tree' ? [message.tabId, ...descendants] : descendants);
+      const item = itemOf(message.tabId);
+      const { descendants } = await subtreeOf(item);
+      if (message.type === 'close-tree') return closeTabs([item, ...descendants]);
+      return closeTabs(descendants.filter((id) => id !== state.splits.get(item)));
     }
   }
 }

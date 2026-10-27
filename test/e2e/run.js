@@ -517,6 +517,96 @@ try {
     await settle();
   });
 
+  await check('a split view is one row, and the worker never moves its halves', async () => {
+    // Chromium here can't make split views, so both the worker and the panel
+    // are told that two tabs form one, the way Chrome reports it.
+    const [leftPage, windowId] = await Promise.all([
+      context.waitForEvent('page'),
+      worker.evaluate(async (url) => (await chrome.windows.create({ url })).id, `${base}/Split left`),
+    ]);
+    await leftPage.waitForLoadState();
+    const openIn = async (name) => {
+      const [opened] = await Promise.all([
+        context.waitForEvent('page'),
+        worker.evaluate((args) => chrome.tabs.create({ active: false, ...args }), { windowId, url: `${base}/${name}` }),
+      ]);
+      await opened.waitForLoadState();
+    };
+    await openIn('Split right');
+    await openIn('Split other');
+    await settle();
+    const [left, right, other] = [await idOf('Page Split left'), await idOf('Page Split right'), await idOf('Page Split other')];
+    const simulate = (ids) => {
+      const query = chrome.tabs.query.bind(chrome.tabs);
+      const get = chrome.tabs.get.bind(chrome.tabs);
+      const move = chrome.tabs.move.bind(chrome.tabs);
+      const patch = (tab) => tab && Object.assign(tab, { splitViewId: ids.includes(tab.id) ? 99 : -1 });
+      self.unsimulate = () => Object.assign(chrome.tabs, { query, get, move });
+      self.moved = [];
+      chrome.tabs.query = async (q) => (await query(q)).map(patch);
+      chrome.tabs.get = async (id) => patch(await get(id));
+      chrome.tabs.move = (id, props) => (self.moved.push(...[id].flat()), move(id, props));
+    };
+    await worker.evaluate(simulate, [left, right]);
+    const [splitPanel] = await Promise.all([
+      context.waitForEvent('page'),
+      worker.evaluate(
+        (url) => chrome.windows.create({ url, type: 'popup', width: 320, height: 640 }),
+        panelUrl.replace(`windowId=${mainWindowId}`, `windowId=${windowId}`),
+      ),
+    ]);
+    await splitPanel.waitForLoadState();
+    await splitPanel.evaluate(simulate, [left, right]);
+    // Any change makes the worker look at the window again.
+    await splitPanel.evaluate((id) => chrome.runtime.sendMessage({ type: 'set-collapsed', tabId: id, collapsed: false }), other);
+    await settle();
+    const parents = async () => new Map((await worker.evaluate(() => chrome.storage.session.get('tree'))).tree.parents);
+    const titles = () =>
+      worker.evaluate(
+        async (windowId) => (await chrome.tabs.query({ windowId })).sort((a, b) => a.index - b.index).map((t) => t.title.replace('Page Split ', '')),
+        windowId,
+      );
+    const rows = () =>
+      splitPanel.$$eval('.tab', (els) => els.map((el) => [...el.querySelectorAll('.title')].map((t) => t.textContent.replace('Page Split ', '')).join(' | ')));
+
+    assert.equal((await parents()).get(right), left, 'the right half belongs to the left one');
+    assert.deepEqual(await rows(), ['left | right', 'other']);
+
+    // A link opened from the left half: Chrome puts it between the halves
+    // here, so the worker moves it out past them, not the halves.
+    await openFrom(leftPage, 'Split child');
+    await settle();
+    const child = await idOf('Page Split child');
+    assert.deepEqual(await titles(), ['left', 'right', 'child', 'other']);
+    assert.equal((await parents()).get(child), left);
+    assert.deepEqual(await rows(), ['left | right', 'child', 'other']);
+
+    // Moving the split view's tree to the end moves the other tabs instead.
+    await splitPanel.evaluate(
+      ({ id, windowId }) => chrome.runtime.sendMessage({ type: 'move', ids: [id], windowId, sourceWindowId: windowId, position: 'end' }),
+      { id: right, windowId },
+    );
+    await settle();
+    assert.deepEqual(await titles(), ['other', 'left', 'right', 'child']);
+    const moved = await worker.evaluate(() => self.moved);
+    assert.ok(!moved.includes(left) && !moved.includes(right), `moved ${moved}`);
+
+    // Each half has its own menu: Close closes just that half, and the other
+    // one carries on with the children.
+    await splitPanel.locator('.part.partner').click({ button: 'right' });
+    const labels = await splitPanel.$$eval('.menu-item', (items) => items.map((i) => i.textContent));
+    assert.ok(labels.includes('Close') && !labels.includes('Close tabs'), labels.join(', '));
+    await splitPanel.locator('.menu-item', { hasText: /^Close$/ }).click();
+    await settle();
+    assert.deepEqual(await titles(), ['other', 'left', 'child']);
+    assert.equal((await parents()).get(child), left);
+
+    await worker.evaluate(() => self.unsimulate());
+    await splitPanel.close();
+    await worker.evaluate((id) => chrome.windows.remove(id), windowId);
+    await settle();
+  });
+
   await check('links on the settings page open as its children', async () => {
     const optionsUrl = `chrome-extension://${extensionId}/src/options/options.html`;
     const [options] = await Promise.all([

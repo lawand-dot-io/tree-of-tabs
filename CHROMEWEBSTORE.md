@@ -34,6 +34,7 @@ FEATURES
 • Collapse branches you are not using: point at a tab and its icon turns into an arrow. A collapsed branch shows a count of the tabs inside. If you never collapse, you can turn collapsing off entirely.
 • Closing a parent tab keeps its branch together: its first child takes its place. You can also choose to close the whole branch with it.
 • Pinned tabs show as a row of icons at the top. Tab group colors appear next to each tab.
+• Split views (two tabs side by side) show as one row and move together, so the tree never breaks them apart.
 • New tab button: click it to start a new tree, or middle-click or right-click it to open a tab under the current one.
 • Right-click a tab for quick actions: new tab inside this branch, reload, duplicate, pin, mute, indent or outdent, move a branch to a new window, close a branch, close all other tabs or the tabs below.
 • Keyboard friendly: move through the tree with the arrow keys, open the menu with Shift+F10, and show or hide the tree with a keyboard shortcut (Alt+Shift+T by default, Option+Shift+T on a Mac).

@@ -130,30 +130,12 @@ body {
   z-index: -1;
 }
 
-/* The two halves of a split view share one shape, on a soft surface. */
-.tab.split-first::after,
-.tab.split-last::after {
-  background: var(--split-bg);
-}
-
-.tab.split-first::after {
-  bottom: 0;
-  border-end-start-radius: 0;
-  border-end-end-radius: 0;
-}
-
-.tab.split-last::after {
-  top: 0;
-  border-start-start-radius: 0;
-  border-start-end-radius: 0;
-}
-
 .tab:hover::after {
   background: var(--hover);
 }
 
 .tab.highlighted::after,
-.tab.split-partner::after {
+.tab.split-active::after {
   background: var(--selected-bg);
 }
 
@@ -161,16 +143,64 @@ body {
   background: var(--active-bg);
 }
 
-.tab.active {
+.tab.active,
+.part.active {
   color: var(--active-text);
+}
+
+/* A tab's part of its row: its icon, title and buttons. */
+.part {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+}
+
+/* A split view: both halves share the row, each with its own icon, title
+   and buttons. The row is lightly highlighted while the split view is in
+   view, and the half in focus gets the active color. */
+.tab.split {
+  gap: 2px;
+}
+
+.tab.split .part {
+  position: relative;
+  flex-basis: 0;
+  height: auto;
+  align-self: stretch;
+  margin-block: 1px;
+  padding-inline: 6px 0;
+  border-radius: 8px;
+}
+
+/* The first half keeps its icon where a tab's icon always is. */
+.tab.split .part:first-of-type {
+  margin-inline-start: -6px;
+}
+
+.tab.split .part.active {
+  background: var(--active-bg);
+}
+
+/* A thin divider between the halves. */
+.tab.split .partner::before {
+  content: '';
+  position: absolute;
+  left: -1.5px;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+  background: var(--divider);
 }
 
 .tree {
   isolation: isolate;
 }
 
-.tab.discarded .title,
-.tab.discarded .favicon {
+.part.discarded .title,
+.part.discarded .favicon {
   opacity: 0.6;
 }
 
@@ -235,8 +265,9 @@ body {
   visibility: hidden;
 }
 
-.tab.active .twisty {
-  color: inherit;
+.tab.active .twisty,
+.tab.split:has(> .part:first-of-type.active) .twisty {
+  color: var(--active-text);
 }
 
 /* With collapsing turned off it never shows. */
@@ -244,7 +275,7 @@ body {
   visibility: visible;
 }
 
-:root:not(.no-collapsing) .tab.has-children:is(:hover, :focus-visible) .icon {
+:root:not(.no-collapsing) .tab.has-children:is(:hover, :focus-visible) > .part:first-of-type .icon {
   visibility: hidden;
 }
 
@@ -297,13 +328,13 @@ body {
   animation: spin 0.8s linear infinite;
 }
 
-.tab.loading .spinner,
+.part.loading .spinner,
 .pinned-tab.loading .spinner {
   display: block;
 }
 
-.tab.loading .favicon,
-.tab.loading .fallback-icon,
+.part.loading .favicon,
+.part.loading .fallback-icon,
 .pinned-tab.loading .favicon,
 .pinned-tab.loading .fallback-icon {
   display: none !important;
@@ -362,14 +393,17 @@ body {
   background: var(--pressed);
 }
 
-/* Like Chrome: the close button shows on hover and on the active tab. */
-.tab:hover .close,
-.tab.active .close {
+/* Like Chrome: the close button shows on hover and on the active tab. In a
+   split view's row each half shows its own, only on hover, so both halves
+   keep the same room for their titles. */
+.tab:not(.split):hover .close,
+.tab:not(.split) .part.active .close,
+.part:hover .close {
   display: grid;
 }
 
-.tab.audible .audio,
-.tab.muted .audio {
+.part.audible .audio,
+.part.muted .audio {
   display: grid;
 }
 

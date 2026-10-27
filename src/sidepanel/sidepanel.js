@@ -17,12 +17,17 @@ let tabsById = new Map();
 let collapsed = new Set();
 let groups = new Map();
 let tree = buildTree([], new Map());
-let visible = []; // Rows currently shown: { id, depth, hasChildren, collapsed, hidden }
+// Rows currently shown: { id, partner, kids, depth, hasChildren, collapsed, hidden }.
+// A split view (two tabs Chrome shows side by side) is one row: `id` is its
+// first tab and `partner` the second, which the worker keeps as the first
+// tab's first child. `kids` are the row's children, without the partner.
+let visible = [];
 let activeId = null;
 let focusedId = null;
 let drag = null;
 
-const rowEls = new Map();
+const rowEls = new Map(); // row id -> element
+const rowIdOf = new Map(); // tab id -> id of the row showing it
 const pinnedEls = new Map();
 
 const send = (message) => chrome.runtime.sendMessage(message).catch(() => null);
@@ -66,15 +71,16 @@ function scheduleRefresh() {
 function render(pinnedTabs) {
   visible = [];
   const walk = (id, depth) => {
-    const kids = tree.children.get(id);
+    const all = tree.children.get(id);
+    const partner = splitPartner(id, all[0]);
+    const kids = partner === null ? all : all.slice(1);
     const isCollapsed = kids.length > 0 && collapsed.has(id) && !settings.disableCollapsing;
-    const hidden = isCollapsed ? descendantsOf(tree, id).length : 0;
-    visible.push({ id, depth, hasChildren: kids.length > 0, collapsed: isCollapsed, hidden });
+    const hidden = isCollapsed ? descendantsOf(tree, id).length - (partner === null ? 0 : 1) : 0;
+    visible.push({ id, partner, kids, depth, hasChildren: kids.length > 0, collapsed: isCollapsed, hidden });
     if (!isCollapsed) for (const kid of kids) walk(kid, depth + 1);
   };
   tree.roots.forEach((id) => walk(id, 0));
   markGroupRuns();
-  markSplitPairs();
 
   renderPinned(pinnedTabs);
   renderRows();
@@ -82,9 +88,9 @@ function render(pinnedTabs) {
   const active = [...tabsById.values()].find((t) => t.active);
   if (active && active.id !== activeId) {
     activeId = active.id;
-    (rowEls.get(activeId) ?? pinnedEls.get(activeId))?.scrollIntoView({ block: 'nearest' });
+    (rowEls.get(rowIdOf.get(activeId)) ?? pinnedEls.get(activeId))?.scrollIntoView({ block: 'nearest' });
   }
-  if (focusedId === null || !rowEls.has(focusedId)) focusedId = activeId;
+  if (focusedId === null || !rowEls.has(focusedId)) focusedId = rowIdOf.get(activeId) ?? activeId;
   for (const [id, el] of rowEls) el.tabIndex = id === focusedId ? 0 : -1;
 }
 
@@ -102,14 +108,14 @@ function isSelected(tab) {
   return split === null || split !== splitOf([...tabsById.values()].find((t) => t.active));
 }
 
-/** The two halves of a split view are next to each other; join their rows. */
-function markSplitPairs() {
-  visible.forEach((row, i) => {
-    const split = splitOf(tabsById.get(row.id));
-    row.splitFirst = split !== null && splitOf(tabsById.get(visible[i + 1]?.id)) === split;
-    row.splitLast = split !== null && splitOf(tabsById.get(visible[i - 1]?.id)) === split;
-  });
+/** `first` when it is the other half of `id`'s split view, else null. */
+function splitPartner(id, first) {
+  const split = splitOf(tabsById.get(id));
+  return first !== undefined && split !== null && split === splitOf(tabsById.get(first)) ? first : null;
 }
+
+/** The tabs a row shows: one, or both halves of a split view. */
+const tabsOfRow = (row) => (row.partner === null ? [row.id] : [row.id, row.partner]);
 
 /**
  * Each run of rows in the same tab group gets one continuous colored line.
@@ -143,11 +149,13 @@ function syncChildren(container, elements) {
 
 function renderRows() {
   const used = new Set();
+  rowIdOf.clear();
   const elements = visible.map((row) => {
     let el = rowEls.get(row.id);
     if (!el) rowEls.set(row.id, (el = createRow(row.id)));
     updateRow(el, tabsById.get(row.id), row);
     used.add(row.id);
+    for (const id of tabsOfRow(row)) rowIdOf.set(id, row.id);
     return el;
   });
   for (const id of rowEls.keys()) if (!used.has(id)) rowEls.delete(id);
@@ -160,20 +168,29 @@ function createRow(id) {
   el.dataset.id = id;
   el.draggable = true;
   el.setAttribute('role', 'treeitem');
-  el.innerHTML = `
-    <button class="twisty" tabindex="-1">${icon('chevron')}</button>
+  el.innerHTML = `<button class="twisty" tabindex="-1">${icon('chevron')}</button>`;
+  el.append(createPart(id));
+  return el;
+}
+
+/** One tab's part of a row: the whole row, or one half of a split view's row. */
+function createPart(id, { partner = false } = {}) {
+  const part = document.createElement('span');
+  part.className = partner ? 'part partner' : 'part';
+  part.dataset.tabId = id;
+  part.innerHTML = `
     <span class="icon">
       <img class="favicon" alt="" draggable="false">
       <span class="fallback-icon">${icon('globe')}</span>
       <span class="spinner"></span>
     </span>
     <span class="title"></span>
-    <span class="badge"></span>
+    ${partner ? '' : '<span class="badge"></span>'}
     <button class="tab-button audio" tabindex="-1"></button>
     <button class="tab-button close" tabindex="-1" aria-label="Close tab">${icon('close')}</button>`;
-  const iconEl = el.querySelector('.icon');
-  el.querySelector('.favicon').addEventListener('error', () => iconEl.classList.add('no-favicon'));
-  return el;
+  const iconEl = part.querySelector('.icon');
+  part.querySelector('.favicon').addEventListener('error', () => iconEl.classList.add('no-favicon'));
+  return part;
 }
 
 function faviconUrl(tab) {
@@ -204,43 +221,36 @@ function tabTitle(tab) {
 
 function updateRow(el, tab, row) {
   if (!tab) return;
+  const partner = row.partner === null ? null : tabsById.get(row.partner);
   el.style.setProperty('--depth', row.depth);
-  el.classList.toggle('active', tab.active);
-  el.classList.toggle('highlighted', isSelected(tab) && !tab.active);
-  el.classList.toggle('split-first', !!row.splitFirst);
-  el.classList.toggle('split-last', !!row.splitLast);
-  // The other half of the split view you're looking at.
-  el.classList.toggle('split-partner', !tab.active && tab.highlighted && !isSelected(tab));
+  el.classList.toggle('split', !!partner);
+  // A split view's row is highlighted lightly while either half is in view,
+  // and the half in focus gets the active color (see .part.active).
+  el.classList.toggle('active', tab.active && !partner);
+  el.classList.toggle('split-active', !!partner && (tab.active || partner.active));
+  el.classList.toggle('highlighted', [tab, partner].some((t) => t && isSelected(t) && !t.active));
   el.classList.toggle('has-children', row.hasChildren);
   el.classList.toggle('collapsed', row.collapsed);
-  el.classList.toggle('loading', tab.status === 'loading');
-  el.classList.toggle('discarded', !!tab.discarded);
-  el.classList.toggle('audible', !!tab.audible);
-  el.classList.toggle('muted', !!tab.mutedInfo?.muted);
   el.classList.toggle('dragging', !!drag?.blocked.has(tab.id));
   el.setAttribute('aria-level', row.depth + 1);
-  el.setAttribute('aria-selected', tab.active);
+  el.setAttribute('aria-selected', tab.active || !!partner?.active);
   if (row.hasChildren) el.setAttribute('aria-expanded', !row.collapsed);
   else el.removeAttribute('aria-expanded');
   const twisty = el.querySelector('.twisty');
   twisty.title = row.collapsed ? 'Expand' : 'Collapse';
   twisty.setAttribute('aria-label', twisty.title);
 
-  const title = tabTitle(tab);
-  const titleEl = el.querySelector('.title');
-  if (titleEl.textContent !== title) titleEl.textContent = title;
-  el.title = tab.url && tab.url !== title ? `${title}\n${tab.url}` : title;
-  el.querySelector('.badge').textContent = row.hidden;
-  setFavicon(el.querySelector('.icon'), tab);
-
-  const audio = el.querySelector('.audio');
-  const muted = !!tab.mutedInfo?.muted;
-  const audioKey = muted ? 'off' : 'on';
-  if (audio.dataset.state !== audioKey) {
-    audio.dataset.state = audioKey;
-    audio.innerHTML = icon(muted ? 'volumeOff' : 'volumeUp');
-    audio.setAttribute('aria-label', muted ? 'Unmute tab' : 'Mute tab');
+  const [part] = el.getElementsByClassName('part');
+  updatePart(part, tab);
+  part.querySelector('.badge').textContent = row.hidden;
+  let partnerPart = el.querySelector('.partner');
+  if (partner && partnerPart?.dataset.tabId !== String(partner.id)) {
+    partnerPart?.remove();
+    el.append((partnerPart = createPart(partner.id, { partner: true })));
+  } else if (!partner) {
+    partnerPart?.remove();
   }
+  if (partner) updatePart(partnerPart, partner);
 
   const group = groups.get(tab.groupId);
   if (group) {
@@ -252,6 +262,29 @@ function updateRow(el, tab, row) {
   }
   el.classList.toggle('group-first', !!group && row.groupFirst);
   el.classList.toggle('group-last', !!group && row.groupLast);
+}
+
+function updatePart(part, tab) {
+  part.classList.toggle('active', tab.active);
+  part.classList.toggle('loading', tab.status === 'loading');
+  part.classList.toggle('discarded', !!tab.discarded);
+  part.classList.toggle('audible', !!tab.audible);
+  part.classList.toggle('muted', !!tab.mutedInfo?.muted);
+
+  const title = tabTitle(tab);
+  const titleEl = part.querySelector('.title');
+  if (titleEl.textContent !== title) titleEl.textContent = title;
+  part.title = tab.url && tab.url !== title ? `${title}\n${tab.url}` : title;
+  setFavicon(part.querySelector('.icon'), tab);
+
+  const audio = part.querySelector('.audio');
+  const muted = !!tab.mutedInfo?.muted;
+  const audioKey = muted ? 'off' : 'on';
+  if (audio.dataset.state !== audioKey) {
+    audio.dataset.state = audioKey;
+    audio.innerHTML = icon(muted ? 'volumeOff' : 'volumeUp');
+    audio.setAttribute('aria-label', muted ? 'Unmute tab' : 'Mute tab');
+  }
 }
 
 function renderPinned(pinnedTabs) {
@@ -292,6 +325,13 @@ function renderPinned(pinnedTabs) {
 const rowOf = (target) => target.closest?.('.tab, .pinned-tab');
 const idOf = (el) => Number(el.dataset.id);
 const rowInfo = (id) => visible.find((r) => r.id === id);
+/** The tab under the pointer: its half of a split view's row, or the row's tab. */
+const tabIdAt = (target, el) => Number(target.closest?.('.part')?.dataset.tabId ?? el.dataset.id);
+/** In a split view's row, the half in focus, if any; otherwise the first one. */
+function focusedTabOf(rowId) {
+  const row = rowInfo(rowId);
+  return row?.partner != null && tabsById.get(row.partner)?.active ? row.partner : rowId;
+}
 
 function activate(id) {
   quietly(chrome.tabs.update(id, { active: true }));
@@ -333,10 +373,10 @@ function toggleHighlighted(id) {
 function selectRange(id) {
   const active = [...tabsById.values()].find((t) => t.active);
   const ids = visible.map((r) => r.id);
-  const from = ids.indexOf(active?.id);
-  const to = ids.indexOf(id);
+  const from = ids.indexOf(rowIdOf.get(active?.id));
+  const to = ids.indexOf(rowIdOf.get(id));
   if (from === -1 || to === -1) return activate(id);
-  highlight(active, ids.slice(Math.min(from, to), Math.max(from, to) + 1));
+  highlight(active, visible.slice(Math.min(from, to), Math.max(from, to) + 1).flatMap(tabsOfRow));
 }
 
 function highlight(active, ids) {
@@ -345,10 +385,17 @@ function highlight(active, ids) {
   quietly(chrome.tabs.highlight({ windowId, tabs: indexes }));
 }
 
+/** Selected tabs a tab action applies to: the selection, if the tab is in it, or just the tab. */
 function selectedIdsFor(id) {
   const tab = tabsById.get(id);
-  const selected = visible.map((r) => tabsById.get(r.id)).filter(isSelected);
+  const selected = visible.flatMap(tabsOfRow).map((x) => tabsById.get(x)).filter(isSelected);
   return isSelected(tab) && selected.length > 1 ? selected.map((t) => t.id) : [id];
+}
+
+/** Rows a tree action (drag, move, close others) applies to, by row id. */
+function selectedRowsFor(rowId) {
+  const selected = visible.filter((r) => tabsOfRow(r).some((x) => isSelected(tabsById.get(x))));
+  return selected.some((r) => r.id === rowId) && selected.length > 1 ? selected.map((r) => r.id) : [rowId];
 }
 
 function newTab() {
@@ -367,7 +414,7 @@ function newChildOfActive() {
 function onPointerDown(event) {
   const el = rowOf(event.target);
   if (!el || event.target.closest('button')) return;
-  const id = idOf(el);
+  const id = tabIdAt(event.target, el);
   if (event.button === 1) {
     event.preventDefault(); // No autoscroll on middle click.
     return;
@@ -384,9 +431,9 @@ function onPointerDown(event) {
 function onClick(event) {
   const el = rowOf(event.target);
   if (!el) return;
-  const id = idOf(el);
+  const id = tabIdAt(event.target, el);
   const button = event.target.closest('button');
-  if (button?.classList.contains('twisty')) return toggleCollapsed(id);
+  if (button?.classList.contains('twisty')) return toggleCollapsed(idOf(el));
   if (button?.classList.contains('close')) return closeTab(id);
   if (button?.classList.contains('audio')) return toggleMuted(id);
   if (event.ctrlKey || event.metaKey || event.shiftKey) return;
@@ -398,7 +445,7 @@ function onAuxClick(event) {
   const el = rowOf(event.target);
   if (el && event.button === 1) {
     event.preventDefault();
-    closeTab(idOf(el));
+    closeTab(tabIdAt(event.target, el));
   }
 }
 
@@ -410,7 +457,7 @@ for (const container of [treeEl, pinnedEl]) {
     const el = rowOf(event.target);
     if (!el) return;
     event.preventDefault();
-    openTabMenu(idOf(el), event.clientX, event.clientY);
+    openTabMenu(idOf(el), event.clientX, event.clientY, tabIdAt(event.target, el));
   });
 }
 
@@ -489,7 +536,7 @@ treeEl.addEventListener('keydown', (event) => {
     case 'ArrowRight':
       handled();
       if (row.collapsed) toggleCollapsed(id);
-      else if (row.hasChildren) focusRow(tree.children.get(id)[0]);
+      else if (row.hasChildren) focusRow(row.kids[0]);
       break;
     case 'ArrowLeft': {
       handled();
@@ -501,19 +548,20 @@ treeEl.addEventListener('keydown', (event) => {
     case 'Enter':
     case ' ':
       handled();
-      activate(id);
+      // In a split view's row, switch to the other half.
+      activate(row.partner !== null && tabsById.get(id)?.active ? row.partner : id);
       break;
     case 'Delete':
     case 'Backspace':
       handled();
-      closeTab(id);
+      closeTab(focusedTabOf(id));
       break;
     case 'ContextMenu':
     case 'F10': {
       if (event.key === 'F10' && !event.shiftKey) break;
       handled();
       const rect = el.getBoundingClientRect();
-      openTabMenu(id, rect.left + 24, rect.bottom);
+      openTabMenu(id, rect.left + 24, rect.bottom, focusedTabOf(id));
       break;
     }
   }
@@ -521,18 +569,31 @@ treeEl.addEventListener('keydown', (event) => {
 
 // --- Context menu ------------------------------------------------------------
 
-function tabMenuItems(id) {
-  const tab = tabsById.get(id);
+/**
+ * The menu for a row (`id`), opened on one of its tabs (`tabId`: the row's
+ * tab, or one half of a split view). Tab actions apply to that tab; tree
+ * actions to the whole row, so a split view always stays together.
+ */
+function tabMenuItems(id, tabId = id) {
+  const tab = tabsById.get(tabId);
   if (!tab) return [];
   const row = rowInfo(id);
-  const hasChildren = !tab.pinned && tree.children.get(id)?.length > 0;
+  const hasChildren = !tab.pinned && (row?.kids.length ?? 0) > 0;
   const parent = tab.pinned ? null : tree.parentOf.get(id);
-  const siblings = parent === null || parent === undefined ? tree.roots : tree.children.get(parent);
-  const ids = selectedIdsFor(id);
+  // A split view's partner is part of its head's row, not a sibling of its own.
+  const partners = new Set(visible.map((r) => r.partner));
+  const siblings = (parent === null || parent === undefined ? tree.roots : tree.children.get(parent)).filter(
+    (x) => !partners.has(x),
+  );
+  const ids = selectedIdsFor(tabId);
   const many = ids.length > 1;
+  const rows = tab.pinned ? [tabId] : selectedRowsFor(id);
+  const rowTabs = rows.flatMap((x) => (rowInfo(x) ? tabsOfRow(rowInfo(x)) : [x]));
+  // Both halves of a split view pin together: Chrome keeps them in one place.
+  const pinIds = [...new Set(ids.flatMap((x) => (rowIdOf.has(x) ? tabsOfRow(rowInfo(rowIdOf.get(x))) : [x])))];
   // Like Chrome's "Close other tabs" and "Close tabs to the right", pinned tabs stay.
-  const last = Math.max(...ids.map((x) => tabsById.get(x)?.index ?? -1));
-  const others = [...tabsById.values()].filter((t) => !t.pinned && !ids.includes(t.id)).map((t) => t.id);
+  const last = Math.max(...rowTabs.map((x) => tabsById.get(x)?.index ?? -1));
+  const others = [...tabsById.values()].filter((t) => !t.pinned && !rowTabs.includes(t.id)).map((t) => t.id);
   const below = others.filter((x) => tabsById.get(x).index > last);
   return [
     { label: 'New tab as child', action: () => send({ type: 'new-child-tab', tabId: id }), hidden: tab.pinned },
@@ -542,7 +603,7 @@ function tabMenuItems(id) {
     { label: 'Duplicate', action: () => send({ type: 'duplicate', ids }) },
     {
       label: tab.pinned ? 'Unpin' : 'Pin',
-      action: () => ids.forEach((x) => quietly(chrome.tabs.update(x, { pinned: !tab.pinned }))),
+      action: () => pinIds.forEach((x) => quietly(chrome.tabs.update(x, { pinned: !tab.pinned }))),
     },
     {
       // Only these tabs: Chrome's own "Mute site" mutes every tab of the site.
@@ -569,8 +630,8 @@ function tabMenuItems(id) {
       disabled: parent === null,
     },
     {
-      label: many ? 'Move tabs to new window' : hasChildren ? 'Move tree to new window' : 'Move to new window',
-      action: () => send({ type: 'move-to-new-window', ids }),
+      label: rows.length > 1 ? 'Move tabs to new window' : hasChildren ? 'Move tree to new window' : 'Move to new window',
+      action: () => send({ type: 'move-to-new-window', ids: rows }),
       hidden: tab.pinned,
     },
     'separator',
@@ -579,12 +640,12 @@ function tabMenuItems(id) {
     { label: many ? 'Close tabs' : 'Close', action: () => send({ type: 'close-tabs', ids }) },
     {
       label: 'Close other tabs',
-      action: () => send({ type: 'close-tabs', ids: others, keep: ids }),
+      action: () => send({ type: 'close-tabs', ids: others, keep: rowTabs }),
       disabled: !others.length,
     },
     {
       label: 'Close tabs below',
-      action: () => send({ type: 'close-tabs', ids: below, keep: ids }),
+      action: () => send({ type: 'close-tabs', ids: below, keep: rowTabs }),
       disabled: !below.length,
     },
     'separator',
@@ -617,8 +678,8 @@ function windowMenuItems() {
   ];
 }
 
-function openTabMenu(id, x, y) {
-  openMenu(tabMenuItems(id), x, y);
+function openTabMenu(id, x, y, tabId = id) {
+  openMenu(tabMenuItems(id, tabId), x, y);
 }
 
 function openMenu(items, x, y) {
@@ -705,7 +766,7 @@ treeEl.addEventListener('dragstart', (event) => {
   const el = rowOf(event.target);
   if (!el) return;
   closeMenu();
-  startDrag(event, selectedIdsFor(idOf(el)));
+  startDrag(event, selectedRowsFor(idOf(el)));
 });
 
 pinnedEl.addEventListener('dragstart', (event) => {

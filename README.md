@@ -65,6 +65,13 @@ Built with [Claude Code](https://claude.com/claude-code).
   so after full screen you bring it back with the toolbar button or Alt+Shift+T.
 - Thin guide lines run down from each parent, so you can see which tabs
   belong to it, even several levels deep. You can hide them in Settings.
+- **Split views** (two tabs side by side) show as one row with both halves,
+  each with its own icon, title and close button. The half in focus is
+  highlighted. The pair is one item in the tree: it moves, nests and collapses
+  together, and tabs opened from either half become its children. Closing one
+  half leaves the other in its place. Tree of Tabs never moves the halves
+  themselves, since that would end the split view in Chrome; it moves the tabs
+  around them instead.
 - Pinned tabs show as a row of icons at the top, tab group colors show as a
   bar on each tab, and a spinner shows while a page loads.
 
@@ -165,6 +172,10 @@ the one before it. Moves the worker makes itself are recorded, so their
   hiding tabs in the tab strip.
 - Chrome may add or remove a tab from a tab group when the tree moves it
   in or out of the group's range.
+- A few moves can't keep a split view together: moving it to another window,
+  or putting one split view before another. Chrome 155 lets extensions pair
+  the tabs again afterwards, which Tree of Tabs does; before that they stay
+  separate.
 
 ## License
 
