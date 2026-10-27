@@ -10,7 +10,6 @@ field from here.
 - [ ] Decide whether to declare yourself a trader under EU rules (see [Developer Info](#developer-info))
 - [ ] At least one screenshot (see [Graphics & Assets](#graphics--assets))
 - [ ] Enter the privacy policy URL (see [Privacy Policy](#privacy-policy)) in the dashboard
-- [ ] Choose visibility (public or unlisted)
 - [ ] Once the listing is live: put its link in the README's Install section and in the repository's About box
 
 ## Store Listing
@@ -167,7 +166,7 @@ version.
 
 ## Distribution
 
-**Visibility**: to decide. Public, or Unlisted to share with a few people first.
+**Visibility**: Public, so anyone can find it in the store.
 
 **Regions**: All regions
 
