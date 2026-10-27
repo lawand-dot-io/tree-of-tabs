@@ -158,3 +158,18 @@ the one before it. Moves the worker makes itself are recorded, so their
   hiding tabs in the tab strip.
 - Chrome may add or remove a tab from a tab group when the tree moves it
   in or out of the group's range.
+
+## License
+
+Tab Tree is released under the [MIT License](LICENSE): you can use, change and
+share it freely, as long as the copyright notice stays with the code.
+
+Two parts come from Google and keep their own license, the
+[Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0):
+
+- the icons in `src/sidepanel/icons.js`, from
+  [Material Design Icons](https://github.com/google/material-design-icons)
+  (license: `src/sidepanel/icons.LICENSE`);
+- the Claude Code skill in `.claude/skills/chrome-extensions/`, from
+  [Modern Web Guidance](https://github.com/GoogleChrome/modern-web-guidance)
+  (license: `.claude/skills/chrome-extensions/LICENSE`).

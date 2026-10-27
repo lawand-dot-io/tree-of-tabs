@@ -1,4 +1,5 @@
-// Material icons (Apache 2.0), the same family Chrome's own UI uses.
+// Material icons by Google, the same family Chrome's own UI uses. Licensed
+// under the Apache License 2.0, see icons.LICENSE next to this file.
 const PATHS = {
   close:
     'M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z',

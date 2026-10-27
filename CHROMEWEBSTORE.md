@@ -214,11 +214,11 @@ the listing.
 
 ## Packaging
 
-Only these go in the ZIP: `manifest.json`, `icons/` and `src/`. The tests, tools,
+Only these go in the ZIP: `manifest.json`, `LICENSE`, `icons/` and `src/`. The tests, tools,
 `.claude/`, `.mcp.json`, `package.json`, `README.md` and this file stay out.
 
 ```sh
-zip -r tab-tree-v1.0.0.zip manifest.json icons src -x "*.DS_Store"
+zip -r tab-tree-v1.0.0.zip manifest.json LICENSE icons src -x "*.DS_Store"
 ```
 
 ## Version History
