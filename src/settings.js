@@ -13,6 +13,11 @@ export const DEFAULTS = {
   indent: 16,
   // 'comfortable' (32px rows) or 'compact' (26px rows).
   density: 'comfortable',
+  // Close the side panel while its window is full screen (videos, F11).
+  hideInFullscreen: true,
+  // Whether the user has picked hideInFullscreen yet. Until then, the first
+  // full screen explains the choice in the panel instead of closing it.
+  fullscreenChoiceMade: false,
 };
 
 export async function loadSettings() {

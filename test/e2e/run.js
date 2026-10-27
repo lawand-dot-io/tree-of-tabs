@@ -283,69 +283,104 @@ try {
     assert.ok(tree.collapsed.includes(newsId));
   });
 
-  await check('the panel closes when its window goes full screen', async () => {
-    // Here the panel runs as a tab without ?windowId=, like the real side
-    // panel, so it watches its own window.
-    const url = panelUrl.replace(/\?.*/, '');
-    await worker.evaluate((url) => chrome.windows.create({ url: [url, 'about:blank'], width: 900, height: 600 }), url);
-    let own;
-    for (let i = 0; i < 50 && !own; i++) {
-      own = context.pages().find((p) => p.url() === url);
-      if (!own) await new Promise((resolve) => setTimeout(resolve, 100));
+  // Here the panel runs as a tab without ?windowId=, like the real side
+  // panel, so it watches its own window. Playwright pins the page size, so
+  // the page gets no real resize events; tests send the one Chrome would.
+  const plainPanelUrl = panelUrl.replace(/\?.*/, '');
+  const fullscreenWindow = await worker.evaluate(
+    (url) => chrome.windows.create({ url: ['about:blank', url], width: 900, height: 600 }).then((w) => w.id),
+    plainPanelUrl,
+  );
+  const openOwnPanel = async () => {
+    const before = new Set(context.pages());
+    await worker.evaluate(
+      ({ windowId, url }) => chrome.tabs.create({ windowId, url }),
+      { windowId: fullscreenWindow, url: plainPanelUrl },
+    );
+    let page;
+    for (let i = 0; i < 50 && !page; i++) {
+      page = context.pages().find((p) => !before.has(p) && p.url() === plainPanelUrl);
+      if (!page) await new Promise((resolve) => setTimeout(resolve, 100));
     }
-    await own.waitForLoadState();
-    const windowId = await worker.evaluate(async (url) => (await chrome.tabs.query({ url }))[0].windowId, url);
-    // Playwright pins the page size, so the page gets no real resize events
-    // here; send the one Chrome would send.
-    const resized = () => own.evaluate(() => dispatchEvent(new Event('resize')));
-    await worker.evaluate((id) => chrome.windows.update(id, { width: 800 }), windowId);
-    await resized();
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    assert.equal(own.isClosed(), false, 'an ordinary resize keeps the panel open');
-    await worker.evaluate((id) => chrome.windows.update(id, { state: 'fullscreen' }), windowId);
-    await Promise.all([own.waitForEvent('close', { timeout: 5000 }), resized().catch(() => {})]);
+    await page.waitForLoadState();
+    await page.waitForSelector('.tab');
+    return page;
+  };
+  const setState = (state) =>
+    worker.evaluate(({ id, state }) => chrome.windows.update(id, { state }), { id: fullscreenWindow, state });
+  const resize = (page) => page.evaluate(() => dispatchEvent(new Event('resize'))).catch(() => {});
+  const noticeShown = (page) => page.locator('#fullscreen-notice').isVisible();
+  const settled = () => new Promise((resolve) => setTimeout(resolve, 400));
+  const fullscreenSettings = () =>
+    worker.evaluate(() => chrome.storage.sync.get(['hideInFullscreen', 'fullscreenChoiceMade']));
+
+  await check('the first full screen explains the choice instead of closing the panel', async () => {
+    const own = context.pages().find((p) => p.url() === plainPanelUrl) ?? (await openOwnPanel());
+    await own.waitForSelector('.tab');
+    await worker.evaluate((id) => chrome.windows.update(id, { width: 800 }), fullscreenWindow);
+    await resize(own);
+    await settled();
+    assert.equal(await noticeShown(own), false, 'an ordinary resize changes nothing');
+
+    await setState('fullscreen');
+    await resize(own);
+    await settled();
+    assert.equal(own.isClosed(), false);
+    assert.equal(await noticeShown(own), true, 'the notice replaces the tree');
+    assert.equal(await own.locator('#scroller').isVisible(), false);
+    // The notice names the shortcut Chrome has assigned, if there is one.
+    const shortcut = await worker.evaluate(
+      async () => (await chrome.commands.getAll()).find((c) => c.name === '_execute_action').shortcut,
+    );
+    const text = await own.locator('#fullscreen-notice').textContent();
+    assert.ok(text.includes(shortcut ? `toolbar button or ${shortcut}.` : 'toolbar button.'), text);
+    if (shots) {
+      for (const scheme of ['light', 'dark']) {
+        await own.emulateMedia({ colorScheme: scheme });
+        await own.screenshot({ path: path.join(shots, `fullscreen-notice-${scheme}.png`) });
+      }
+    }
+
+    await setState('normal');
+    await resize(own);
+    await settled();
+    assert.equal(await noticeShown(own), false, 'leaving full screen unanswered brings the tree back');
+    assert.equal(await own.locator('#scroller').isVisible(), true);
+
+    await setState('fullscreen');
+    await resize(own);
+    await settled();
+    await Promise.all([own.waitForEvent('close', { timeout: 5000 }), own.click('#fullscreen-hide')]);
+    assert.deepEqual(await fullscreenSettings(), { hideInFullscreen: true, fullscreenChoiceMade: true });
   });
 
-  await check('after full screen the toolbar button is marked until the panel opens again', async () => {
-    const url = panelUrl.replace(/\?.*/, '');
-    const windowId = await worker.evaluate(
-      async () => (await chrome.windows.getAll()).find((w) => w.state === 'fullscreen').id,
-    );
-    const badge = () =>
-      worker.evaluate(async (windowId) => {
-        const [tab] = await chrome.tabs.query({ windowId, active: true });
-        return chrome.action.getBadgeText({ tabId: tab.id });
-      }, windowId);
-    const waitForBadge = async (text, step) => {
-      for (let i = 0; i < 40 && (await badge()) !== text; i++) await new Promise((r) => setTimeout(r, 100));
-      assert.equal(await badge(), text, step);
-    };
-    await waitForBadge('•', 'marked after full screen');
+  await check('after choosing to hide, full screen closes the panel without asking', async () => {
+    await setState('normal');
+    const own = await openOwnPanel();
+    await setState('fullscreen');
+    await Promise.all([own.waitForEvent('close', { timeout: 5000 }), resize(own)]);
+  });
 
-    // The mark follows the active tab within the window.
-    await worker.evaluate(async (windowId) => {
-      await chrome.windows.update(windowId, { state: 'normal' });
-      await chrome.tabs.create({ windowId, url: 'about:blank#other' });
-    }, windowId);
-    await waitForBadge('•', 'mark follows the active tab');
-
-    // Opening the panel again clears it.
-    const [reopened] = await Promise.all([
-      context.waitForEvent('page'),
-      worker.evaluate(({ windowId, url }) => chrome.tabs.create({ windowId, url }), { windowId, url }),
-    ]);
-    await reopened.waitForLoadState();
-    await worker.evaluate(async (windowId) => {
-      const [, other] = await chrome.tabs.query({ windowId });
-      await chrome.tabs.update(other.id, { active: true });
-    }, windowId);
-    await waitForBadge('', 'cleared when the panel opens');
-
-    // Closing the panel by hand leaves no mark.
-    await reopened.close();
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    assert.equal(await badge(), '');
-    await worker.evaluate((id) => chrome.windows.remove(id), windowId);
+  await check('choosing to keep it open leaves the panel open in full screen', async () => {
+    await setState('normal');
+    await worker.evaluate(() => chrome.storage.sync.set({ fullscreenChoiceMade: false }));
+    const own = await openOwnPanel();
+    await setState('fullscreen');
+    await resize(own);
+    await settled();
+    await own.click('#fullscreen-keep');
+    await settled();
+    assert.equal(await noticeShown(own), false);
+    assert.equal(await own.locator('#scroller').isVisible(), true);
+    assert.deepEqual(await fullscreenSettings(), { hideInFullscreen: false, fullscreenChoiceMade: true });
+    await resize(own);
+    await settled();
+    assert.equal(own.isClosed(), false, 'later full screens leave it open too');
+    assert.equal(await noticeShown(own), false);
+    await worker.evaluate(async (id) => {
+      await chrome.windows.remove(id);
+      await chrome.storage.sync.remove(['hideInFullscreen', 'fullscreenChoiceMade']);
+    }, fullscreenWindow);
   });
 
   if (shots) {

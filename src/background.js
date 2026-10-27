@@ -9,7 +9,6 @@ import {
   sanitize,
 } from './tree.js';
 import { DEFAULTS, loadSettings, onSettingsChanged } from './settings.js';
-import { clearReopen, markForReopen, registerReopenBadge } from './reopen-badge.js';
 
 // Tree state for every window, keyed by tab id. Sibling order is the native
 // tab order, which this worker keeps consistent with the tree.
@@ -522,10 +521,6 @@ async function handleMessage(message) {
       return indent(message.tabId);
     case 'outdent':
       return outdent(message.tabId);
-    case 'panel-opened':
-      return clearReopen(message.windowId);
-    case 'panel-closed-for-fullscreen':
-      return markForReopen(message.windowId);
     case 'close-tree':
     case 'close-children': {
       const { descendants } = await subtreeOf(message.tabId);
@@ -563,8 +558,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 onSettingsChanged((next) => {
   settings = next;
 });
-
-registerReopenBadge();
 
 // Clicking the toolbar button toggles the side panel.
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => {});

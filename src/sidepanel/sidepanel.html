@@ -17,6 +17,19 @@
       </div>
       <div id="drop-line" class="drop-line" hidden></div>
     </div>
+    <div id="fullscreen-notice" class="notice" role="dialog" aria-labelledby="fullscreen-notice-title" hidden>
+      <h2 id="fullscreen-notice-title">Hide the tab tree during full screen?</h2>
+      <p>Chrome keeps the side panel open next to full screen videos and pages. Tab Tree can close it when you go full screen.</p>
+      <p>
+        Chrome doesn't let extensions reopen the side panel by themselves, so afterwards you bring the tree back
+        with the toolbar button<span id="fullscreen-shortcut"></span>.
+      </p>
+      <div class="notice-buttons">
+        <button id="fullscreen-hide" class="button filled">Hide during full screen</button>
+        <button id="fullscreen-keep" class="button">Keep it open</button>
+      </div>
+      <p class="notice-footnote">You can change this later in Settings.</p>
+    </div>
     <div id="menu" class="menu" role="menu" hidden></div>
     <script type="module" src="sidepanel.js"></script>
   </body>

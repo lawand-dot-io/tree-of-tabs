@@ -15,5 +15,10 @@ function write(field, value) {
 const settings = await loadSettings();
 for (const field of fields) {
   write(field, settings[field.name]);
-  field.addEventListener('change', () => chrome.storage.sync.set({ [field.name]: read(field) }));
+  field.addEventListener('change', () => {
+    const change = { [field.name]: read(field) };
+    // Choosing here counts as answering the panel's first full screen question.
+    if (field.name === 'hideInFullscreen') change.fullscreenChoiceMade = true;
+    chrome.storage.sync.set(change);
+  });
 }

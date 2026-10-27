@@ -36,12 +36,13 @@ tree in Chrome's own side panel, styled to match the browser.
 - **Persistence**: the tree survives service worker restarts, extension
   updates and browser restarts. After a browser restart it is matched back to
   the restored tabs by URL.
-- **Full screen**: the panel closes when its window goes full screen, for
-  example for a video. Chrome only lets extensions open the side panel from a
-  click or shortcut ([Chromium issue 578117954](https://issues.chromium.org/issues/578117954)),
-  so it can't come back by itself. Instead the toolbar button gets a blue dot
-  when you leave full screen; click it (or press Alt+Shift+T) to bring the
-  tree back. A panel you closed yourself leaves no dot.
+- **Full screen**: Chrome keeps the side panel open next to full screen videos
+  and pages, so Tab Tree can close it when you go full screen. The first time,
+  the panel shows a short explanation instead of the tree and lets you choose
+  whether to hide it; you can change this later in Settings. Chrome doesn't let
+  extensions reopen the side panel by themselves
+  ([Chromium issue 578117954](https://issues.chromium.org/issues/578117954)),
+  so after full screen you bring it back with the toolbar button or Alt+Shift+T.
 - Pinned tabs show as a row of icons at the top, tab group colors show as a
   bar on each tab, and a spinner shows while a page loads.
 

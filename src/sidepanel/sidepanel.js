@@ -757,6 +757,49 @@ pinnedEl.addEventListener('drop', async (event) => {
 
 // --- Setup -------------------------------------------------------------------
 
+// --- Full screen ---------------------------------------------------------------
+// Chrome keeps showing the side panel next to full screen videos and pages.
+// The panel can close itself when its window goes full screen (which resizes
+// the panel), but Chrome only lets it open again from a click or shortcut
+// (https://issues.chromium.org/issues/578117954). So the first time, the
+// panel explains this and lets the user choose instead of just vanishing.
+
+const notice = document.getElementById('fullscreen-notice');
+
+function showNotice(show) {
+  notice.hidden = !show;
+  document.body.classList.toggle('showing-notice', show);
+  if (show) notice.querySelector('.button.filled').focus();
+}
+
+async function showShortcut() {
+  // The shortcut as Chrome shows it on this platform (⌥⇧T on a Mac), or none
+  // if the user removed it.
+  const commands = await chrome.commands.getAll().catch(() => []);
+  const shortcut = commands.find((c) => c.name === '_execute_action')?.shortcut;
+  const el = document.getElementById('fullscreen-shortcut');
+  el.replaceChildren();
+  if (shortcut) el.append(' or ', Object.assign(document.createElement('kbd'), { textContent: shortcut }));
+}
+
+function watchFullscreen() {
+  showShortcut();
+  addEventListener('resize', async () => {
+    const win = await chrome.windows.get(windowId).catch(() => null);
+    const fullscreen = win?.state === 'fullscreen';
+    if (!settings.fullscreenChoiceMade) showNotice(fullscreen);
+    else if (fullscreen && settings.hideInFullscreen) window.close();
+  });
+  const choose = async (hide) => {
+    await chrome.storage.sync.set({ hideInFullscreen: hide, fullscreenChoiceMade: true });
+    showNotice(false);
+    const win = await chrome.windows.get(windowId).catch(() => null);
+    if (hide && win?.state === 'fullscreen') window.close();
+  };
+  document.getElementById('fullscreen-hide').addEventListener('click', () => choose(true));
+  document.getElementById('fullscreen-keep').addEventListener('click', () => choose(false));
+}
+
 function applySettings(next) {
   settings = next;
   document.documentElement.style.setProperty('--indent', `${settings.indent}px`);
@@ -791,21 +834,7 @@ async function main() {
     if (message?.type === 'tree-changed' && forThisWindow(message.windowId)) scheduleRefresh();
   });
 
-  // Chrome keeps showing the side panel next to full screen videos and
-  // pages, so close it when the window goes full screen (which resizes the
-  // panel). Chrome only lets the panel open from a click or shortcut, so it
-  // can't come back by itself: the worker marks the toolbar button instead,
-  // and opening the panel clears the mark.
-  if (!forced) {
-    send({ type: 'panel-opened', windowId });
-    addEventListener('resize', async () => {
-      const win = await chrome.windows.get(windowId).catch(() => null);
-      if (win?.state !== 'fullscreen') return;
-      const delivered = send({ type: 'panel-closed-for-fullscreen', windowId });
-      await Promise.race([delivered, new Promise((resolve) => setTimeout(resolve, 500))]);
-      window.close();
-    });
-  }
+  if (!forced) watchFullscreen();
   await refresh();
 }
 
