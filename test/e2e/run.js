@@ -283,6 +283,28 @@ try {
     assert.ok(tree.collapsed.includes(newsId));
   });
 
+  await check('the panel closes when its window goes full screen', async () => {
+    // Here the panel runs as a tab without ?windowId=, like the real side
+    // panel, so it watches its own window.
+    const url = panelUrl.replace(/\?.*/, '');
+    const [own] = await Promise.all([
+      context.waitForEvent('page'),
+      worker.evaluate((url) => chrome.windows.create({ url: [url, 'about:blank'], width: 900, height: 600 }), url),
+    ]);
+    await own.waitForLoadState();
+    const windowId = await worker.evaluate(async (url) => (await chrome.tabs.query({ url }))[0].windowId, url);
+    // Playwright pins the page size, so the page gets no real resize events
+    // here; send the one Chrome would send.
+    const resized = () => own.evaluate(() => dispatchEvent(new Event('resize')));
+    await worker.evaluate((id) => chrome.windows.update(id, { width: 800 }), windowId);
+    await resized();
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    assert.equal(own.isClosed(), false, 'an ordinary resize keeps the panel open');
+    await worker.evaluate((id) => chrome.windows.update(id, { state: 'fullscreen' }), windowId);
+    await Promise.all([own.waitForEvent('close', { timeout: 5000 }), resized().catch(() => {})]);
+    await worker.evaluate((id) => chrome.windows.remove(id), windowId);
+  });
+
   if (shots) {
     await worker.evaluate(async (id) => chrome.tabs.update(id, { active: true }), await idOf('Page Design spec'));
     await settle();

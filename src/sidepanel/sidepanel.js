@@ -790,6 +790,17 @@ async function main() {
   chrome.runtime.onMessage.addListener((message) => {
     if (message?.type === 'tree-changed' && forThisWindow(message.windowId)) scheduleRefresh();
   });
+
+  // Chrome keeps showing the side panel next to full screen videos and
+  // pages, so close it when the window goes full screen (which resizes the
+  // panel). Chrome only lets the panel open from a click or shortcut, so it
+  // stays closed until the user opens it again.
+  if (!forced) {
+    addEventListener('resize', async () => {
+      const win = await chrome.windows.get(windowId).catch(() => null);
+      if (win?.state === 'fullscreen') window.close();
+    });
+  }
   await refresh();
 }
 

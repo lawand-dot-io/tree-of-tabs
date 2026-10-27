@@ -36,6 +36,9 @@ tree in Chrome's own side panel, styled to match the browser.
 - **Persistence**: the tree survives service worker restarts, extension
   updates and browser restarts. After a browser restart it is matched back to
   the restored tabs by URL.
+- **Full screen**: the panel closes when its window goes full screen, for
+  example for a video. Chrome only lets extensions open the side panel from a
+  click or shortcut, so reopen it with the toolbar button or Alt+Shift+T.
 - Pinned tabs show as a row of icons at the top, tab group colors show as a
   bar on each tab, and a spinner shows while a page loads.
 
