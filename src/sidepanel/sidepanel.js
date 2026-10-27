@@ -2,7 +2,7 @@ import { buildTree, descendantsOf } from '../tree.js';
 import { DEFAULTS, loadSettings, onSettingsChanged } from '../settings.js';
 import { icon } from './icons.js';
 
-const DRAG_TYPE = 'application/x-tab-tree';
+const DRAG_TYPE = 'application/x-tree-of-tabs';
 
 const pinnedEl = document.getElementById('pinned');
 const scroller = document.getElementById('scroller');

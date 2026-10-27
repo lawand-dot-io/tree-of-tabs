@@ -43,7 +43,7 @@ const NEW_TAB_URLS = ['chrome://newtab/', 'chrome://new-tab-page/', 'chrome-sear
 
 let queue = Promise.resolve();
 function enqueue(task) {
-  const run = queue.then(task).catch((error) => console.error('[tab-tree]', error));
+  const run = queue.then(task).catch((error) => console.error('[tree-of-tabs]', error));
   queue = run;
   return run;
 }

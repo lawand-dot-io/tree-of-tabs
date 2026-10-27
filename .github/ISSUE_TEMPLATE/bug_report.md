@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Something in Tab Tree doesn't work as expected
+about: Something in Tree of Tabs doesn't work as expected
 title: ''
 labels: bug
 assignees: ''
@@ -18,7 +18,7 @@ assignees: ''
 **What you expected instead**
 
 **Versions**
-- Tab Tree: <!-- chrome://extensions -->
+- Tree of Tabs: <!-- chrome://extensions -->
 - Chrome: <!-- chrome://version -->
 - Operating system:
 

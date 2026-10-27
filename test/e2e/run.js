@@ -23,7 +23,7 @@ const server = createServer((req, res) => {
 await new Promise((resolve) => server.listen(0, resolve));
 const base = `http://localhost:${server.address().port}`;
 
-const context = await chromium.launchPersistentContext(mkdtempSync(path.join(tmpdir(), 'tab-tree-')), {
+const context = await chromium.launchPersistentContext(mkdtempSync(path.join(tmpdir(), 'tree-of-tabs-')), {
   headless: true,
   channel: 'chromium', // The headless shell cannot load extensions.
   args: [`--disable-extensions-except=${root}`, `--load-extension=${root}`],

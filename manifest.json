@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Tab Tree",
+  "name": "Tree of Tabs",
   "version": "1.0.0",
   "description": "See your tabs as a tree in the side panel. Tabs you open from a page nest under it, and you can drag them to reorganize.",
   "minimum_chrome_version": "116",
@@ -17,7 +17,7 @@
     "open_in_tab": true
   },
   "action": {
-    "default_title": "Show tab tree",
+    "default_title": "Show Tree of Tabs",
     "default_icon": {
       "16": "icons/icon16.png",
       "32": "icons/icon32.png"
@@ -28,7 +28,7 @@
       "suggested_key": {
         "default": "Alt+Shift+T"
       },
-      "description": "Show or hide the tab tree"
+      "description": "Show or hide the tree"
     }
   },
   "icons": {

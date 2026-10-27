@@ -12,7 +12,7 @@ body:
           required: true
   - type: textarea
     attributes:
-      label: What would you like Tab Tree to do?
+      label: What would you like Tree of Tabs to do?
       description: Describe the feature as you would use it.
     validations:
       required: true

@@ -1,4 +1,4 @@
-# Tab Tree
+# Tree of Tabs
 
 Tree style tabs for Chrome, modeled on Firefox's
 [Tree Style Tab](https://github.com/piroor/treestyletab). Your tabs show as a
@@ -54,7 +54,7 @@ Built with [Claude Code](https://claude.com/claude-code).
   updates and browser restarts. After a browser restart it is matched back to
   the restored tabs by URL.
 - **Full screen**: Chrome keeps the side panel open next to full screen videos
-  and pages, so Tab Tree can close it when you go full screen. The first time,
+  and pages, so Tree of Tabs can close it when you go full screen. The first time,
   the panel shows a short explanation instead of the tree and lets you choose
   whether to hide it; you can change this later in Settings. Chrome doesn't let
   extensions reopen the side panel by themselves
@@ -152,7 +152,7 @@ the one before it. Moves the worker makes itself are recorded, so their
   open it with the toolbar button or Alt+Shift+T
   ([Chromium issue 578112289](https://issues.chromium.org/issues/578112289)).
 - Chrome doesn't tell extensions when a page opens a tab if that page is an
-  extension's page (like a settings page). For those, Tab Tree goes by the
+  extension's page (like a settings page). For those, Tree of Tabs goes by the
   tab Chrome names as the opener, so a tab opened some other way while an
   extension page is active (a bookmark, say) also nests under that page.
 - Chrome's horizontal tab strip can't be hidden by an extension.
@@ -163,7 +163,7 @@ the one before it. Moves the worker makes itself are recorded, so their
 
 ## License
 
-Tab Tree is released under the [MIT License](LICENSE): you can use, change and
+Tree of Tabs is released under the [MIT License](LICENSE): you can use, change and
 share it freely, as long as the copyright notice stays with the code.
 
 Two parts come from Google and keep their own license, the

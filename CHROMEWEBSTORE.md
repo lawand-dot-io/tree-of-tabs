@@ -1,4 +1,4 @@
-# Chrome Web Store Listing — Tab Tree
+# Chrome Web Store Listing — Tree of Tabs
 
 > Last Updated: 2026-10-27
 
@@ -16,7 +16,7 @@ field from here.
 
 **Extension Name**
 
-Tab Tree
+Tree of Tabs
 
 **Short Description** (120 of 132 characters; same as the manifest description)
 
@@ -42,17 +42,17 @@ FEATURES
 • Optional: keep a window open when you close its last tab from the tree.
 
 HOW TO USE
-1. Click the Tab Tree button in the toolbar (or use its keyboard shortcut) to open the tree in the side panel.
+1. Click the Tree of Tabs button in the toolbar (or use its keyboard shortcut) to open the tree in the side panel.
 2. Browse as usual. Tabs you open from a page appear under it.
 3. Drag tabs to reorganize. Right-click a tab for more actions.
 4. Right-click the tree and choose Settings to change how new and closed tabs behave, the spacing, and more.
 Tip: to put the tree on the left, open the browser's appearance settings and set the side panel position to the left.
 
 PRIVACY
-Tab Tree never sends your tabs or browsing anywhere. It keeps the shape of your tree on your own computer so it can rebuild it after a restart, and it has no analytics, no accounts and no servers. Your settings sync with your browser profile if you use browser sync.
+Tree of Tabs never sends your tabs or browsing anywhere. It keeps the shape of your tree on your own computer so it can rebuild it after a restart, and it has no analytics, no accounts and no servers. Your settings sync with your browser profile if you use browser sync.
 
 PERMISSIONS
-• "Read your browsing history": Tab Tree needs the titles and addresses of your open tabs to show them in the tree and to know which tab a new tab was opened from. It does not read the content of any page, and it does not see the history of pages you closed.
+• "Read your browsing history": Tree of Tabs needs the titles and addresses of your open tabs to show them in the tree and to know which tab a new tab was opened from. It does not read the content of any page, and it does not see the history of pages you closed.
 
 SUPPORT
 Found a bug? Report it at https://github.com/lawand-dot-io/chrome-tree-style-tab/issues
@@ -98,7 +98,7 @@ endorsement).
 
 ## Permissions Justification
 
-There are no host permissions: Tab Tree never reads or changes the content of
+There are no host permissions: Tree of Tabs never reads or changes the content of
 web pages. There is no `scripting`, `history`, `bookmarks` or `<all_urls>`.
 
 | Permission | Type | Justification |
@@ -160,12 +160,12 @@ GitHub Pages or a public gist), check that the link loads, and enter it in the
 dashboard.
 
 ```
-Privacy Policy for Tab Tree
+Privacy Policy for Tree of Tabs
 
 Last updated: October 27, 2026
 
-What data Tab Tree handles
-Tab Tree shows your open tabs as a tree. To do that it reads the title, website address and icon of each open tab, and remembers which tab each tab was opened from. It does not read the content of web pages, and it does not access the history of pages you have closed.
+What data Tree of Tabs handles
+Tree of Tabs shows your open tabs as a tree. To do that it reads the title, website address and icon of each open tab, and remembers which tab each tab was opened from. It does not read the content of web pages, and it does not access the history of pages you have closed.
 
 How it is stored
 - The tree's structure is kept in the browser's session storage, which the browser clears when it closes.
@@ -176,16 +176,16 @@ How it is used
 Only to display your tabs as a tree and to restore that tree after a restart.
 
 Third-party services
-Tab Tree does not use any third-party services, analytics or advertising, and it has no servers. To show a tab's icon, it loads the icon image from that tab's own website, as the browser does for the tab itself.
+Tree of Tabs does not use any third-party services, analytics or advertising, and it has no servers. To show a tab's icon, it loads the icon image from that tab's own website, as the browser does for the tab itself.
 
 Data sharing
-Tab Tree does not send your data to the developer or to anyone else, and does not sell it.
+Tree of Tabs does not send your data to the developer or to anyone else, and does not sell it.
 
 Retention and deletion
-Session data is cleared when you close the browser. The saved copy of the tree is replaced as you use the browser and keeps only your most recent windows. Removing Tab Tree from the browser deletes everything it stored.
+Session data is cleared when you close the browser. The saved copy of the tree is replaced as you use the browser and keeps only your most recent windows. Removing Tree of Tabs from the browser deletes everything it stored.
 
 Changes to this policy
-If Tab Tree's data practices change, this policy will be updated and the date above changed before the new version is published.
+If the extension's data practices change, this policy will be updated and the date above changed before the new version is published.
 
 Contact
 support@lawand.io
@@ -218,7 +218,7 @@ Only these go in the ZIP: `manifest.json`, `LICENSE`, `icons/` and `src/`. The t
 `.claude/`, `.mcp.json`, `package.json`, `README.md` and this file stay out.
 
 ```sh
-zip -r tab-tree-v1.0.0.zip manifest.json LICENSE icons src -x "*.DS_Store"
+zip -r tree-of-tabs-v1.0.0.zip manifest.json LICENSE icons src -x "*.DS_Store"
 ```
 
 ## Version History
