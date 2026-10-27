@@ -60,7 +60,7 @@ Have an idea? Suggest a feature at https://github.com/lawand-dot-io/tree-of-tabs
 
 **Category**
 
-Productivity. If the dashboard asks for a subcategory, Tools fits best.
+Functionality & UI (under "Make Chrome Yours"): Tree of Tabs changes how Chrome shows and organizes tabs.
 
 **Single Purpose**
 
