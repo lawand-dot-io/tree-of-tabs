@@ -105,11 +105,12 @@ body {
   padding-inline: calc(var(--row-start) + var(--depth) * var(--indent)) 4px;
   border-radius: 8px;
   outline-offset: -2px;
-  /* Guide lines: one per level, running down from the middle of each
-     ancestor's arrow (or its icon, with collapsing off). Rows touch, so the
-     lines join up into one line per branch. */
-  background: repeating-linear-gradient(90deg, var(--guide) 0 1px, transparent 1px var(--indent))
-    calc(var(--row-start) + 7.5px) 0 / calc(var(--depth) * var(--indent)) 100% no-repeat;
+}
+
+/* A thin line between top-level trees. It sits in the 1px gap above the
+   row, so it never crosses a highlighted row. */
+.tab.root:not(:first-child) {
+  background: linear-gradient(var(--guide), var(--guide)) 0 0 / 100% 1px no-repeat;
 }
 
 /* A thin gap between rows, without a dead zone for drag and drop. */
@@ -135,12 +136,6 @@ body {
 
 .tab.active {
   color: var(--active-text);
-}
-
-/* The guide lines stop at highlighted rows instead of crossing them. */
-.tab.active,
-.tab.highlighted {
-  background: none;
 }
 
 .tree {
