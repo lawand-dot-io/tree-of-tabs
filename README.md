@@ -45,8 +45,8 @@ Built with [Claude Code](https://claude.com/claude-code).
 - **Context menu**: new child tab, reload, duplicate, pin, mute, collapse or
   expand all, indent and outdent, move a tree to a new window, close children,
   close tree.
-- **New tab button**: click it for a new tree, middle-click it for a new tab
-  under the current tab.
+- **New tab button**: click it for a new tree. Middle-click it, or right-click
+  it and pick from the menu, for a new tab under the current tab.
 - **Keyboard**: arrow keys move through the tree, Left and Right collapse and
   expand, Enter activates, Delete closes, Shift+F10 opens the menu.
   Alt+Shift+T toggles the panel; you can change it at `chrome://extensions/shortcuts`.

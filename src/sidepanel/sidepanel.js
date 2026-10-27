@@ -372,8 +372,18 @@ newTabEl.addEventListener('auxclick', (event) => {
   event.preventDefault();
   newChildOfActive();
 });
+// Right-click offers both, since many trackpads have no middle click.
+newTabEl.addEventListener('contextmenu', (event) => {
+  event.preventDefault();
+  openMenu(newTabMenuItems(), event.clientX, event.clientY);
+});
 newTabEl.addEventListener('keydown', (event) => {
   if (event.key === 'Enter' || event.key === ' ') newTab();
+  if (event.key === 'ContextMenu' || (event.key === 'F10' && event.shiftKey)) {
+    event.preventDefault();
+    const rect = newTabEl.getBoundingClientRect();
+    openMenu(newTabMenuItems(), rect.left + 24, rect.bottom);
+  }
 });
 
 // Double-click on empty space opens a new tab, like the tab strip.
@@ -521,6 +531,13 @@ function collapseAllItems() {
   return [
     { label: 'Collapse all', action: () => send({ type: 'set-all-collapsed', windowId, collapsed: true }), hidden },
     { label: 'Expand all', action: () => send({ type: 'set-all-collapsed', windowId, collapsed: false }), hidden },
+  ];
+}
+
+function newTabMenuItems() {
+  return [
+    { label: 'New tab', action: newTab },
+    { label: 'New tab under the current tab', action: newChildOfActive },
   ];
 }
 

@@ -481,7 +481,7 @@ try {
     assert.deepEqual(panelErrors, []);
   });
 
-  await check('the new tab button opens a tree, or a child when middle-clicked', async () => {
+  await check('the new tab button opens a tree, or a child when middle-clicked or from its menu', async () => {
     const newest = () =>
       worker.evaluate(async (windowId) => {
         const tabs = await chrome.tabs.query({ windowId });
@@ -509,6 +509,17 @@ try {
     assert.notEqual(root.id, child.id);
     assert.equal(root.parent, null, 'left click: a new tree');
     await worker.evaluate((id) => chrome.tabs.remove(id), root.id);
+    await settle();
+
+    await panel.click('#new-tab', { button: 'right' });
+    const labels = await panel.$$eval('.menu-item', (items) => items.map((item) => item.textContent));
+    assert.deepEqual(labels, ['New tab', 'New tab under the current tab']);
+    await panel.locator('.menu-item', { hasText: 'under the current tab' }).click();
+    await settle();
+    const fromMenu = await newest();
+    assert.notEqual(fromMenu.id, root.id);
+    assert.equal(fromMenu.parent, activeId, 'right-click menu: child of the active tab');
+    await worker.evaluate((id) => chrome.tabs.remove(id), fromMenu.id);
     await settle();
   });
 
