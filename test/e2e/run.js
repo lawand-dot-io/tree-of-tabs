@@ -307,6 +307,23 @@ try {
     await settle();
   });
 
+  await check('a duplicate goes right after the original, as its sibling', async () => {
+    const original = await openRoot('Original');
+    await openFrom(original, 'Original child');
+    await settle();
+    const originalId = await idOf('Page Original');
+    await panel.evaluate((id) => chrome.runtime.sendMessage({ type: 'duplicate', ids: [id] }), originalId);
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    const lines = (await outline()).split('\n');
+    const at = lines.indexOf('Page Original');
+    assert.deepEqual(lines.slice(at, at + 3), ['Page Original', ' Page Original child', 'Page Original']);
+    await worker.evaluate(async () => {
+      const tabs = await chrome.tabs.query({ title: 'Page Original*' });
+      await chrome.tabs.remove(tabs.map((t) => t.id));
+    });
+    await settle();
+  });
+
   await check('pinned tabs leave the tree and show in the pinned bar', async () => {
     await worker.evaluate(async (id) => chrome.tabs.update(id, { pinned: true }), await idOf('about:blank'));
     await settle();

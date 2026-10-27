@@ -515,6 +515,14 @@ async function newChildTab(parentId, url) {
   pendingPlacements.set(created.id, childPlacement(parentId));
 }
 
+/** Duplicates land right after the original's tree, as its next sibling. */
+async function duplicateTabs(ids) {
+  for (const id of ids) {
+    const copy = await chrome.tabs.duplicate(id).catch(() => null);
+    if (copy) pendingPlacements.set(copy.id, { targetId: id, position: 'afterTree' });
+  }
+}
+
 async function openUrlAt({ windowId, url, targetId, position }) {
   const created = await chrome.tabs.create({ windowId, url, active: true });
   pendingPlacements.set(created.id, { targetId, position });
@@ -553,6 +561,8 @@ async function handleMessage(message) {
       return newChildTab(message.tabId, message.url);
     case 'open-url':
       return openUrlAt(message);
+    case 'duplicate':
+      return duplicateTabs(message.ids);
     case 'indent':
       return indent(message.tabId);
     case 'outdent':

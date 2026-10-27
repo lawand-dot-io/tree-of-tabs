@@ -471,7 +471,7 @@ function tabMenuItems(id) {
     { label: 'New tab', action: newTab },
     'separator',
     { label: 'Reload', action: () => ids.forEach((x) => quietly(chrome.tabs.reload(x))) },
-    { label: 'Duplicate', action: () => ids.forEach((x) => quietly(chrome.tabs.duplicate(x))) },
+    { label: 'Duplicate', action: () => send({ type: 'duplicate', ids }) },
     {
       label: tab.pinned ? 'Unpin' : 'Pin',
       action: () => ids.forEach((x) => quietly(chrome.tabs.update(x, { pinned: !tab.pinned }))),
