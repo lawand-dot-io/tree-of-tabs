@@ -239,6 +239,37 @@ try {
     assert.deepEqual(panelErrors, []);
   });
 
+  await check('the new tab button opens a tree, or a child when middle-clicked', async () => {
+    const newest = () =>
+      worker.evaluate(async (windowId) => {
+        const tabs = await chrome.tabs.query({ windowId });
+        const tab = tabs.reduce((a, b) => (b.id > a.id ? b : a));
+        const { tree } = await chrome.storage.session.get('tree');
+        return { id: tab.id, parent: new Map(tree.parents).get(tab.id) };
+      }, mainWindowId);
+    const activeId = await worker.evaluate(
+      async (windowId) => (await chrome.tabs.query({ windowId, active: true }))[0].id,
+      mainWindowId,
+    );
+    const before = (await newest()).id;
+
+    await panel.click('#new-tab', { button: 'middle' });
+    await settle();
+    const child = await newest();
+    assert.notEqual(child.id, before);
+    assert.equal(child.parent, activeId, 'middle click: child of the active tab');
+    await worker.evaluate((id) => chrome.tabs.remove(id), child.id);
+    await settle();
+
+    await panel.click('#new-tab');
+    await settle();
+    const root = await newest();
+    assert.notEqual(root.id, child.id);
+    assert.equal(root.parent, null, 'left click: a new tree');
+    await worker.evaluate((id) => chrome.tabs.remove(id), root.id);
+    await settle();
+  });
+
   await check('the panel reflects the tree after a reload', async () => {
     await panel.reload();
     await settle();

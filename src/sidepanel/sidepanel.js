@@ -300,6 +300,13 @@ function newTab() {
   quietly(chrome.tabs.create({ windowId }));
 }
 
+/** A new tab under the active one, like middle-clicking Tree Style Tab's new tab button. */
+function newChildOfActive() {
+  const active = [...tabsById.values()].find((t) => t.active);
+  if (!active || active.pinned) return newTab(); // Pinned tabs have no children.
+  send({ type: 'new-child-tab', tabId: active.id });
+}
+
 // --- Pointer and keyboard ----------------------------------------------------
 
 function onPointerDown(event) {
@@ -352,7 +359,16 @@ for (const container of [treeEl, pinnedEl]) {
   });
 }
 
+// Left click: a new tree. Middle click: a new child of the current tab.
 newTabEl.addEventListener('click', newTab);
+newTabEl.addEventListener('mousedown', (event) => {
+  if (event.button === 1) event.preventDefault(); // No autoscroll on middle click.
+});
+newTabEl.addEventListener('auxclick', (event) => {
+  if (event.button !== 1) return;
+  event.preventDefault();
+  newChildOfActive();
+});
 newTabEl.addEventListener('keydown', (event) => {
   if (event.key === 'Enter' || event.key === ' ') newTab();
 });
