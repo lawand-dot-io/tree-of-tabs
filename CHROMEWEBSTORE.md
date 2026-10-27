@@ -7,7 +7,6 @@ field from here.
 
 ## Still needed before submitting
 
-- [ ] Decide whether to declare yourself a trader under EU rules (see [Developer Info](#developer-info))
 - [ ] Enter the privacy policy URL (see [Privacy Policy](#privacy-policy)) in the dashboard
 - [ ] Once the listing is live: put its link in the README's Install section and in the repository's About box
 
@@ -174,9 +173,10 @@ version.
 **Contact Email**: support@lawand.io (shown publicly; Google also sends policy
 notices to it)
 
-**Trader status**: to decide. The dashboard asks whether you are a trader under EU
-rules. If you declare yes, your address and contact details are shown publicly on
-the listing.
+**Trader status**: not a trader. Tree of Tabs is free, and so are the Mac apps
+the settings page mentions. Switch to trader in the dashboard once you start
+selling them (your address and contact details are then shown publicly on the
+listing).
 
 **Support URL**: https://github.com/lawand-dot-io/tree-of-tabs/issues
 
