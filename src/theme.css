@@ -21,6 +21,7 @@
   --selected-bg: rgb(11 87 208 / 0.08);
   --accent: #0b57d0;
   --divider: #e3e3e3;
+  --guide: rgb(31 31 31 / 0.14);
   --scrollbar: rgb(31 31 31 / 0.24);
   --badge-bg: #e9eef6;
   --menu-bg: #ffffff;
@@ -54,6 +55,7 @@
     --selected-bg: rgb(168 199 250 / 0.12);
     --accent: #a8c7fa;
     --divider: #444746;
+    --guide: rgb(227 227 227 / 0.16);
     --scrollbar: rgb(227 227 227 / 0.24);
     --badge-bg: #3c4043;
     --menu-bg: #303134;

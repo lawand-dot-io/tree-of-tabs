@@ -105,6 +105,11 @@ body {
   padding-inline: calc(var(--row-start) + var(--depth) * var(--indent)) 4px;
   border-radius: 8px;
   outline-offset: -2px;
+  /* Guide lines: one per level, running down from the middle of each
+     ancestor's arrow (or its icon, with collapsing off). Rows touch, so the
+     lines join up into one line per branch. */
+  background: repeating-linear-gradient(90deg, var(--guide) 0 1px, transparent 1px var(--indent))
+    calc(var(--row-start) + 7.5px) 0 / calc(var(--depth) * var(--indent)) 100% no-repeat;
 }
 
 /* A thin gap between rows, without a dead zone for drag and drop. */
