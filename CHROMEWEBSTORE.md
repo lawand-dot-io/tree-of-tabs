@@ -179,6 +179,14 @@ notices to it)
 
 **Mature content**: No
 
+## Test Instructions
+
+No credentials. Additional instructions:
+
+```
+No account or setup is needed. After installing, click the Tree of Tabs button in the toolbar (pin it from the puzzle menu) or press Alt+Shift+T to open the tree in the side panel. Then open a few links in new tabs (middle-click or Ctrl+click): they appear nested under the page they came from. Drag a tab onto another to nest it, point at a parent tab and click its arrow to collapse it, and right-click a tab for more actions. Settings: right-click the tree.
+```
+
 ## Packaging
 
 Only these go in the ZIP: `manifest.json`, `LICENSE`, `icons/` and `src/`. The tests, tools,
@@ -199,7 +207,7 @@ zip -r tree-of-tabs-v1.0.0.zip manifest.json LICENSE icons src -x "*.DS_Store"
 
 | Version | Date | Changes | Status |
 |---------|------|---------|--------|
-| 1.0.0 | 2026-10-27 | First release: tab tree in the side panel, automatic nesting, drag and drop, choice of what happens to a closed parent's children, optionally keeping a window open when its last tab is closed from the tree, collapsing (or turning it off), pinned tabs, tab group colors, right-click actions, keyboard navigation, hiding during full screen, tree restored after restart | Draft |
+| 1.0.0 | 2026-10-27 | First release: tab tree in the side panel, automatic nesting, drag and drop, choice of what happens to a closed parent's children, optionally keeping a window open when its last tab is closed from the tree, collapsing (or turning it off), pinned tabs, tab group colors, right-click actions, keyboard navigation, hiding during full screen, tree restored after restart | Submitted for review |
 
 ## Review Notes
 
