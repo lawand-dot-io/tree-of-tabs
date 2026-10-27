@@ -11,7 +11,7 @@ export const DEFAULTS = {
   // Expand collapsed trees when one of their hidden tabs gets activated.
   autoExpandOnActivate: true,
   // Indentation per level in the side panel, in pixels.
-  indent: 16,
+  indent: 20,
   // 'comfortable' (32px rows) or 'compact' (26px rows).
   density: 'comfortable',
   // Turn collapsing off entirely: no arrows, no collapse menu items, and
@@ -27,8 +27,14 @@ export const DEFAULTS = {
   fullscreenChoiceMade: false,
 };
 
+// Indentation sizes the panel is designed for (see the highlight and guide
+// line spacing in sidepanel.css); anything else falls back to the default.
+export const INDENTS = [20, 28];
+
 export async function loadSettings() {
-  return { ...DEFAULTS, ...(await chrome.storage.sync.get(DEFAULTS)) };
+  const settings = { ...DEFAULTS, ...(await chrome.storage.sync.get(DEFAULTS)) };
+  if (!INDENTS.includes(settings.indent)) settings.indent = DEFAULTS.indent;
+  return settings;
 }
 
 export function onSettingsChanged(callback) {

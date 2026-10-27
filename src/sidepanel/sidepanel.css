@@ -1,5 +1,5 @@
 :root {
-  --indent: 16px;
+  --indent: 20px;
   /* Space before the favicon, which fills its 16px box. The close button's
      X is drawn with about 5px of empty space inside its box, so with the 4px
      after it there is about 9px of visible space on each side. */
@@ -112,15 +112,14 @@ body {
 }
 
 /* A thin gap between rows, without a dead zone for drag and drop. In child
-   rows the highlight starts at the guide line right next to the tab (its
-   parent's), which becomes its edge, as a group's colored line does. The
-   lines further left stay outside it. */
+   rows the highlight starts 2px after the line right next to the tab (its
+   parent's guide line, or its group's line, which is 3px wide). */
 .tab::after {
   content: '';
   position: absolute;
   inset: 1px 0;
   inset-inline-start: calc(
-    min(var(--depth), 1) * (var(--row-start) + 6.5px + (var(--depth) - 1) * var(--indent))
+    min(var(--depth), 1) * (var(--row-start) + 11.5px + (var(--depth) - 1) * var(--indent))
   );
   border-radius: 8px;
   z-index: -1;
@@ -162,10 +161,11 @@ body {
 
 /* Tab group color: one continuous line along the group's tabs (see
    markGroupRuns). It covers the guide line left of the group's shallowest
-   tabs, centered on it, or sits on the leading edge for top-level tabs. */
+   tabs, centered on it. For top-level tabs it sits in the tree's side
+   padding, 2px before their highlight. */
 .tab[data-group-color] {
   --group-x: calc(
-    min(var(--group-level), 1) * (var(--row-start) + 6.5px + (var(--group-level) - 1) * var(--indent))
+    min(var(--group-level), 1) * (var(--row-start) + 11.5px + (var(--group-level) - 1) * var(--indent)) - 5px
   );
 }
 
