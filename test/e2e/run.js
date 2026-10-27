@@ -702,10 +702,22 @@ try {
       return tabs.map((t) => parents.get(t.id) === optionsId);
     }, optionsId);
     assert.deepEqual(opened, [true, true], 'a click and a middle click both nest under the settings page');
-    await worker.evaluate(async (optionsId) => {
+
+    // The chrome:// link in the tip opens too, also nested.
+    await options.bringToFront();
+    await options.click('#appearance-link');
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    const appearance = await worker.evaluate(async () => {
+      const { tree } = await chrome.storage.session.get('tree');
+      const tab = (await chrome.tabs.query({})).find((t) => (t.pendingUrl || t.url) === 'chrome://settings/appearance');
+      return tab && { id: tab.id, parent: new Map(tree.parents).get(tab.id) };
+    });
+    assert.equal(appearance?.parent, optionsId, 'chrome://settings/appearance opens under the settings page');
+
+    await worker.evaluate(async ({ optionsId, appearanceId }) => {
       const tabs = (await chrome.tabs.query({})).filter((t) => (t.pendingUrl || t.url).includes('Settings%20link'));
-      await chrome.tabs.remove([optionsId, ...tabs.map((t) => t.id)]);
-    }, optionsId);
+      await chrome.tabs.remove([optionsId, appearanceId, ...tabs.map((t) => t.id)]);
+    }, { optionsId, appearanceId: appearance.id });
     await settle();
   });
 
