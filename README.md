@@ -109,6 +109,15 @@ Claude Code asks you to approve project MCP servers the first time it starts
 in this folder. The server sends Google usage statistics unless you add
 `--no-usage-statistics` to the script.
 
+### Claude Code skill
+
+`.claude/skills/chrome-extensions/` is the `chrome-extensions` skill from
+Google's [Modern Web Guidance](https://github.com/GoogleChrome/modern-web-guidance):
+Chrome's rules for Manifest V3 extensions and for publishing to the Chrome Web
+Store, which Claude Code reads when working in this folder. It's plain text,
+copied unchanged (version in `skill-version.txt`). To update it, run
+`npx modern-web-guidance@latest install --choose` and pick `chrome-extensions`.
+
 ### How it works
 
 The background worker stores only a parent id per tab, plus which tabs are
