@@ -26,6 +26,9 @@ const rowEls = new Map();
 const pinnedEls = new Map();
 
 const send = (message) => chrome.runtime.sendMessage(message).catch(() => null);
+// Tab actions race with tabs closing, or being dragged in the tab strip, so a
+// failed call just means the tab is gone or busy: nothing to report.
+const quietly = (promise) => promise.catch(() => {});
 
 // --- Data --------------------------------------------------------------------
 
@@ -33,11 +36,12 @@ let generation = 0;
 async function refresh() {
   const current = ++generation;
   const [tabs, state, groupList] = await Promise.all([
-    chrome.tabs.query({ windowId }),
+    chrome.tabs.query({ windowId }).catch(() => null),
     send({ type: 'get-tree' }),
     chrome.tabGroups.query({ windowId }).catch(() => []),
   ]);
-  if (current !== generation) return;
+  // No tabs means the window is closing; keep what is shown until then.
+  if (current !== generation || !tabs) return;
   tabs.sort((a, b) => a.index - b.index);
   tabsById = new Map(tabs.map((t) => [t.id, t]));
   collapsed = new Set(state?.collapsed ?? []);
@@ -238,11 +242,11 @@ const idOf = (el) => Number(el.dataset.id);
 const rowInfo = (id) => visible.find((r) => r.id === id);
 
 function activate(id) {
-  chrome.tabs.update(id, { active: true });
+  quietly(chrome.tabs.update(id, { active: true }));
 }
 
 function closeTab(id) {
-  chrome.tabs.remove(id);
+  quietly(chrome.tabs.remove(id));
 }
 
 function toggleCollapsed(id) {
@@ -256,7 +260,7 @@ function toggleCollapsed(id) {
 
 function toggleMuted(id) {
   const tab = tabsById.get(id);
-  chrome.tabs.update(id, { muted: !tab?.mutedInfo?.muted });
+  quietly(chrome.tabs.update(id, { muted: !tab?.mutedInfo?.muted }));
 }
 
 /** Ctrl/Cmd+click: add a tab to, or remove it from, the multi-selection. */
@@ -283,7 +287,7 @@ function selectRange(id) {
 function highlight(active, ids) {
   // The first index becomes the active tab, so keep the current one first.
   const indexes = [active.index, ...ids.filter((x) => x !== active.id).map((x) => tabsById.get(x).index)];
-  chrome.tabs.highlight({ windowId, tabs: indexes });
+  quietly(chrome.tabs.highlight({ windowId, tabs: indexes }));
 }
 
 function selectedIdsFor(id) {
@@ -293,7 +297,7 @@ function selectedIdsFor(id) {
 }
 
 function newTab() {
-  chrome.tabs.create({ windowId });
+  quietly(chrome.tabs.create({ windowId }));
 }
 
 // --- Pointer and keyboard ----------------------------------------------------
@@ -449,15 +453,16 @@ function tabMenuItems(id) {
     { label: 'New tab as child', action: () => send({ type: 'new-child-tab', tabId: id }), hidden: tab.pinned },
     { label: 'New tab', action: newTab },
     'separator',
-    { label: 'Reload', action: () => ids.forEach((x) => chrome.tabs.reload(x)) },
-    { label: 'Duplicate', action: () => ids.forEach((x) => chrome.tabs.duplicate(x)) },
+    { label: 'Reload', action: () => ids.forEach((x) => quietly(chrome.tabs.reload(x))) },
+    { label: 'Duplicate', action: () => ids.forEach((x) => quietly(chrome.tabs.duplicate(x))) },
     {
       label: tab.pinned ? 'Unpin' : 'Pin',
-      action: () => ids.forEach((x) => chrome.tabs.update(x, { pinned: !tab.pinned })),
+      action: () => ids.forEach((x) => quietly(chrome.tabs.update(x, { pinned: !tab.pinned }))),
     },
     {
-      label: tab.mutedInfo?.muted ? 'Unmute site' : 'Mute site',
-      action: () => ids.forEach((x) => chrome.tabs.update(x, { muted: !tab.mutedInfo?.muted })),
+      // Only these tabs: Chrome's own "Mute site" mutes every tab of the site.
+      label: `${tab.mutedInfo?.muted ? 'Unmute' : 'Mute'} ${many ? 'tabs' : 'tab'}`,
+      action: () => ids.forEach((x) => quietly(chrome.tabs.update(x, { muted: !tab.mutedInfo?.muted }))),
     },
     'separator',
     {
@@ -487,7 +492,7 @@ function tabMenuItems(id) {
     'separator',
     { label: 'Close children', action: () => send({ type: 'close-children', tabId: id }), hidden: !hasChildren },
     { label: 'Close tree', action: () => send({ type: 'close-tree', tabId: id }), hidden: !hasChildren },
-    { label: many ? 'Close tabs' : 'Close', action: () => chrome.tabs.remove(ids) },
+    { label: many ? 'Close tabs' : 'Close', action: () => quietly(chrome.tabs.remove(ids)) },
     'separator',
     { label: 'Settings', action: () => chrome.runtime.openOptionsPage() },
   ];
@@ -745,13 +750,16 @@ pinnedEl.addEventListener('drop', async (event) => {
   endDrag();
   let at = index;
   for (const id of ids) {
-    const tab = await chrome.tabs.get(id).catch(() => null);
-    if (!tab) continue;
-    if (sourceWindowId !== windowId) await chrome.tabs.move(id, { windowId, index: -1 });
-    if (!tab.pinned) await chrome.tabs.update(id, { pinned: true });
-    const current = (await chrome.tabs.get(id)).index;
-    await chrome.tabs.move(id, { index: current < at ? at - 1 : at });
-    at++;
+    try {
+      const tab = await chrome.tabs.get(id);
+      if (sourceWindowId !== windowId) await chrome.tabs.move(id, { windowId, index: -1 });
+      if (!tab.pinned) await chrome.tabs.update(id, { pinned: true });
+      const current = (await chrome.tabs.get(id)).index;
+      await chrome.tabs.move(id, { index: current < at ? at - 1 : at });
+      at++;
+    } catch {
+      // The tab closed mid-drop; carry on with the others.
+    }
   }
 });
 

@@ -561,8 +561,5 @@ onSettingsChanged((next) => {
 
 // Clicking the toolbar button toggles the side panel.
 chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }).catch(() => {});
-// The removed docked window mode turned the side panel off, and Chrome keeps
-// that setting, so make sure it is on.
-chrome.sidePanel.setOptions({ enabled: true }).catch(() => {});
 
 enqueue(init);

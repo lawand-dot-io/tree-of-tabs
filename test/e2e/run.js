@@ -83,6 +83,9 @@ try {
   ]);
   await panel.setViewportSize({ width: 320, height: 640 });
   await panel.waitForLoadState();
+  // Any uncaught error in the panel fails the run (checked at the end).
+  const panelErrors = [];
+  panel.on('pageerror', (error) => panelErrors.push(error.message));
   await settle();
   // Playwright's mouse-driven drag stalls on extension pages, so dispatch the
   // HTML5 drag events directly. `fraction` is where on the target row to drop.
@@ -208,6 +211,32 @@ try {
     await settle();
     assert.equal(await panel.locator('.pinned-tab').count(), 1);
     assert.ok((await outline()).startsWith('[pinned] about:blank'));
+  });
+
+  await check('the menu offers to mute just the tab', async () => {
+    await panel.locator('.tab').first().click({ button: 'right' });
+    const labels = await panel.$$eval('.menu-item', (items) => items.map((item) => item.textContent));
+    await panel.keyboard.press('Escape');
+    assert.ok(labels.includes('Mute tab'), labels.join(', '));
+    assert.ok(!labels.some((label) => label.includes('site')));
+  });
+
+  await check('clicking a tab that just closed is not an error', async () => {
+    const id = await worker.evaluate(async (windowId) => {
+      const tab = await chrome.tabs.create({ windowId, url: 'about:blank#closing', active: false });
+      return tab.id;
+    }, mainWindowId);
+    await settle();
+    const row = panel.locator(`.tab[data-id="${id}"]`);
+    // Remove the tab behind the panel's back, then click its row before the
+    // panel has caught up.
+    await row.evaluate((el, id) => {
+      chrome.tabs.remove(id);
+      el.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, button: 0 }));
+      el.querySelector('.close').click();
+    }, id);
+    await settle();
+    assert.deepEqual(panelErrors, []);
   });
 
   await check('the panel reflects the tree after a reload', async () => {
@@ -396,6 +425,9 @@ try {
     await panel.screenshot({ path: path.join(shots, 'panel-menu-dark.png') });
     await panel.keyboard.press('Escape');
   }
+  await check('the panel reported no errors', async () => {
+    assert.deepEqual(panelErrors, []);
+  });
 } finally {
   await context.close();
   server.close();
