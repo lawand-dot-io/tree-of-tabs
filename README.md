@@ -16,18 +16,16 @@ Built with [Claude Code](https://claude.com/claude-code).
 
 ## Install
 
-Tree of Tabs is coming to the Chrome Web Store. Until then, you can install it
-from this repository:
-
-1. Download `tree-of-tabs-v1.0.0.zip` from the
-   [latest release](https://github.com/lawand-dot-io/tree-of-tabs/releases/latest)
-   and unzip it.
-2. Open `chrome://extensions` and turn on **Developer mode**.
-3. Click **Load unpacked** and pick the unzipped folder.
+**[Add Tree of Tabs to Chrome](https://chromewebstore.google.com/detail/tree-of-tabs/goknfcebnofoghkgcmpjhlokkgefbokm)** from the Chrome Web Store.
 
 Then click the Tree of Tabs button in the toolbar (pin it from the puzzle menu
 first), or press Alt+Shift+T (Option+Shift+T on a Mac), to open the tree. Needs
 Chrome 116 or newer.
+
+To install it by hand instead, download the ZIP from the
+[latest release](https://github.com/lawand-dot-io/tree-of-tabs/releases/latest)
+and unzip it. Then open `chrome://extensions`, turn on **Developer mode**, click
+**Load unpacked** and pick the unzipped folder.
 
 Found a bug? [Report it](https://github.com/lawand-dot-io/tree-of-tabs/issues).
 Have an idea? [Suggest a feature](https://github.com/lawand-dot-io/tree-of-tabs/discussions/categories/feature-requests).

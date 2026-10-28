@@ -7,6 +7,8 @@ field from here.
 
 ## Store Listing
 
+**Listing**: https://chromewebstore.google.com/detail/tree-of-tabs/goknfcebnofoghkgcmpjhlokkgefbokm
+
 **Extension Name**
 
 Tree of Tabs
@@ -208,7 +210,7 @@ zip -r tree-of-tabs-v1.0.0.zip manifest.json LICENSE icons src -x "*.DS_Store"
 
 | Version | Date | Changes | Status |
 |---------|------|---------|--------|
-| 1.0.0 | 2026-10-27 | First release: tab tree in the side panel, automatic nesting, drag and drop, choice of what happens to a closed parent's children, optionally keeping a window open when its last tab is closed from the tree, collapsing (or turning it off), pinned tabs, tab group colors, right-click actions, keyboard navigation, hiding during full screen, tree restored after restart | Submitted for review |
+| 1.0.0 | 2026-10-27 | First release: tab tree in the side panel, automatic nesting, drag and drop, choice of what happens to a closed parent's children, optionally keeping a window open when its last tab is closed from the tree, collapsing (or turning it off), pinned tabs, tab group colors, right-click actions, keyboard navigation, hiding during full screen, tree restored after restart | Published |
 
 ## Review Notes
 
