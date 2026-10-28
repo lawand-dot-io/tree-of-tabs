@@ -203,7 +203,7 @@ Actions tab, pick **Release** and click **Run workflow** (or push a tag such as
 upload to the store. By hand:
 
 ```sh
-zip -r tree-of-tabs-v1.0.0.zip manifest.json LICENSE icons src -x "*.DS_Store"
+zip -r tree-of-tabs-v1.0.1.zip manifest.json LICENSE icons src -x "*.DS_Store"
 ```
 
 ## Version History
@@ -211,6 +211,7 @@ zip -r tree-of-tabs-v1.0.0.zip manifest.json LICENSE icons src -x "*.DS_Store"
 | Version | Date | Changes | Status |
 |---------|------|---------|--------|
 | 1.0.0 | 2026-10-27 | First release: tab tree in the side panel, automatic nesting, drag and drop, choice of what happens to a closed parent's children, optionally keeping a window open when its last tab is closed from the tree, collapsing (or turning it off), pinned tabs, tab group colors, right-click actions, keyboard navigation, hiding during full screen, tree restored after restart | Published |
+| 1.0.1 | 2026-10-28 | A one-time tip that each window has its own side panel, the icon on the settings page, a description that leads with "vertical tabs" | Released on GitHub, to upload |
 
 ## Review Notes
 
