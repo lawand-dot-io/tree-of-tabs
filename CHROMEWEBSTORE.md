@@ -42,6 +42,7 @@ HOW TO USE
 2. Browse as usual. Tabs you open from a page appear under it.
 3. Drag tabs to reorganize. Right-click a tab for more actions.
 4. Right-click the tree and choose Settings to change how new and closed tabs behave, the spacing, and more.
+Chrome opens the side panel one window at a time, so in a new window, open the tree with the toolbar button or the keyboard shortcut.
 Tip: to put the tree on the left, open the browser's appearance settings and set the side panel position to the left.
 
 PRIVACY
@@ -223,6 +224,8 @@ zip -r tree-of-tabs-v1.0.0.zip manifest.json LICENSE icons src -x "*.DS_Store"
   and lets the user choose whether to hide it.
 - For the same reason, a new window starts without the tree; the user opens it
   with the toolbar button or shortcut (reported as Chromium issue 578112289).
+  The first time the tree opens while several windows are open, the panel
+  shows a tip explaining this.
 - Requires Chrome 116 or newer.
 
 ### Rejection History

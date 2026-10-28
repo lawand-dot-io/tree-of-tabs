@@ -28,6 +28,9 @@ export const DEFAULTS = {
   // Whether the user has picked hideInFullscreen yet. Until then, the first
   // full screen explains the choice in the panel instead of closing it.
   fullscreenChoiceMade: false,
+  // Whether the user has dismissed the tip that each window has its own side
+  // panel, shown the first time the tree opens while several windows are open.
+  windowTipSeen: false,
 };
 
 // Indentation sizes the panel is designed for (see the highlight and guide

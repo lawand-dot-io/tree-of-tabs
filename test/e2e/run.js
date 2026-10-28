@@ -899,6 +899,30 @@ try {
   const fullscreenSettings = () =>
     worker.evaluate(() => chrome.storage.sync.get(['hideInFullscreen', 'fullscreenChoiceMade']));
 
+  await check('with several windows open, the panel explains once that each window has its own', async () => {
+    const own = context.pages().find((p) => p.url() === plainPanelUrl) ?? (await openOwnPanel());
+    await own.waitForSelector('#window-tip:not([hidden])', { timeout: 5000 });
+    const shortcut = await worker.evaluate(
+      async () => (await chrome.commands.getAll()).find((c) => c.name === '_execute_action').shortcut,
+    );
+    const text = await own.locator('#window-tip').textContent();
+    assert.ok(text.includes(shortcut ? `toolbar button or ${shortcut}.` : 'toolbar button.'), text);
+    if (shots) {
+      for (const scheme of ['light', 'dark']) {
+        await own.emulateMedia({ colorScheme: scheme });
+        await own.screenshot({ path: path.join(shots, `window-tip-${scheme}.png`) });
+      }
+    }
+
+    await own.click('#window-tip-dismiss');
+    assert.equal(await own.locator('#window-tip').isVisible(), false);
+    assert.equal(await worker.evaluate(() => chrome.storage.sync.get('windowTipSeen').then((s) => s.windowTipSeen)), true);
+    const again = await openOwnPanel();
+    await settled();
+    assert.equal(await again.locator('#window-tip').isVisible(), false, 'the tip shows only once');
+    await again.close();
+  });
+
   await check('the first full screen explains the choice instead of closing the panel', async () => {
     const own = context.pages().find((p) => p.url() === plainPanelUrl) ?? (await openOwnPanel());
     await own.waitForSelector('.tab');

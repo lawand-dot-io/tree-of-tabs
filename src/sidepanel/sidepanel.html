@@ -8,6 +8,13 @@
     <link rel="stylesheet" href="sidepanel.css" />
   </head>
   <body>
+    <div id="window-tip" class="tip" role="note" hidden>
+      <p>
+        <strong>Each window has its own side panel.</strong> Chrome doesn't let extensions open it by themselves,
+        so in a new window, show the tree with the toolbar button<span class="shortcut"></span>.
+      </p>
+      <button id="window-tip-dismiss" class="button">Got it</button>
+    </div>
     <div id="pinned" class="pinned" role="list" aria-label="Pinned tabs"></div>
     <div id="scroller" class="scroller">
       <div id="tree" class="tree" role="tree" aria-label="Tabs"></div>
@@ -22,7 +29,7 @@
       <p>Chrome keeps the side panel open next to full screen videos and pages. Tree of Tabs can close it when you go full screen.</p>
       <p>
         Chrome doesn't let extensions reopen the side panel by themselves, so afterwards you bring the tree back
-        with the toolbar button<span id="fullscreen-shortcut"></span>.
+        with the toolbar button<span class="shortcut"></span>.
       </p>
       <div class="notice-buttons">
         <button id="fullscreen-hide" class="button filled">Hide during full screen</button>

@@ -197,6 +197,8 @@ the one before it. Moves the worker makes itself are recorded, so their
   when you click or press a shortcut. So a new window starts without the tree;
   open it with the toolbar button or Alt+Shift+T
   ([Chromium issue 578112289](https://issues.chromium.org/issues/578112289)).
+  The first time you open the tree with several windows open, the panel
+  explains this with a short tip.
 - Chrome doesn't tell extensions when a page opens a tab if that page is an
   extension's page (like a settings page). For those, Tree of Tabs goes by the
   tab Chrome names as the opener, so a tab opened some other way while an

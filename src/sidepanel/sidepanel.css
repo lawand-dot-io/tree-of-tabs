@@ -518,6 +518,39 @@ body {
   background: var(--divider);
 }
 
+/* --- New window tip ---------------------------------------------------------- */
+
+.tip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  margin: 6px var(--tree-padding) 0;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--control-bg);
+  line-height: 1.45;
+}
+
+.tip p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.tip strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.tip .button {
+  height: 32px;
+}
+
+.tip[hidden],
+body.showing-notice .tip {
+  display: none;
+}
+
 /* --- Full screen notice ----------------------------------------------------- */
 
 /* Shown in place of the tree the first time the window goes full screen. */
@@ -545,6 +578,7 @@ body.showing-notice .scroller {
   color: var(--text-secondary);
 }
 
+.tip kbd,
 .notice kbd {
   padding: 0 4px;
   border: 1px solid var(--divider);

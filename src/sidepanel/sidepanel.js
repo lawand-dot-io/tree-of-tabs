@@ -955,13 +955,13 @@ async function showShortcut() {
   // if the user removed it.
   const commands = await chrome.commands.getAll().catch(() => []);
   const shortcut = commands.find((c) => c.name === '_execute_action')?.shortcut;
-  const el = document.getElementById('fullscreen-shortcut');
-  el.replaceChildren();
-  if (shortcut) el.append(' or ', Object.assign(document.createElement('kbd'), { textContent: shortcut }));
+  for (const el of document.querySelectorAll('.shortcut')) {
+    el.replaceChildren();
+    if (shortcut) el.append(' or ', Object.assign(document.createElement('kbd'), { textContent: shortcut }));
+  }
 }
 
 async function watchFullscreen() {
-  showShortcut();
   const isFullscreen = async () => (await chrome.windows.get(windowId).catch(() => null))?.state === 'fullscreen';
   // Act only when the window goes full screen. A panel the user opens, or
   // resizes, while the window is already full screen stays open.
@@ -987,12 +987,33 @@ async function watchFullscreen() {
   document.getElementById('fullscreen-keep').addEventListener('click', () => choose(false));
 }
 
+// --- New windows ---------------------------------------------------------------
+// Chrome opens the side panel one window at a time, and extensions can't open
+// it by themselves (https://issues.chromium.org/issues/578112289), so a new
+// window starts without the tree. The first time the tree opens while several
+// windows are open, a tip explains this and names the shortcut.
+
+const windowTip = document.getElementById('window-tip');
+
+async function showWindowTip() {
+  if (settings.windowTipSeen) return;
+  const windows = await chrome.windows.getAll({ windowTypes: ['normal'] });
+  if (windows.length < 2) return;
+  windowTip.hidden = false;
+  document.getElementById('window-tip-dismiss').addEventListener('click', () => {
+    windowTip.hidden = true;
+    chrome.storage.sync.set({ windowTipSeen: true });
+  });
+}
+
 function applySettings(next) {
   settings = next;
   document.documentElement.style.setProperty('--indent', `${settings.indent}px`);
   document.documentElement.classList.toggle('compact', settings.density === 'compact');
   document.documentElement.classList.toggle('no-collapsing', settings.disableCollapsing);
   document.documentElement.classList.toggle('no-guide-lines', settings.hideGuideLines);
+  // Dismissed in another window's panel.
+  if (settings.windowTipSeen) windowTip.hidden = true;
 }
 
 async function main() {
@@ -1023,7 +1044,11 @@ async function main() {
     if (message?.type === 'tree-changed' && forThisWindow(message.windowId)) scheduleRefresh();
   });
 
-  if (!forced) await watchFullscreen();
+  if (!forced) {
+    showShortcut();
+    await watchFullscreen();
+    showWindowTip();
+  }
   await refresh();
 }
 
