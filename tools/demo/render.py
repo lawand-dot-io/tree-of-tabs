@@ -10,98 +10,21 @@ import os
 import subprocess
 import sys
 from functools import lru_cache
-from PIL import Image, ImageDraw, ImageFilter, ImageFont
+from PIL import Image, ImageDraw
+from frame import ACCENT, BG, TEXT, TITLE, Window, font, forest, ghost, icon, make_cursor, pointer, rounded_mask, shadow_for
 
 ROOT = os.path.join(os.path.dirname(__file__), '../..')
 OUT = os.path.join(ROOT, 'docs/demo')
-FONTS = '/usr/share/fonts/opentype/inter/'
 CAPTURES = sys.argv[1]
 
 W, H, FPS = 1920, 1080, 30
-BG = (240, 244, 249)
-TITLE = (31, 31, 31)
-TEXT = (71, 71, 71)
-ACCENT = (11, 87, 208)
-# The side panel's header and the line next to it, in each color scheme.
-CHROME = {
-    'light': dict(bg=(255, 255, 255), text=(31, 31, 31), divider=(227, 227, 227)),
-    'dark': dict(bg=(40, 42, 44), text=(227, 227, 227), divider=(68, 71, 70)),
-}
-SCALE = 0.6  # Captures are at twice the size; 0.6 shows them at 1.2x.
-
-PAGE_W, PAGE_H = 1080, 840
-PANEL_W = 384
-HEADER = PAGE_H - round(666 * 2 * SCALE)
-WIN_W = PAGE_W + 1 + PANEL_W
-X0 = (W - WIN_W) // 2
+WINDOW = Window(1.2)
+X0 = (W - WINDOW.width) // 2
 Y0 = 64
-CAPTION_Y = Y0 + PAGE_H + 76
-
-
-def font(name, size):
-    return ImageFont.truetype(os.path.join(FONTS, name), size)
-
-
-def icon(size):
-    # The 128px icon has 16px of padding; crop it off before scaling.
-    image = Image.open(os.path.join(ROOT, 'icons/icon128.png')).convert('RGBA')
-    return image.crop((16, 16, 112, 112)).resize((size, size), Image.LANCZOS)
-
-
-def ease(t):
-    return 4 * t * t * t if t < 0.5 else 1 - (-2 * t + 2) ** 3 / 2
-
-
-# --- Pixel art trees along the bottom ------------------------------------------------
-
-SPRITES = {
-    'round': '''
-        ....LLL....
-        ..LLGGGGG..
-        .LLGGGGGGG.
-        LLGGGGGGGGG
-        LGGGGGGGGDG
-        GGGGGGGGDDG
-        .GGGGGGDDG.
-        ..GGGDDDD..
-        ....TT.....
-        ....TT.....
-        ...TTTT....''',
-    'pine': '''
-        ....L....
-        ...LGD...
-        ..LGGGD..
-        ...GGD...
-        ..LGGGD..
-        .LGGGGGD.
-        ...GGGD..
-        ..LGGGGD.
-        .LGGGGGGD
-        LGGGGGGGD
-        ....T....
-        ....T....''',
-    # A tiny Tree of Tabs: three tabs as leaves.
-    'tabs': '''
-        ....GGGGG....
-        ....GLLLG....
-        ....GGGGG....
-        GGGGG.T.GGGGG
-        GLLLG.T.GLLLG
-        GGGGGTTTGGGGG
-        ....TTTTT....
-        .....TTT.....
-        .....TTT.....
-        ....TTTTT....''',
-    'bush': '''
-        ..LLL..
-        .LGGGG.
-        LGGGGDG
-        .GGDDD.''',
-}
-PIXEL_COLORS = {'L': (176, 213, 168), 'G': (139, 190, 136), 'D': (108, 160, 114), 'T': (176, 150, 128)}
-# Where each tree stands: (sprite, x of its left edge, pixel size). They share a
-# ground line near the bottom, in the corners and under the caption's ends.
-FOREST = [
+CAPTION_Y = Y0 + WINDOW.height + 76
+# The pixel art trees: (sprite, x of its left edge, pixel size), in the corners
+# and under the caption's ends.
+TREES = [
     ('pine', 40, 6), ('round', 104, 5), ('bush', 168, 4), ('tabs', 206, 4),
     ('bush', 470, 3), ('pine', 520, 3),
     ('round', 1380, 3), ('bush', 1425, 3),
@@ -110,73 +33,42 @@ FOREST = [
 GROUND = H - 26
 
 
-def forest(canvas):
-    canvas = canvas.convert('RGBA')
-    layer = Image.new('RGBA', (W, H), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(layer)
-    for name, left, size in FOREST:
-        rows = [line.strip() for line in SPRITES[name].strip('\n').splitlines()]
-        top = GROUND - len(rows) * size
-        for r, line in enumerate(rows):
-            for c, ch in enumerate(line):
-                if ch in PIXEL_COLORS:
-                    x, y = left + c * size, top + r * size
-                    draw.rectangle((x, y, x + size - 1, y + size - 1), fill=PIXEL_COLORS[ch] + (255,))
-    # Subtle: the trees are drawn at partial strength over the background.
-    layer.putalpha(layer.getchannel('A').point(lambda a: a * 0.7))
-    return Image.alpha_composite(canvas, layer).convert('RGB')
+def ease(t):
+    return 4 * t * t * t if t < 0.5 else 1 - (-2 * t + 2) ** 3 / 2
 
 
-# --- The window: page and panel side by side -------------------------------------
+# --- The window: the side panel and the page --------------------------------------
 
 def background():
-    canvas = Image.new('RGBA', (W, H), BG + (255,))
-    shadow = Image.new('RGBA', (W, H), (0, 0, 0, 0))
-    ImageDraw.Draw(shadow).rounded_rectangle((X0, Y0 + 10, X0 + WIN_W, Y0 + PAGE_H + 10), radius=18, fill=(0, 0, 0, 55))
-    return forest(Image.alpha_composite(canvas, shadow.filter(ImageFilter.GaussianBlur(24))))
+    canvas = Image.new('RGB', (W, H), BG)
+    canvas = shadow_for(canvas, (X0, Y0, X0 + WINDOW.width, Y0 + WINDOW.height), radius=18)
+    return forest(canvas, TREES, GROUND)
 
 
 BACKGROUND = background()
-MASK = Image.new('L', (WIN_W, PAGE_H), 0)
-ImageDraw.Draw(MASK).rounded_rectangle((0, 0, WIN_W - 1, PAGE_H - 1), radius=18, fill=255)
-
-
+MASK = rounded_mask((WINDOW.width, WINDOW.height), 18)
 SCHEMES = []  # Light or dark, for each capture; read from steps.json.
 
 
-def load(kind, shot):
-    image = Image.open(os.path.join(CAPTURES, f'{kind}-{shot}.png')).convert('RGB')
-    return image.resize((round(image.width * SCALE), round(image.height * SCALE)), Image.LANCZOS)
+def capture(kind, shot):
+    return os.path.join(CAPTURES, f'{kind}-{shot}.png')
 
 
 @lru_cache(maxsize=8)
 def scene(shot):
-    colors = CHROME[SCHEMES[shot]]
-    window = Image.new('RGB', (WIN_W, PAGE_H), colors['bg'])
-    draw = ImageDraw.Draw(window)
-    # The side panel's header, as Chrome draws it: the extension's icon and name.
-    logo = icon(20)
-    window.paste(logo, (14, (HEADER - 20) // 2), logo)
-    draw.text((44, HEADER // 2), 'Tree of Tabs', font=font('Inter-Medium.otf', 17), fill=colors['text'], anchor='lm')
-    draw.line((0, HEADER - 1, PANEL_W, HEADER - 1), fill=colors['divider'])
-    window.paste(load('panel', shot), (0, HEADER))
-    draw.line((PANEL_W, 0, PANEL_W, PAGE_H), fill=colors['divider'])
-    window.paste(load('page', shot), (PANEL_W + 1, 0))
     canvas = BACKGROUND.copy()
-    canvas.paste(window, (X0, Y0), MASK)
+    canvas.paste(WINDOW.draw(capture('page', shot), capture('panel', shot), SCHEMES[shot]), (X0, Y0), MASK)
     return canvas
 
 
 def to_screen(point):
-    if point['on'] == 'page':
-        return X0 + PANEL_W + 1 + point['x'] * 2 * SCALE, Y0 + point['y'] * 2 * SCALE
-    return X0 + point['x'] * 2 * SCALE, Y0 + HEADER + point['y'] * 2 * SCALE
+    return WINDOW.to_screen(point, (X0, Y0))
 
 
 # --- Title cards ---------------------------------------------------------------------
 
 def card(lines):
-    canvas = forest(Image.new('RGB', (W, H), BG))
+    canvas = forest(Image.new('RGB', (W, H), BG), TREES, GROUND)
     draw = ImageDraw.Draw(canvas)
     logo = icon(168)
     total = 168 + 48 + 96 + sum(gap + size for _, size, gap, _ in lines)
@@ -204,54 +96,25 @@ CARDS = {
 
 # --- Cursor, clicks and the dragged tab --------------------------------------------------
 
-def make_cursor():
-    """A classic arrow cursor: dark with a white outline, drawn at 4x and scaled down."""
-    points = [(0, 0), (0, 25), (6, 19.5), (10.5, 29), (14.5, 27.2), (10.2, 18), (18, 18)]
-    big, scale = 4, 1.25
-    shape = [(16 + x * scale * big, 12 + y * scale * big) for x, y in points]
-    image = Image.new('RGBA', (40 * big, 48 * big), (0, 0, 0, 0))
-    ImageDraw.Draw(image).polygon(shape, fill=(20, 20, 20, 255), outline=(255, 255, 255, 255), width=2 * big)
-    shadow = Image.new('RGBA', image.size, (0, 0, 0, 0))
-    ImageDraw.Draw(shadow).polygon([(x + 4, y + 8) for x, y in shape], fill=(0, 0, 0, 90))
-    image = Image.alpha_composite(shadow.filter(ImageFilter.GaussianBlur(8)), image)
-    return image.resize((40, 48), Image.LANCZOS)
-
-
 CURSOR = make_cursor()
 
 
 @lru_cache(maxsize=4)
-def ghost_image(shot, x, y, width, height):
-    """The dragged tab as a small translucent label, like Chrome's drag image."""
-    panel = Image.open(os.path.join(CAPTURES, f'panel-{shot}.png')).convert('RGB')
-    width = min(width, 215)
-    row = panel.crop((round(x * 2), round(y * 2), round((x + width) * 2), round((y + height) * 2)))
-    row = row.resize((round(row.width * SCALE), round(row.height * SCALE)), Image.LANCZOS)
-    pad = 12
-    image = Image.new('RGBA', (row.width + pad * 2, row.height + pad * 2), (0, 0, 0, 0))
-    shadow = Image.new('L', image.size, 0)
-    ImageDraw.Draw(shadow).rounded_rectangle((pad, pad + 3, pad + row.width, pad + row.height + 3), radius=10, fill=70)
-    image.putalpha(shadow.filter(ImageFilter.GaussianBlur(5)))
-    mask = Image.new('L', row.size, 0)
-    ImageDraw.Draw(mask).rounded_rectangle((0, 0, row.width - 1, row.height - 1), radius=10, fill=225)
-    image.paste(row, (pad, pad), mask)
-    return image
+def dragged(shot, x, y, width, height):
+    return ghost(capture('panel', shot), dict(x=x, y=y, width=width, height=height), WINDOW.scale)
 
 
-def overlay(frame, position, click=None, ghost=None):
-    frame = frame.convert('RGBA')
+def overlay(frame, position, click=None, drag=None):
     x, y = position
-    if ghost:
-        image = ghost_image(ghost['shot'], ghost['x'], ghost['y'], ghost['width'], ghost['height'])
-        frame.alpha_composite(image, (round(x - 12), round(y + 10)))
     if click is not None:
+        frame = frame.convert('RGBA')
         ring = Image.new('RGBA', (W, H), (0, 0, 0, 0))
         radius = 8 + 22 * click
         alpha = round(150 * (1 - click))
         ImageDraw.Draw(ring).ellipse((x - radius, y - radius, x + radius, y + radius), outline=ACCENT + (alpha,), width=4)
         frame = Image.alpha_composite(frame, ring)
-    frame.alpha_composite(CURSOR, (round(x - 4), round(y - 3)))
-    return frame.convert('RGB')
+    image = drag and dragged(drag['shot'], drag['x'], drag['y'], drag['width'], drag['height'])
+    return pointer(frame, position, CURSOR, image)
 
 
 # --- Captions ------------------------------------------------------------------------------
@@ -281,7 +144,7 @@ def frames():
     timeline = json.load(open(os.path.join(CAPTURES, 'steps.json')))
     steps = timeline['steps']
     SCHEMES[:] = timeline['schemes']
-    position = (X0 + PANEL_W + PAGE_W * 0.45, Y0 + PAGE_H * 0.75)
+    position = (X0 + WINDOW.panel_w + WINDOW.page_w * 0.45, Y0 + WINDOW.height * 0.75)
     text, caption_age = None, 0
     previous = None  # The last frame shown, to fade from after a title card.
     fade_from, fade_left = None, 0

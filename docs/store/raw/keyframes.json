@@ -1,0 +1,50 @@
+{
+  "nest": {
+    "shot": 21,
+    "scheme": "light",
+    "cursor": {
+      "on": "page",
+      "x": 165.90625,
+      "y": 358.296875
+    }
+  },
+  "drag": {
+    "shot": 24,
+    "scheme": "light",
+    "cursor": {
+      "on": "panel",
+      "x": 66,
+      "y": 65
+    },
+    "ghost": {
+      "shot": 22,
+      "x": 6,
+      "y": 369,
+      "width": 308,
+      "height": 32
+    }
+  },
+  "collapse": {
+    "shot": 30,
+    "scheme": "light",
+    "cursor": {
+      "on": "panel",
+      "x": 23,
+      "y": 65
+    }
+  },
+  "menu": {
+    "shot": 35,
+    "scheme": "light",
+    "cursor": {
+      "on": "panel",
+      "x": 126,
+      "y": 418
+    }
+  },
+  "dark": {
+    "shot": 38,
+    "scheme": "dark",
+    "cursor": null
+  }
+}

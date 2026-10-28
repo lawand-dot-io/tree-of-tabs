@@ -87,14 +87,16 @@ English
 | Marquee Promo Tile | 1400×560 | ✅ Ready | `docs/store/marquee-tile.png` |
 
 Upload the screenshots in this order. `tools/make-store-images.py` rebuilds
-them from the panel captures in `docs/store/raw/`.
+them from the captures in `docs/store/raw/`, which `tools/demo/capture.mjs`
+refreshes.
 
 ### Screenshot Notes
 
-Each screenshot shows the real panel, captured with made-up tabs and plain
-letter icons (no real sites, so nothing reads as an endorsement), next to a
-headline. To show it in a real browser window instead, take screenshots at
-1280×800 in Chrome with the side panel open.
+Each screenshot shows a headline over the real panel and page, captured while
+browsing real sites: Wikipedia, Wikivoyage and Wikimedia Commons (CC BY-SA),
+OpenStreetMap, Chrome for Developers and this project on GitHub. They come
+from the same capture as the demo video (`tools/demo/capture.mjs`), so the
+listing and the video match.
 
 ## Permissions Justification
 
