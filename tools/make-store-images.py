@@ -16,7 +16,7 @@ THEMES = {
     'dark': dict(bg=(31, 31, 31), title=(227, 227, 227), text=(196, 199, 197), card=(40, 42, 44), shadow=140),
 }
 SHOTS = [
-    ('nest', 'light', 'Tabs nest under the\npage they came from',
+    ('nest', 'light', 'Vertical tabs,\nas a tree',
      'Open a link in a new tab and it shows up right under the page you opened it from. '
      'Tabs you open yourself start their own tree.'),
     ('drag', 'light', 'Drag to\nreorganize',
@@ -91,7 +91,7 @@ def promo_tile():
     canvas.paste(logo, (28, 52), logo)
     draw.text((28, 128), 'Tree of', font=font('InterDisplay-Bold.otf', 38), fill=colors['title'])
     draw.text((28, 170), 'Tabs', font=font('InterDisplay-Bold.otf', 38), fill=colors['title'])
-    draw.text((29, 222), 'Your tabs as a tree', font=font('Inter-Regular.otf', 17), fill=colors['text'])
+    draw.text((29, 222), 'Vertical tabs as a tree', font=font('Inter-Regular.otf', 17), fill=colors['text'])
     canvas.save(os.path.join(OUT, 'promo-tile.png'), optimize=True)
 
 
@@ -106,7 +106,7 @@ def marquee_tile():
     logo = icon(112)
     canvas.paste(logo, (120, 96), logo)
     draw.text((118, 236), 'Tree of Tabs', font=font('InterDisplay-Bold.otf', 80), fill=colors['title'])
-    for i, line in enumerate(['See your tabs as a tree', 'in Chrome\u2019s side panel.']):
+    for i, line in enumerate(['Vertical tabs as a tree', 'in Chrome\u2019s side panel.']):
         draw.text((121, 344 + 44 * i), line, font=font('Inter-Regular.otf', 32), fill=colors['text'])
     canvas.save(os.path.join(OUT, 'marquee-tile.png'), optimize=True)
 

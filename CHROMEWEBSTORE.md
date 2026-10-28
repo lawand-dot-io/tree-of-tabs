@@ -13,12 +13,12 @@ Tree of Tabs
 
 **Short Description** (120 of 132 characters; same as the manifest description)
 
-See your tabs as a tree in the side panel. Tabs you open from a page nest under it, and you can drag them to reorganize.
+Vertical tabs as a tree in the side panel. Tabs you open from a page nest under it, and you can drag them to reorganize.
 
 **Detailed Description** (plain text: the store strips Markdown)
 
 ```
-See your tabs as a tree in the side panel. Every tab you open from a page appears nested under that page, so you can always tell where a tab came from and which tabs belong together.
+Vertical tabs for Chrome, shown as a tree in the side panel. Every tab you open from a page appears nested under that page, so you can always tell where a tab came from and which tabs belong together.
 
 FEATURES
 • Automatic nesting: links you open in a new tab, middle-clicked links and pages that open tabs show up under the tab they came from. Tabs you open yourself, from the address bar, a bookmark or a new tab, start their own tree.

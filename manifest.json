@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Tree of Tabs",
   "version": "1.0.0",
-  "description": "See your tabs as a tree in the side panel. Tabs you open from a page nest under it, and you can drag them to reorganize.",
+  "description": "Vertical tabs as a tree in the side panel. Tabs you open from a page nest under it, and you can drag them to reorganize.",
   "minimum_chrome_version": "116",
   "permissions": ["tabs", "webNavigation", "tabGroups", "sidePanel", "storage", "favicon"],
   "background": {

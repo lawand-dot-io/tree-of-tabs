@@ -26,7 +26,7 @@ def build(scheme, colors):
     icon = icon.crop((16, 16, 112, 112)).resize((132, 132), Image.LANCZOS)
     image.paste(icon, (96, 150), icon)
     draw.text((96, 310), 'Tree of Tabs', font=font('InterDisplay-Bold.otf', 84), fill=colors['title'])
-    for i, line in enumerate(['See your tabs as a tree', 'in Chrome’s side panel.']):
+    for i, line in enumerate(['Vertical tabs as a tree', 'in Chrome’s side panel.']):
         draw.text((98, 420 + 46 * i), line, font=font('Inter-Regular.otf', 34), fill=colors['text'])
     draw.text((98, 540), 'Free and open source', font=font('Inter-Medium.otf', 26), fill=colors['accent'])
 

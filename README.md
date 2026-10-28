@@ -2,12 +2,13 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/social-preview-dark.png">
-  <img src="docs/social-preview.png" alt="Tree of Tabs: see your tabs as a tree in Chrome's side panel. Free and open source. Next to it, the side panel with tabs nested under the tabs they were opened from.">
+  <img src="docs/social-preview.png" alt="Tree of Tabs: vertical tabs as a tree in Chrome's side panel. Free and open source. Next to it, the side panel with tabs nested under the tabs they were opened from.">
 </picture>
 
-See your tabs as a tree in Chrome's side panel. Tabs you open from a page nest
-under it, so you can always tell where a tab came from and which tabs belong
-together. Drag tabs to reorganize them, and collapse the trees you're not using.
+Vertical tabs for Chrome, shown as a tree in the side panel. Tabs you open from
+a page nest under it, so you can always tell where a tab came from and which
+tabs belong together. Drag tabs to reorganize them, and collapse the trees
+you're not using.
 It works like Firefox's [Tree Style Tab](https://github.com/piroor/treestyletab),
 and looks like part of Chrome.
 
