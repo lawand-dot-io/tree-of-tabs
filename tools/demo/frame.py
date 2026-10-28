@@ -2,8 +2,8 @@
 (tools/make-store-images.py): the window with the side panel on the left and
 the page next to it, the cursor, the dragged tab and the pixel art trees.
 Captures come from tools/demo/capture.mjs at twice their size."""
+import math
 import os
-import random
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 ROOT = os.path.join(os.path.dirname(__file__), '../..')
@@ -132,7 +132,20 @@ def pointer(canvas, position, cursor, dragged=None):
     return canvas.convert('RGB')
 
 
-# --- Pixel art trees along the bottom ------------------------------------------------
+# --- Background and the title cards' landscape ----------------------------------
+
+GREEN_TINT = (232, 242, 235)
+
+
+def gradient(size, top, bottom):
+    """A vertical gradient: the demo's background fades to a hint of green."""
+    w, h = size
+    strip = Image.new('RGB', (1, h))
+    for y in range(h):
+        t = y / (h - 1)
+        strip.putpixel((0, y), tuple(round(a + (b - a) * t) for a, b in zip(top, bottom)))
+    return strip.resize(size)
+
 
 SPRITES = {
     'round': '''
@@ -160,81 +173,32 @@ SPRITES = {
         LGGGGGGGD
         ....T....
         ....T....''',
-    # A tiny Tree of Tabs: three tabs as leaves.
-    'tabs': '''
-        ....GGGGG....
-        ....GLLLG....
-        ....GGGGG....
-        GGGGG.T.GGGGG
-        GLLLG.T.GLLLG
-        GGGGGTTTGGGGG
-        ....TTTTT....
-        .....TTT.....
-        .....TTT.....
-        ....TTTTT....''',
-    'bush': '''
-        ..LLL..
-        .LGGGG.
-        LGGGGDG
-        .GGDDD.''',
 }
 PIXEL_COLORS = {'L': (176, 213, 168), 'G': (139, 190, 136), 'D': (108, 160, 114), 'T': (176, 150, 128)}
+HILL = (206, 228, 205)
 
 
-def sprite_size(name, size):
-    rows = [line.strip() for line in SPRITES[name].strip('\n').splitlines()]
-    return max(map(len, rows)) * size, len(rows) * size
-
-
-def scatter(canvas_size, keep_out, count, sizes, seed=11, margin=28):
-    """`count` trees at random spots over the background, as (sprite, x, ground,
-    pixel size). Each one is fully inside the canvas and clear of the `keep_out`
-    boxes (the window, the text), and each goes where it's furthest from the
-    trees already placed, so they spread out without a pattern. One of them is
-    a tiny Tree of Tabs. The same seed always gives the same trees."""
-    rng = random.Random(seed)
-    W, H = canvas_size
-    boxes = [(x0 - margin, y0 - margin, x1 + margin, y1 + margin) for x0, y0, x1, y1 in keep_out]
-    trees, centers = [], []
-    for i in range(count):
-        best, best_distance = None, -1
-        for _ in range(400):
-            name = 'tabs' if i == count // 3 else rng.choice(['round', 'pine'])
-            size = rng.choice(sizes)
-            w, h = sprite_size(name, size)
-            x, y = rng.uniform(16, W - w - 16), rng.uniform(16, H - h - 16)
-            if any(x < b[2] and x + w > b[0] and y < b[3] and y + h > b[1] for b in boxes):
-                continue
-            cx, cy = x + w / 2, y + h / 2
-            distance = min(((cx - px) ** 2 + (cy - py) ** 2 for px, py in centers), default=float('inf'))
-            if distance > best_distance:
-                best, best_distance = ((name, round(x), round(y + h), size), (cx, cy)), distance
-        if best:
-            trees.append(best[0])
-            centers.append(best[1])
-    return trees
-
-
-def scattered(canvas, trees, strength=0.38):
-    """Draws trees from `scatter`."""
-    for name, x, ground, size in trees:
-        canvas = forest(canvas, [(name, x, size)], ground, strength)
-    return canvas
-
-
-def forest(canvas, trees, ground, strength=0.7):
-    """Draws `trees`, a list of (sprite, x of its left edge, pixel size), standing on `ground`."""
+def landscape(canvas, trees, block=8):
+    """A gentle pixel art hill along the bottom, a little higher in the middle,
+    with `trees` standing on it: a list of (sprite, x of its left edge, pixel size)."""
+    W, H = canvas.size
+    heights = [block * round((70 + 46 * math.exp(-((i * block - W / 2) / 520) ** 2) + 10 * math.sin(i / 9)) / block)
+               for i in range(W // block + 1)]
     canvas = canvas.convert('RGBA')
-    layer = Image.new('RGBA', canvas.size, (0, 0, 0, 0))
-    draw = ImageDraw.Draw(layer)
+    draw = ImageDraw.Draw(canvas)
+    for i, h in enumerate(heights):
+        draw.rectangle((i * block, H - h, i * block + block - 1, H), fill=HILL)
     for name, left, size in trees:
         rows = [line.strip() for line in SPRITES[name].strip('\n').splitlines()]
-        top = ground - len(rows) * size
+        middle = left + max(map(len, rows)) * size / 2
+        top = H - heights[min(len(heights) - 1, int(middle // block))] + 4 - len(rows) * size
         for r, line in enumerate(rows):
             for c, ch in enumerate(line):
                 if ch in PIXEL_COLORS:
                     x, y = left + c * size, top + r * size
-                    draw.rectangle((x, y, x + size - 1, y + size - 1), fill=PIXEL_COLORS[ch] + (255,))
-    # Subtle: the trees are drawn at partial strength over the background.
-    layer.putalpha(layer.getchannel('A').point(lambda a: a * strength))
-    return Image.alpha_composite(canvas, layer).convert('RGB')
+                    color = PIXEL_COLORS[ch]
+                    # Drawn at 70% strength, so they sit softly on the background.
+                    under = canvas.getpixel((min(W - 1, x), min(H - 1, y)))[:3]
+                    draw.rectangle((x, y, x + size - 1, y + size - 1),
+                                   fill=tuple(round(u + (v - u) * 0.7) for u, v in zip(under, color)))
+    return canvas.convert('RGB')

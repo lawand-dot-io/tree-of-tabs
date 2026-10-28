@@ -11,8 +11,8 @@ import subprocess
 import sys
 from functools import lru_cache
 from PIL import Image, ImageDraw
-from frame import (ACCENT, BG, TEXT, TITLE, Window, font, ghost, icon, make_cursor, pointer, rounded_mask, scatter,
-                   scattered, shadow_for)
+from frame import (ACCENT, BG, GREEN_TINT, TEXT, TITLE, Window, font, ghost, gradient, icon, landscape, make_cursor,
+                   pointer, rounded_mask, shadow_for)
 
 ROOT = os.path.join(os.path.dirname(__file__), '../..')
 OUT = os.path.join(ROOT, 'docs/demo')
@@ -24,14 +24,10 @@ X0 = (W - WINDOW.width) // 2
 Y0 = 64
 CAPTION_Y = Y0 + WINDOW.height + 76
 CAPTION_FONT = font('Inter-SemiBold.otf', 40)
-# The longest caption, so no tree comes near any of them.
-CAPTION_W = 1000
-# Faint pixel art trees, scattered over the background around the window.
-TREES = scatter(
-    (W, H),
-    [(X0, Y0, X0 + WINDOW.width, Y0 + WINDOW.height),
-     (W / 2 - CAPTION_W / 2, CAPTION_Y - 30, W / 2 + CAPTION_W / 2, CAPTION_Y + 30)],
-    count=20, sizes=[3, 4, 4, 5])
+# The title cards' little forest: (sprite, x of its left edge, pixel size).
+# The demo itself has no trees, so nothing competes with the recording.
+TREES = [('pine', 300, 8), ('round', 400, 7), ('pine', 520, 6), ('round', 640, 5),
+         ('round', 1180, 5), ('pine', 1290, 6), ('round', 1380, 7), ('pine', 1510, 8)]
 
 
 def ease(t):
@@ -41,8 +37,7 @@ def ease(t):
 # --- The window: the side panel and the page --------------------------------------
 
 def background():
-    canvas = Image.new('RGB', (W, H), BG)
-    canvas = scattered(canvas, TREES)
+    canvas = gradient((W, H), BG, GREEN_TINT)
     return shadow_for(canvas, (X0, Y0, X0 + WINDOW.width, Y0 + WINDOW.height), radius=18)
 
 
@@ -69,11 +64,12 @@ def to_screen(point):
 # --- Title cards ---------------------------------------------------------------------
 
 def card(lines):
-    canvas = scattered(Image.new('RGB', (W, H), BG), TREES)
+    canvas = landscape(gradient((W, H), BG, GREEN_TINT), TREES)
     draw = ImageDraw.Draw(canvas)
     logo = icon(168)
     total = 168 + 48 + 96 + sum(gap + size for _, size, gap, _ in lines)
-    y = (H - total) // 2
+    # Centered in the sky above the hill.
+    y = (H - 140 - total) // 2
     canvas.paste(logo, ((W - 168) // 2, y), logo)
     y += 168 + 48
     draw.text((W // 2, y), 'Tree of Tabs', font=font('InterDisplay-Bold.otf', 96), fill=TITLE, anchor='mt')

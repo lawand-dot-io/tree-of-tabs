@@ -13,15 +13,16 @@ import textwrap
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'demo'))
-from frame import Window, ghost, make_cursor, pointer, rounded_mask, scatter, scattered, shadow_for  # noqa: E402
+from frame import GREEN_TINT, Window, ghost, gradient, make_cursor, pointer, rounded_mask, shadow_for  # noqa: E402
 
 ROOT = os.path.join(os.path.dirname(__file__), '..')
 OUT = os.path.join(ROOT, 'docs/store')
 RAW = os.path.join(OUT, 'raw')
 FONTS = '/usr/share/fonts/opentype/inter/'
 THEMES = {
-    'light': dict(bg=(240, 244, 249), title=(31, 31, 31), text=(71, 71, 71), card=(255, 255, 255), shadow=60, trees=0.38),
-    'dark': dict(bg=(31, 31, 31), title=(227, 227, 227), text=(196, 199, 197), card=(40, 42, 44), shadow=140, trees=0.22),
+    # `tint` is where the background's gradient ends, at the bottom.
+    'light': dict(bg=(240, 244, 249), tint=GREEN_TINT, title=(31, 31, 31), text=(71, 71, 71), card=(255, 255, 255), shadow=60),
+    'dark': dict(bg=(31, 31, 31), tint=(27, 36, 30), title=(227, 227, 227), text=(196, 199, 197), card=(40, 42, 44), shadow=140),
 }
 SHOTS = [
     ('nest', 'Vertical tabs, as a tree',
@@ -39,10 +40,6 @@ KEYFRAMES = json.load(open(os.path.join(RAW, 'keyframes.json')))
 WINDOW = Window(0.8)
 W, H = 1280, 800
 X0, Y0 = (W - WINDOW.width) // 2, 196
-# Faint pixel art trees scattered around the window, clear of the headline,
-# its text and the name at the top right.
-TREES = scatter((W, H), [(X0, Y0, X0 + WINDOW.width, Y0 + WINDOW.height), (X0, 40, X0 + WINDOW.width, 176)],
-                count=10, sizes=[2, 3, 3])
 
 
 def font(name, size):
@@ -75,8 +72,7 @@ def screenshot(number, name, headline, body):
     frame = KEYFRAMES[name]
     colors = THEMES[frame['scheme']]
     x0, y0 = X0, Y0
-    canvas = Image.new('RGB', (W, H), colors['bg'])
-    canvas = scattered(canvas, TREES, strength=colors['trees'])
+    canvas = gradient((W, H), colors['bg'], colors['tint'])
     canvas = shadow_for(canvas, (x0, y0, x0 + WINDOW.width, y0 + WINDOW.height), radius=14,
                         strength=colors['shadow'], blur=18)
     window = WINDOW.draw(os.path.join(RAW, f'{name}-page.png'), os.path.join(RAW, f'{name}-panel.png'), frame['scheme'])
