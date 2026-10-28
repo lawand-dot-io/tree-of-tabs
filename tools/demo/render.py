@@ -52,13 +52,88 @@ def ease(t):
     return 4 * t * t * t if t < 0.5 else 1 - (-2 * t + 2) ** 3 / 2
 
 
+# --- Pixel art trees along the bottom ------------------------------------------------
+
+SPRITES = {
+    'round': '''
+        ....LLL....
+        ..LLGGGGG..
+        .LLGGGGGGG.
+        LLGGGGGGGGG
+        LGGGGGGGGDG
+        GGGGGGGGDDG
+        .GGGGGGDDG.
+        ..GGGDDDD..
+        ....TT.....
+        ....TT.....
+        ...TTTT....''',
+    'pine': '''
+        ....L....
+        ...LGD...
+        ..LGGGD..
+        ...GGD...
+        ..LGGGD..
+        .LGGGGGD.
+        ...GGGD..
+        ..LGGGGD.
+        .LGGGGGGD
+        LGGGGGGGD
+        ....T....
+        ....T....''',
+    # A tiny Tree of Tabs: three tabs as leaves.
+    'tabs': '''
+        ....GGGGG....
+        ....GLLLG....
+        ....GGGGG....
+        GGGGG.T.GGGGG
+        GLLLG.T.GLLLG
+        GGGGGTTTGGGGG
+        ....TTTTT....
+        .....TTT.....
+        .....TTT.....
+        ....TTTTT....''',
+    'bush': '''
+        ..LLL..
+        .LGGGG.
+        LGGGGDG
+        .GGDDD.''',
+}
+PIXEL_COLORS = {'L': (176, 213, 168), 'G': (139, 190, 136), 'D': (108, 160, 114), 'T': (176, 150, 128)}
+# Where each tree stands: (sprite, x of its left edge, pixel size). They share a
+# ground line near the bottom, in the corners and under the caption's ends.
+FOREST = [
+    ('pine', 40, 6), ('round', 104, 5), ('bush', 168, 4), ('tabs', 206, 4),
+    ('bush', 470, 3), ('pine', 520, 3),
+    ('round', 1380, 3), ('bush', 1425, 3),
+    ('bush', 1650, 4), ('round', 1690, 5), ('pine', 1752, 6), ('bush', 1820, 4), ('round', 1850, 4),
+]
+GROUND = H - 26
+
+
+def forest(canvas):
+    canvas = canvas.convert('RGBA')
+    layer = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(layer)
+    for name, left, size in FOREST:
+        rows = [line.strip() for line in SPRITES[name].strip('\n').splitlines()]
+        top = GROUND - len(rows) * size
+        for r, line in enumerate(rows):
+            for c, ch in enumerate(line):
+                if ch in PIXEL_COLORS:
+                    x, y = left + c * size, top + r * size
+                    draw.rectangle((x, y, x + size - 1, y + size - 1), fill=PIXEL_COLORS[ch] + (255,))
+    # Subtle: the trees are drawn at partial strength over the background.
+    layer.putalpha(layer.getchannel('A').point(lambda a: a * 0.7))
+    return Image.alpha_composite(canvas, layer).convert('RGB')
+
+
 # --- The window: page and panel side by side -------------------------------------
 
 def background():
     canvas = Image.new('RGBA', (W, H), BG + (255,))
     shadow = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     ImageDraw.Draw(shadow).rounded_rectangle((X0, Y0 + 10, X0 + WIN_W, Y0 + PAGE_H + 10), radius=18, fill=(0, 0, 0, 55))
-    return Image.alpha_composite(canvas, shadow.filter(ImageFilter.GaussianBlur(24))).convert('RGB')
+    return forest(Image.alpha_composite(canvas, shadow.filter(ImageFilter.GaussianBlur(24))))
 
 
 BACKGROUND = background()
@@ -101,7 +176,7 @@ def to_screen(point):
 # --- Title cards ---------------------------------------------------------------------
 
 def card(lines):
-    canvas = Image.new('RGB', (W, H), BG)
+    canvas = forest(Image.new('RGB', (W, H), BG))
     draw = ImageDraw.Draw(canvas)
     logo = icon(168)
     total = 168 + 48 + 96 + sum(gap + size for _, size, gap, _ in lines)
@@ -149,7 +224,7 @@ CURSOR = make_cursor()
 def ghost_image(shot, x, y, width, height):
     """The dragged tab as a small translucent label, like Chrome's drag image."""
     panel = Image.open(os.path.join(CAPTURES, f'panel-{shot}.png')).convert('RGB')
-    width = min(width, 170)
+    width = min(width, 215)
     row = panel.crop((round(x * 2), round(y * 2), round((x + width) * 2), round((y + height) * 2)))
     row = row.resize((round(row.width * SCALE), round(row.height * SCALE)), Image.LANCZOS)
     pad = 12
@@ -267,7 +342,7 @@ def main():
     gif = os.path.join(OUT, 'demo.gif')
     subprocess.run(
         ['ffmpeg', '-loglevel', 'error', '-y', '-i', video, '-vf',
-         'fps=15,scale=960:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=128:stats_mode=diff[p];'
+         'fps=12,scale=800:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=128:stats_mode=diff[p];'
          '[b][p]paletteuse=dither=bayer:bayer_scale=4:diff_mode=rectangle', gif],
         check=True)
     print(f'{gif}: {os.path.getsize(gif) / 1e6:.1f} MB')

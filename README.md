@@ -14,7 +14,9 @@ and looks like part of Chrome.
 
 Built with [Claude Code](https://claude.com/claude-code).
 
-![A short demo with the side panel on the left: links opened from a page nest under it, a tab is dragged onto another, a tree is collapsed, the right-click menu opens, and everything switches to dark mode.](docs/demo/demo.gif)
+![A short demo, browsing Wikipedia articles about Lisbon with the side panel on the left: links opened from a page nest under it, a tab is dragged onto another, a tree is collapsed, the right-click menu opens, and everything switches to dark mode.](docs/demo/demo.gif)
+
+<sub>The demo shows articles from [Wikipedia](https://en.wikipedia.org/wiki/Lisbon), available under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).</sub>
 
 ## Install
 
