@@ -13,15 +13,15 @@ import textwrap
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'demo'))
-from frame import Window, forest, ghost, make_cursor, pointer, rounded_mask, shadow_for  # noqa: E402
+from frame import Window, ghost, make_cursor, pointer, rounded_mask, scatter, scattered, shadow_for  # noqa: E402
 
 ROOT = os.path.join(os.path.dirname(__file__), '..')
 OUT = os.path.join(ROOT, 'docs/store')
 RAW = os.path.join(OUT, 'raw')
 FONTS = '/usr/share/fonts/opentype/inter/'
 THEMES = {
-    'light': dict(bg=(240, 244, 249), title=(31, 31, 31), text=(71, 71, 71), card=(255, 255, 255), shadow=60, trees=0.7),
-    'dark': dict(bg=(31, 31, 31), title=(227, 227, 227), text=(196, 199, 197), card=(40, 42, 44), shadow=140, trees=0.35),
+    'light': dict(bg=(240, 244, 249), title=(31, 31, 31), text=(71, 71, 71), card=(255, 255, 255), shadow=60, trees=0.38),
+    'dark': dict(bg=(31, 31, 31), title=(227, 227, 227), text=(196, 199, 197), card=(40, 42, 44), shadow=140, trees=0.22),
 }
 SHOTS = [
     ('nest', 'Vertical tabs, as a tree',
@@ -37,11 +37,12 @@ SHOTS = [
 ]
 KEYFRAMES = json.load(open(os.path.join(RAW, 'keyframes.json')))
 WINDOW = Window(0.8)
-# Pixel art trees in the corners: (sprite, x of its left edge, pixel size).
-TREES = [
-    ('pine', 22, 4), ('round', 64, 3), ('bush', 100, 3),
-    ('bush', 1150, 3), ('round', 1176, 3), ('pine', 1214, 4),
-]
+W, H = 1280, 800
+X0, Y0 = (W - WINDOW.width) // 2, 196
+# Faint pixel art trees scattered around the window, clear of the headline,
+# its text and the name at the top right.
+TREES = scatter((W, H), [(X0, Y0, X0 + WINDOW.width, Y0 + WINDOW.height), (X0, 40, X0 + WINDOW.width, 176)],
+                count=10, sizes=[2, 3, 3])
 
 
 def font(name, size):
@@ -73,10 +74,9 @@ def card(canvas, panel, colors, x, y, width, radius):
 def screenshot(number, name, headline, body):
     frame = KEYFRAMES[name]
     colors = THEMES[frame['scheme']]
-    W, H = 1280, 800
-    x0, y0 = (W - WINDOW.width) // 2, 196
+    x0, y0 = X0, Y0
     canvas = Image.new('RGB', (W, H), colors['bg'])
-    canvas = forest(canvas, TREES, H - 14, strength=colors['trees'])
+    canvas = scattered(canvas, TREES, strength=colors['trees'])
     canvas = shadow_for(canvas, (x0, y0, x0 + WINDOW.width, y0 + WINDOW.height), radius=14,
                         strength=colors['shadow'], blur=18)
     window = WINDOW.draw(os.path.join(RAW, f'{name}-page.png'), os.path.join(RAW, f'{name}-panel.png'), frame['scheme'])

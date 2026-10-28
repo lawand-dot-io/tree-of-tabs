@@ -3,6 +3,7 @@
 the page next to it, the cursor, the dragged tab and the pixel art trees.
 Captures come from tools/demo/capture.mjs at twice their size."""
 import os
+import random
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 ROOT = os.path.join(os.path.dirname(__file__), '../..')
@@ -178,6 +179,47 @@ SPRITES = {
         .GGDDD.''',
 }
 PIXEL_COLORS = {'L': (176, 213, 168), 'G': (139, 190, 136), 'D': (108, 160, 114), 'T': (176, 150, 128)}
+
+
+def sprite_size(name, size):
+    rows = [line.strip() for line in SPRITES[name].strip('\n').splitlines()]
+    return max(map(len, rows)) * size, len(rows) * size
+
+
+def scatter(canvas_size, keep_out, count, sizes, seed=11, margin=28):
+    """`count` trees at random spots over the background, as (sprite, x, ground,
+    pixel size). Each one is fully inside the canvas and clear of the `keep_out`
+    boxes (the window, the text), and each goes where it's furthest from the
+    trees already placed, so they spread out without a pattern. One of them is
+    a tiny Tree of Tabs. The same seed always gives the same trees."""
+    rng = random.Random(seed)
+    W, H = canvas_size
+    boxes = [(x0 - margin, y0 - margin, x1 + margin, y1 + margin) for x0, y0, x1, y1 in keep_out]
+    trees, centers = [], []
+    for i in range(count):
+        best, best_distance = None, -1
+        for _ in range(400):
+            name = 'tabs' if i == count // 3 else rng.choice(['round', 'pine'])
+            size = rng.choice(sizes)
+            w, h = sprite_size(name, size)
+            x, y = rng.uniform(16, W - w - 16), rng.uniform(16, H - h - 16)
+            if any(x < b[2] and x + w > b[0] and y < b[3] and y + h > b[1] for b in boxes):
+                continue
+            cx, cy = x + w / 2, y + h / 2
+            distance = min(((cx - px) ** 2 + (cy - py) ** 2 for px, py in centers), default=float('inf'))
+            if distance > best_distance:
+                best, best_distance = ((name, round(x), round(y + h), size), (cx, cy)), distance
+        if best:
+            trees.append(best[0])
+            centers.append(best[1])
+    return trees
+
+
+def scattered(canvas, trees, strength=0.38):
+    """Draws trees from `scatter`."""
+    for name, x, ground, size in trees:
+        canvas = forest(canvas, [(name, x, size)], ground, strength)
+    return canvas
 
 
 def forest(canvas, trees, ground, strength=0.7):

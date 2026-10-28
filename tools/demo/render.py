@@ -7,13 +7,12 @@ README). Needs Pillow, ffmpeg and the Inter font.
 Usage: python3 tools/demo/render.py <capture folder>"""
 import json
 import os
-import random
 import subprocess
 import sys
 from functools import lru_cache
 from PIL import Image, ImageDraw
-from frame import (ACCENT, BG, SPRITES, TEXT, TITLE, Window, font, forest, ghost, icon, make_cursor, pointer,
-                   rounded_mask, shadow_for)
+from frame import (ACCENT, BG, TEXT, TITLE, Window, font, ghost, icon, make_cursor, pointer, rounded_mask, scatter,
+                   scattered, shadow_for)
 
 ROOT = os.path.join(os.path.dirname(__file__), '../..')
 OUT = os.path.join(ROOT, 'docs/demo')
@@ -24,29 +23,15 @@ WINDOW = Window(1.2)
 X0 = (W - WINDOW.width) // 2
 Y0 = 64
 CAPTION_Y = Y0 + WINDOW.height + 76
-GROUND = H - 26
-
-
-def treeline():
-    """Pixel art trees along the whole bottom edge, as (sprite, x of its left edge,
-    pixel size): bigger at the sides, small and sparser under the caption so
-    they stay below its text. The same every time."""
-    rng = random.Random(4)
-    trees, x = [], 24
-    while x < W - 60:
-        side = abs(x - W / 2) / (W / 2)  # 0 in the middle, 1 at the edges
-        size = 3 if side < 0.45 else 4 if side < 0.75 else rng.choice([5, 6])
-        name = rng.choice(['round', 'pine', 'round', 'pine', 'bush'])
-        # One tiny Tree of Tabs among them, near the left.
-        if not any(t[0] == 'tabs' for t in trees) and x > 180:
-            name, size = 'tabs', 4
-        trees.append((name, x, size))
-        width = max(len(line.strip()) for line in SPRITES[name].strip('\n').splitlines()) * size
-        x += width + rng.randint(12, 56) + (60 if side < 0.45 else 0)
-    return trees
-
-
-TREES = treeline()
+CAPTION_FONT = font('Inter-SemiBold.otf', 40)
+# The longest caption, so no tree comes near any of them.
+CAPTION_W = 1000
+# Faint pixel art trees, scattered over the background around the window.
+TREES = scatter(
+    (W, H),
+    [(X0, Y0, X0 + WINDOW.width, Y0 + WINDOW.height),
+     (W / 2 - CAPTION_W / 2, CAPTION_Y - 30, W / 2 + CAPTION_W / 2, CAPTION_Y + 30)],
+    count=20, sizes=[3, 4, 4, 5])
 
 
 def ease(t):
@@ -57,8 +42,8 @@ def ease(t):
 
 def background():
     canvas = Image.new('RGB', (W, H), BG)
-    canvas = shadow_for(canvas, (X0, Y0, X0 + WINDOW.width, Y0 + WINDOW.height), radius=18)
-    return forest(canvas, TREES, GROUND)
+    canvas = scattered(canvas, TREES)
+    return shadow_for(canvas, (X0, Y0, X0 + WINDOW.width, Y0 + WINDOW.height), radius=18)
 
 
 BACKGROUND = background()
@@ -84,7 +69,7 @@ def to_screen(point):
 # --- Title cards ---------------------------------------------------------------------
 
 def card(lines):
-    canvas = forest(Image.new('RGB', (W, H), BG), TREES, GROUND)
+    canvas = scattered(Image.new('RGB', (W, H), BG), TREES)
     draw = ImageDraw.Draw(canvas)
     logo = icon(168)
     total = 168 + 48 + 96 + sum(gap + size for _, size, gap, _ in lines)
@@ -138,7 +123,7 @@ def overlay(frame, position, click=None, drag=None):
 @lru_cache(maxsize=8)
 def caption_layer(text):
     layer = Image.new('RGBA', (W, 80), (0, 0, 0, 0))
-    ImageDraw.Draw(layer).text((W // 2, 40), text, font=font('Inter-SemiBold.otf', 40), fill=TITLE + (255,), anchor='mm')
+    ImageDraw.Draw(layer).text((W // 2, 40), text, font=CAPTION_FONT, fill=TITLE + (255,), anchor='mm')
     return layer
 
 
