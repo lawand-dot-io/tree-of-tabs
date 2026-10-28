@@ -7,11 +7,13 @@ README). Needs Pillow, ffmpeg and the Inter font.
 Usage: python3 tools/demo/render.py <capture folder>"""
 import json
 import os
+import random
 import subprocess
 import sys
 from functools import lru_cache
 from PIL import Image, ImageDraw
-from frame import ACCENT, BG, TEXT, TITLE, Window, font, forest, ghost, icon, make_cursor, pointer, rounded_mask, shadow_for
+from frame import (ACCENT, BG, SPRITES, TEXT, TITLE, Window, font, forest, ghost, icon, make_cursor, pointer,
+                   rounded_mask, shadow_for)
 
 ROOT = os.path.join(os.path.dirname(__file__), '../..')
 OUT = os.path.join(ROOT, 'docs/demo')
@@ -22,15 +24,29 @@ WINDOW = Window(1.2)
 X0 = (W - WINDOW.width) // 2
 Y0 = 64
 CAPTION_Y = Y0 + WINDOW.height + 76
-# The pixel art trees: (sprite, x of its left edge, pixel size), in the corners
-# and under the caption's ends.
-TREES = [
-    ('pine', 40, 6), ('round', 104, 5), ('bush', 168, 4), ('tabs', 206, 4),
-    ('bush', 470, 3), ('pine', 520, 3),
-    ('round', 1380, 3), ('bush', 1425, 3),
-    ('bush', 1650, 4), ('round', 1690, 5), ('pine', 1752, 6), ('bush', 1820, 4), ('round', 1850, 4),
-]
 GROUND = H - 26
+
+
+def treeline():
+    """Pixel art trees along the whole bottom edge, as (sprite, x of its left edge,
+    pixel size): bigger at the sides, small and sparser under the caption so
+    they stay below its text. The same every time."""
+    rng = random.Random(4)
+    trees, x = [], 24
+    while x < W - 60:
+        side = abs(x - W / 2) / (W / 2)  # 0 in the middle, 1 at the edges
+        size = 3 if side < 0.45 else 4 if side < 0.75 else rng.choice([5, 6])
+        name = rng.choice(['round', 'pine', 'round', 'pine', 'bush'])
+        # One tiny Tree of Tabs among them, near the left.
+        if not any(t[0] == 'tabs' for t in trees) and x > 180:
+            name, size = 'tabs', 4
+        trees.append((name, x, size))
+        width = max(len(line.strip()) for line in SPRITES[name].strip('\n').splitlines()) * size
+        x += width + rng.randint(12, 56) + (60 if side < 0.45 else 0)
+    return trees
+
+
+TREES = treeline()
 
 
 def ease(t):
@@ -150,13 +166,15 @@ def frames():
     fade_from, fade_left = None, 0
     FADE = 12
 
-    def emit(frame):
+    def emit(frame, card=False):
+        """The frame, and whether it shows a title card (or a fade to one)."""
         nonlocal fade_left, previous
         if fade_left:
             frame = Image.blend(fade_from, frame, 1 - fade_left / FADE)
             fade_left -= 1
+            card = True
         previous = frame
-        return frame
+        return frame, card
 
     for step in steps:
         kind = step['type']
@@ -168,7 +186,7 @@ def frames():
             if previous is not None:
                 fade_from, fade_left = previous, FADE
             for _ in range(count):
-                yield emit(CARDS[step['card']])
+                yield emit(CARDS[step['card']], card=True)
             fade_from, fade_left = previous, FADE
             continue
         start = position
@@ -193,18 +211,34 @@ def main():
          '-i', '-', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '18', '-preset', 'slow', '-movflags', '+faststart',
          video],
         stdin=subprocess.PIPE)
-    count = 0
-    for frame in frames():
+    # The README's GIF leaves out the title cards (the README already says what
+    # this is) and fades from the last frame back into the first, so its loop
+    # doesn't jump. Its frames go to a lossless file first.
+    loop = os.path.join(CAPTURES, 'gif-frames.mkv')
+    looper = subprocess.Popen(
+        ['ffmpeg', '-loglevel', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}', '-r', str(FPS),
+         '-i', '-', '-c:v', 'ffv1', loop],
+        stdin=subprocess.PIPE)
+    count, first, last = 0, None, None
+    for frame, card in frames():
         encoder.stdin.write(frame.tobytes())
         count += 1
+        if not card:
+            looper.stdin.write(frame.tobytes())
+            first, last = first or frame, frame
     encoder.stdin.close()
     encoder.wait()
     print(f'{video}: {count / FPS:.1f} seconds')
+    BACK = 18
+    for i in range(1, BACK + 1):
+        looper.stdin.write(Image.blend(last, first, ease(i / BACK)).tobytes())
+    looper.stdin.close()
+    looper.wait()
 
-    # The README's GIF: smaller and slower, with its own palette.
+    # Smaller and slower than the video, with its own palette.
     gif = os.path.join(OUT, 'demo.gif')
     subprocess.run(
-        ['ffmpeg', '-loglevel', 'error', '-y', '-i', video, '-vf',
+        ['ffmpeg', '-loglevel', 'error', '-y', '-i', loop, '-vf',
          'fps=12,scale=800:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=128:stats_mode=diff[p];'
          '[b][p]paletteuse=dither=bayer:bayer_scale=4:diff_mode=rectangle', gif],
         check=True)
