@@ -56,6 +56,12 @@ function pageHtml(name) {
   a:hover { text-decoration: underline; }
   .line { height: 14px; margin: 18px 0; border-radius: 7px; background: #eef1f5; max-width: 640px; }
   .short { max-width: 380px; }
+  @media (prefers-color-scheme: dark) {
+    body { color: #e3e3e3; background: #202124; }
+    p { color: #c4c7c5; }
+    a { color: #a8c7fa; }
+    .line { background: #2d2f31; }
+  }
 </style>
 <h1>${name}</h1>${body}`;
 }
@@ -71,7 +77,7 @@ const context = await chromium.launchPersistentContext(fs.mkdtempSync(path.join(
   headless: true,
   channel: 'chromium', // The headless shell cannot load extensions.
   deviceScaleFactor: 2,
-  viewport: { width: 900, height: 640 },
+  viewport: { width: 900, height: 700 },
   args: [`--disable-extensions-except=${ROOT}`, `--load-extension=${ROOT}`],
 });
 const worker = context.serviceWorkers()[0] ?? (await context.waitForEvent('serviceworker'));
@@ -134,12 +140,12 @@ const extensionId = new URL(worker.url()).host;
 const [panel] = await Promise.all([
   context.waitForEvent('page'),
   worker.evaluate(
-    (url) => chrome.windows.create({ url, type: 'popup', width: 320, height: 640 }),
+    (url) => chrome.windows.create({ url, type: 'popup', width: 320, height: 700 }),
     `chrome-extension://${extensionId}/src/sidepanel/sidepanel.html?windowId=${windowId}`,
   ),
 ]);
 await panel.waitForLoadState();
-await panel.setViewportSize({ width: 320, height: 606 });
+await panel.setViewportSize({ width: 320, height: 666 });
 await panel.evaluate((id) => chrome.runtime.sendMessage({ type: 'set-collapsed', tabId: id, collapsed: true }), await tabId('Q4 roadmap'));
 
 let active = 'Trip to Lisbon: planning notes';
@@ -153,10 +159,13 @@ await sleep(1200);
 // --- The timeline -----------------------------------------------------------
 
 const steps = [];
+const schemes = []; // Light or dark, for each capture.
+let scheme = 'light';
 let shots = 0;
 async function shot() {
   await sleep(350);
   const id = shots++;
+  schemes.push(scheme);
   await pages.get(active).screenshot({ path: path.join(OUT, `page-${id}.png`) });
   await panel.screenshot({ path: path.join(OUT, `panel-${id}.png`) });
   return id;
@@ -172,11 +181,11 @@ const centerOf = async (locator, on, dx = 0) => {
   return { on, x: box.x + Math.min(box.width / 2, 60) + dx, y: box.y + box.height / 2 };
 };
 // Moves the drawn cursor and the real mouse, so hover styles show.
-async function moveTo(target, seconds = 0.7) {
+async function moveTo(target, seconds = 0.85) {
   step({ type: 'move', to: target, seconds });
   // The other side loses its hover, as it would with one real mouse.
   const [page, other, away] =
-    target.on === 'panel' ? [panel, pages.get(active), [5, 630]] : [pages.get(active), panel, [310, 600]];
+    target.on === 'panel' ? [panel, pages.get(active), [5, 690]] : [pages.get(active), panel, [310, 660]];
   await other.mouse.move(...away);
   await page.mouse.move(target.x, target.y);
   current = await shot();
@@ -185,7 +194,7 @@ async function moveTo(target, seconds = 0.7) {
 steps.push({ type: 'card', card: 'intro', seconds: 2.6 });
 
 caption('Tabs you open from a page nest under it');
-hold(1.2);
+hold(1.6);
 for (const name of LINKS['Trip to Lisbon: planning notes']) {
   const link = pages.get(active).locator('a', { hasText: name });
   await moveTo(await centerOf(link, 'page'));
@@ -194,13 +203,13 @@ for (const name of LINKS['Trip to Lisbon: planning notes']) {
   pages.set(name, child);
   current = await shot();
   step({ type: 'click', seconds: 0.25 });
-  hold(0.6);
+  hold(0.9);
 }
 await moveTo(await centerOf(row('Hotels in Alfama'), 'panel'));
 step({ type: 'click', seconds: 0.25 });
 await activate('Hotels in Alfama');
 current = await shot();
-hold(0.6);
+hold(0.9);
 for (const name of LINKS['Hotels in Alfama']) {
   const link = pages.get(active).locator('a', { hasText: name });
   await moveTo(await centerOf(link, 'page'));
@@ -209,9 +218,9 @@ for (const name of LINKS['Hotels in Alfama']) {
   pages.set(name, child);
   current = await shot();
   step({ type: 'click', seconds: 0.25 });
-  hold(0.6);
+  hold(0.9);
 }
-hold(1);
+hold(1.4);
 
 caption('Drag tabs to reorganize them');
 const source = await centerOf(row('Weather in Lisbon'), 'panel');
@@ -253,7 +262,7 @@ await dragTo('Things to do in Lisbon', true);
 await panel.mouse.move(dropAt.x, dropAt.y + 1);
 current = await shot();
 step({ type: 'click', seconds: 0.25 });
-hold(1.2);
+hold(1.6);
 
 caption('Collapse what you’re not using');
 await moveTo(await centerOf(row('Recipes for the weekend'), 'panel'));
@@ -269,11 +278,39 @@ await moveTo(twisty, 0.5);
 await trip.locator('.twisty').click();
 current = await shot();
 step({ type: 'click', seconds: 0.25 });
-hold(1.6);
+hold(2);
 
-steps.push({ type: 'card', card: 'outro', seconds: 3 });
+caption('Right-click a tab for quick actions');
+const recipes = await centerOf(row('Recipes for the weekend'), 'panel');
+await moveTo(recipes);
+hold(0.3);
+await panel.mouse.click(recipes.x, recipes.y, { button: 'right' });
+current = await shot();
+step({ type: 'click', seconds: 0.25 });
+hold(0.8);
+for (const label of ['Duplicate', 'Collapse tree', 'Move tree to new window']) {
+  await moveTo(await centerOf(panel.locator('.menu-item', { hasText: label }), 'panel'), 0.6);
+  hold(0.6);
+}
+hold(0.6);
+await panel.keyboard.press('Escape');
+await panel.mouse.move(310, 660);
+current = await shot();
+hold(0.6);
 
-fs.writeFileSync(path.join(OUT, 'steps.json'), JSON.stringify(steps, null, 2));
+caption('Looks like part of Chrome, in light and dark mode');
+await moveTo({ on: 'page', x: 700, y: 520 }, 0.8);
+const before = current;
+scheme = 'dark';
+await panel.emulateMedia({ colorScheme: 'dark' });
+await pages.get(active).emulateMedia({ colorScheme: 'dark' });
+current = await shot();
+step({ type: 'fade', from: before, seconds: 0.8 });
+hold(2.4);
+
+steps.push({ type: 'card', card: 'outro', seconds: 3.4 });
+
+fs.writeFileSync(path.join(OUT, 'steps.json'), JSON.stringify({ steps, schemes }, null, 2));
 console.log(`${shots} captures, ${steps.length} steps`);
 await context.close();
 server.close();

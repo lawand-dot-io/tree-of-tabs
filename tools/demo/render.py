@@ -1,5 +1,6 @@
 """Renders the demo video from the captures that tools/demo/capture.mjs saves:
-the page and the panel side by side, a cursor, and a caption under them, with
+the side panel on the left (where people who want vertical tabs put it) next
+to the page, a cursor, and a caption under them, with
 a title card at the start and the end. Writes docs/demo/tree-of-tabs-demo.mp4
 (1920x1080, for YouTube and the store listing) and docs/demo/demo.gif (for the
 README). Needs Pillow, ffmpeg and the Inter font.
@@ -21,16 +22,20 @@ BG = (240, 244, 249)
 TITLE = (31, 31, 31)
 TEXT = (71, 71, 71)
 ACCENT = (11, 87, 208)
-DIVIDER = (227, 227, 227)
+# The side panel's header and the line next to it, in each color scheme.
+CHROME = {
+    'light': dict(bg=(255, 255, 255), text=(31, 31, 31), divider=(227, 227, 227)),
+    'dark': dict(bg=(40, 42, 44), text=(227, 227, 227), divider=(68, 71, 70)),
+}
 SCALE = 0.6  # Captures are at twice the size; 0.6 shows them at 1.2x.
 
-PAGE_W, PAGE_H = 1080, 768
+PAGE_W, PAGE_H = 1080, 840
 PANEL_W = 384
-HEADER = PAGE_H - round(606 * 2 * SCALE)
+HEADER = PAGE_H - round(666 * 2 * SCALE)
 WIN_W = PAGE_W + 1 + PANEL_W
 X0 = (W - WIN_W) // 2
-Y0 = 92
-CAPTION_Y = Y0 + PAGE_H + 64
+Y0 = 64
+CAPTION_Y = Y0 + PAGE_H + 76
 
 
 def font(name, size):
@@ -61,6 +66,9 @@ MASK = Image.new('L', (WIN_W, PAGE_H), 0)
 ImageDraw.Draw(MASK).rounded_rectangle((0, 0, WIN_W - 1, PAGE_H - 1), radius=18, fill=255)
 
 
+SCHEMES = []  # Light or dark, for each capture; read from steps.json.
+
+
 def load(kind, shot):
     image = Image.open(os.path.join(CAPTURES, f'{kind}-{shot}.png')).convert('RGB')
     return image.resize((round(image.width * SCALE), round(image.height * SCALE)), Image.LANCZOS)
@@ -68,17 +76,17 @@ def load(kind, shot):
 
 @lru_cache(maxsize=8)
 def scene(shot):
-    window = Image.new('RGB', (WIN_W, PAGE_H), (255, 255, 255))
-    window.paste(load('page', shot), (0, 0))
+    colors = CHROME[SCHEMES[shot]]
+    window = Image.new('RGB', (WIN_W, PAGE_H), colors['bg'])
     draw = ImageDraw.Draw(window)
-    draw.line((PAGE_W, 0, PAGE_W, PAGE_H), fill=DIVIDER)
     # The side panel's header, as Chrome draws it: the extension's icon and name.
-    left = PAGE_W + 1
     logo = icon(20)
-    window.paste(logo, (left + 14, (HEADER - 20) // 2), logo)
-    draw.text((left + 44, HEADER // 2), 'Tree of Tabs', font=font('Inter-Medium.otf', 17), fill=TITLE, anchor='lm')
-    draw.line((left, HEADER - 1, WIN_W, HEADER - 1), fill=DIVIDER)
-    window.paste(load('panel', shot), (left, HEADER))
+    window.paste(logo, (14, (HEADER - 20) // 2), logo)
+    draw.text((44, HEADER // 2), 'Tree of Tabs', font=font('Inter-Medium.otf', 17), fill=colors['text'], anchor='lm')
+    draw.line((0, HEADER - 1, PANEL_W, HEADER - 1), fill=colors['divider'])
+    window.paste(load('panel', shot), (0, HEADER))
+    draw.line((PANEL_W, 0, PANEL_W, PAGE_H), fill=colors['divider'])
+    window.paste(load('page', shot), (PANEL_W + 1, 0))
     canvas = BACKGROUND.copy()
     canvas.paste(window, (X0, Y0), MASK)
     return canvas
@@ -86,8 +94,8 @@ def scene(shot):
 
 def to_screen(point):
     if point['on'] == 'page':
-        return X0 + point['x'] * 2 * SCALE, Y0 + point['y'] * 2 * SCALE
-    return X0 + PAGE_W + 1 + point['x'] * 2 * SCALE, Y0 + HEADER + point['y'] * 2 * SCALE
+        return X0 + PANEL_W + 1 + point['x'] * 2 * SCALE, Y0 + point['y'] * 2 * SCALE
+    return X0 + point['x'] * 2 * SCALE, Y0 + HEADER + point['y'] * 2 * SCALE
 
 
 # --- Title cards ---------------------------------------------------------------------
@@ -122,17 +130,16 @@ CARDS = {
 # --- Cursor, clicks and the dragged tab --------------------------------------------------
 
 def make_cursor():
+    """A classic arrow cursor: dark with a white outline, drawn at 4x and scaled down."""
     points = [(0, 0), (0, 25), (6, 19.5), (10.5, 29), (14.5, 27.2), (10.2, 18), (18, 18)]
-    scale = 1.25
-    image = Image.new('RGBA', (40, 48), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(image)
-    shifted = [(4 + x * scale, 3 + y * scale) for x, y in points]
-    draw.polygon(shifted, fill=(255, 255, 255, 255))
-    small = [(4 + 2.2 + (x - 2.2) * scale * 0.82, 3 + 3.6 + (y - 3.6) * scale * 0.82) for x, y in points]
-    draw.polygon(small, fill=(20, 20, 20, 255))
+    big, scale = 4, 1.25
+    shape = [(16 + x * scale * big, 12 + y * scale * big) for x, y in points]
+    image = Image.new('RGBA', (40 * big, 48 * big), (0, 0, 0, 0))
+    ImageDraw.Draw(image).polygon(shape, fill=(20, 20, 20, 255), outline=(255, 255, 255, 255), width=2 * big)
     shadow = Image.new('RGBA', image.size, (0, 0, 0, 0))
-    ImageDraw.Draw(shadow).polygon([(x + 1, y + 2) for x, y in shifted], fill=(0, 0, 0, 90))
-    return Image.alpha_composite(shadow.filter(ImageFilter.GaussianBlur(2)), image)
+    ImageDraw.Draw(shadow).polygon([(x + 4, y + 8) for x, y in shape], fill=(0, 0, 0, 90))
+    image = Image.alpha_composite(shadow.filter(ImageFilter.GaussianBlur(8)), image)
+    return image.resize((40, 48), Image.LANCZOS)
 
 
 CURSOR = make_cursor()
@@ -196,8 +203,10 @@ def with_caption(frame, text, alpha):
 # --- The timeline ----------------------------------------------------------------------------
 
 def frames():
-    steps = json.load(open(os.path.join(CAPTURES, 'steps.json')))
-    position = (X0 + PAGE_W * 0.55, Y0 + PAGE_H * 0.75)
+    timeline = json.load(open(os.path.join(CAPTURES, 'steps.json')))
+    steps = timeline['steps']
+    SCHEMES[:] = timeline['schemes']
+    position = (X0 + PANEL_W + PAGE_W * 0.45, Y0 + PAGE_H * 0.75)
     text, caption_age = None, 0
     previous = None  # The last frame shown, to fade from after a title card.
     fade_from, fade_left = None, 0
@@ -230,7 +239,10 @@ def frames():
             t = ease((i + 1) / count) if kind == 'move' else 1
             position = (start[0] + (end[0] - start[0]) * t, start[1] + (end[1] - start[1]) * t)
             click = i / count if kind == 'click' else None
-            frame = overlay(scene(step['shot']), position, click, step.get('ghost'))
+            base = scene(step['shot'])
+            if kind == 'fade':
+                base = Image.blend(scene(step['from']), base, ease((i + 1) / count))
+            frame = overlay(base, position, click, step.get('ghost'))
             caption_age += 1
             yield emit(with_caption(frame, text, min(1, caption_age / 10)))
 

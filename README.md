@@ -14,7 +14,7 @@ and looks like part of Chrome.
 
 Built with [Claude Code](https://claude.com/claude-code).
 
-![A short demo: links opened from a page nest under it in the side panel, a tab is dragged onto another, and a tree is collapsed.](docs/demo/demo.gif)
+![A short demo with the side panel on the left: links opened from a page nest under it, a tab is dragged onto another, a tree is collapsed, the right-click menu opens, and everything switches to dark mode.](docs/demo/demo.gif)
 
 ## Install
 
