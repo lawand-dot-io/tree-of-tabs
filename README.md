@@ -14,6 +14,8 @@ and looks like part of Chrome.
 
 Built with [Claude Code](https://claude.com/claude-code).
 
+![A short demo: links opened from a page nest under it in the side panel, a tab is dragged onto another, and a tree is collapsed.](docs/demo/demo.gif)
+
 ## Install
 
 **[Add Tree of Tabs to Chrome](https://chromewebstore.google.com/detail/tree-of-tabs/goknfcebnofoghkgcmpjhlokkgefbokm)** from the Chrome Web Store.
@@ -140,6 +142,7 @@ PRIVACY.md           the privacy policy the store listing links to
 docs/                screenshots, the README banner and social preview, release notes
 tools/make-icons.mjs regenerates icons/ (needs Playwright)
 tools/make-social-preview.py  rebuilds the banner from docs/screenshot-*.png
+tools/demo/          records the demo video and GIF in docs/demo/ (see capture.mjs)
 tools/chrome-devtools-mcp.sh  starts the Chrome DevTools MCP server (see below)
 ```
 
