@@ -335,6 +335,12 @@ for (const [name, frame] of Object.entries(keyframes)) {
   for (const kind of ['page', 'panel']) fs.copyFileSync(path.join(OUT, `${kind}-${frame.shot}.png`), path.join(RAW, `${name}-${kind}.png`));
 }
 fs.copyFileSync(path.join(OUT, `panel-${ghost.shot}.png`), path.join(RAW, 'drag-source-panel.png'));
+// The dark banner's panel: the Lisbon tree expanded again, in dark mode.
+await panel.evaluate((id) => chrome.runtime.sendMessage({ type: 'set-collapsed', tabId: id, collapsed: false }), lisbonId);
+await activate('Alfama');
+await panel.mouse.move(310, 660);
+await sleep(800);
+await panel.screenshot({ path: path.join(RAW, 'nest-dark-panel.png') });
 fs.writeFileSync(path.join(RAW, 'keyframes.json'), JSON.stringify(keyframes, null, 2) + '\n');
 console.log(`${shots} captures, ${steps.length} steps`);
 await context.close();

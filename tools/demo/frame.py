@@ -178,16 +178,19 @@ PIXEL_COLORS = {'L': (176, 213, 168), 'G': (139, 190, 136), 'D': (108, 160, 114)
 HILL = (206, 228, 205)
 
 
-def landscape(canvas, trees, block=8):
-    """A gentle pixel art hill along the bottom, a little higher in the middle,
-    with `trees` standing on it: a list of (sprite, x of its left edge, pixel size)."""
+def landscape(canvas, trees, block=8, base=70, bump=46, hill=HILL, strength=0.7):
+    """A gentle pixel art hill along the bottom, `base` pixels high and `bump`
+    higher in the middle, with `trees` standing on it: a list of (sprite, x of
+    its left edge, pixel size). The trees are drawn at `strength` over it."""
     W, H = canvas.size
-    heights = [block * round((70 + 46 * math.exp(-((i * block - W / 2) / 520) ** 2) + 10 * math.sin(i / 9)) / block)
+    spread = W * 0.27
+    heights = [block * round((base + bump * math.exp(-((i * block - W / 2) / spread) ** 2)
+                              + base / 7 * math.sin(i * 8 / block / 9)) / block)
                for i in range(W // block + 1)]
     canvas = canvas.convert('RGBA')
     draw = ImageDraw.Draw(canvas)
     for i, h in enumerate(heights):
-        draw.rectangle((i * block, H - h, i * block + block - 1, H), fill=HILL)
+        draw.rectangle((i * block, H - h, i * block + block - 1, H), fill=hill)
     for name, left, size in trees:
         rows = [line.strip() for line in SPRITES[name].strip('\n').splitlines()]
         middle = left + max(map(len, rows)) * size / 2
@@ -197,8 +200,7 @@ def landscape(canvas, trees, block=8):
                 if ch in PIXEL_COLORS:
                     x, y = left + c * size, top + r * size
                     color = PIXEL_COLORS[ch]
-                    # Drawn at 70% strength, so they sit softly on the background.
                     under = canvas.getpixel((min(W - 1, x), min(H - 1, y)))[:3]
                     draw.rectangle((x, y, x + size - 1, y + size - 1),
-                                   fill=tuple(round(u + (v - u) * 0.7) for u, v in zip(under, color)))
+                                   fill=tuple(round(u + (v - u) * strength) for u, v in zip(under, color)))
     return canvas.convert('RGB')
