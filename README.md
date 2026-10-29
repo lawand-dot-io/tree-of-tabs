@@ -16,6 +16,8 @@ Built with [Claude Code](https://claude.com/claude-code).
 
 ![A short demo with the side panel on the left, browsing Wikipedia articles about Lisbon among other sites: links opened from a page nest under it, a tab is dragged onto another, a tree is collapsed, the right-click menu opens, and everything switches to dark mode.](docs/demo/demo.gif)
 
+Watch the [full demo on YouTube](https://youtu.be/2g3V4neZfU8).
+
 <sub>The demo and the store screenshots show real pages: [Wikipedia](https://en.wikipedia.org/wiki/Lisbon), Wikivoyage and Wikimedia Commons (CC BY-SA 4.0), OpenStreetMap (© OpenStreetMap contributors), Chrome for Developers (CC BY 4.0) and this project on GitHub.</sub>
 
 ## Install
