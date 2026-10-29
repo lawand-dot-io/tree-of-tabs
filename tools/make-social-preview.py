@@ -3,6 +3,8 @@ soft gradient with a little pixel art hill and trees, like the demo video's
 title cards, next to the real panel from docs/store/raw/ (which
 tools/demo/capture.mjs saves). The light one is the repository's social
 preview; the README shows the one matching the theme.
+Also builds docs/demo/youtube-thumbnail.png (1280x720) for the demo video, in
+the same style with a bigger, shorter headline, since YouTube shows it small.
 Needs Pillow and the Inter font."""
 import os
 import sys
@@ -60,5 +62,37 @@ def build(scheme, colors):
     image.save(os.path.join(ROOT, f'docs/social-preview{suffix}.png'), optimize=True)
 
 
+def thumbnail():
+    colors = THEMES['light']
+    W, H = 1280, 720
+    image = gradient((W, H), colors['bg'], colors['tint'])
+    image = landscape(image, TREES, block=6, base=30, bump=16, hill=colors['hill'], strength=colors['trees'])
+    draw = ImageDraw.Draw(image)
+    icon = Image.open(os.path.join(ROOT, 'icons/icon128.png')).convert('RGBA')
+    icon = icon.crop((16, 16, 112, 112)).resize((72, 72), Image.LANCZOS)
+    image.paste(icon, (80, 96), icon)
+    draw.text((168, 132), 'Tree of Tabs', font=font('Inter-SemiBold.otf', 40), fill=colors['title'], anchor='lm')
+    for i, line in enumerate(['Vertical tabs,', 'as a tree']):
+        draw.text((76, 226 + 108 * i), line, font=font('InterDisplay-Bold.otf', 98), fill=colors['title'])
+    draw.text((82, 468), 'in Chrome’s side panel', font=font('Inter-Medium.otf', 38), fill=colors['accent'])
+
+    # The panel, bigger than on the banner, running off the bottom.
+    shot = Image.open(os.path.join(RAW, colors['panel'])).convert('RGB')
+    width = 470
+    shot = shot.resize((width, int(shot.height * width / shot.width)), Image.LANCZOS)
+    x, y = W - width - 70, 64
+    height = H - y + 40
+    shadow = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    ImageDraw.Draw(shadow).rounded_rectangle((x, y + 8, x + width, y + height + 8), radius=24, fill=(0, 0, 0, colors['shadow']))
+    image = Image.alpha_composite(image.convert('RGBA'), shadow.filter(ImageFilter.GaussianBlur(18))).convert('RGB')
+    card = Image.new('RGB', (width, height), colors['card'])
+    card.paste(shot.crop((0, 0, width, min(shot.height, height))), (0, 0))
+    mask = Image.new('L', (width, height), 0)
+    ImageDraw.Draw(mask).rounded_rectangle((0, 0, width - 1, height - 1), radius=24, fill=255)
+    image.paste(card, (x, y), mask)
+    image.save(os.path.join(ROOT, 'docs/demo/youtube-thumbnail.png'), optimize=True)
+
+
 for scheme, colors in THEMES.items():
     build(scheme, colors)
+thumbnail()
