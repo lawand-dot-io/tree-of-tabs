@@ -1,0 +1,343 @@
+{
+  "extDescription": {
+    "message": "Onglets verticaux en arbre dans le panneau latéral. Les onglets ouverts depuis une page se placent dessous. Glissez pour les ranger."
+  },
+  "actionTitle": {
+    "message": "Afficher Tree of Tabs"
+  },
+  "commandDescription": {
+    "message": "Afficher ou masquer l'arbre"
+  },
+  "pinnedTabs": {
+    "message": "Onglets épinglés"
+  },
+  "tabs": {
+    "message": "Onglets"
+  },
+  "newTab": {
+    "message": "Nouvel onglet"
+  },
+  "newTabTooltip": {
+    "message": "Nouvel onglet\nClic du milieu : nouvel onglet sous l'onglet actuel"
+  },
+  "untitledTab": {
+    "message": "Nouvel onglet"
+  },
+  "closeTab": {
+    "message": "Fermer l'onglet"
+  },
+  "expand": {
+    "message": "Développer"
+  },
+  "collapse": {
+    "message": "Réduire"
+  },
+  "muteTab": {
+    "message": "Couper le son de l'onglet"
+  },
+  "unmuteTab": {
+    "message": "Réactiver le son de l'onglet"
+  },
+  "muteTabs": {
+    "message": "Couper le son des onglets"
+  },
+  "unmuteTabs": {
+    "message": "Réactiver le son des onglets"
+  },
+  "windowTipTitle": {
+    "message": "Chaque fenêtre a son propre panneau latéral."
+  },
+  "windowTipShortcut": {
+    "message": "$TITLE$ Chrome ne permet pas aux extensions de l'ouvrir elles-mêmes. Dans une nouvelle fenêtre, affichez donc l'arbre avec le bouton de la barre d'outils ou avec $SHORTCUT$.",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Each window has its own side panel."
+      },
+      "shortcut": {
+        "content": "$2",
+        "example": "Alt+Shift+T"
+      }
+    }
+  },
+  "windowTip": {
+    "message": "$TITLE$ Chrome ne permet pas aux extensions de l'ouvrir elles-mêmes. Dans une nouvelle fenêtre, affichez donc l'arbre avec le bouton de la barre d'outils.",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Each window has its own side panel."
+      }
+    }
+  },
+  "gotIt": {
+    "message": "OK"
+  },
+  "fullscreenTitle": {
+    "message": "Masquer l'arbre en plein écran ?"
+  },
+  "fullscreenIntro": {
+    "message": "Chrome laisse le panneau latéral ouvert à côté des vidéos et des pages en plein écran. Tree of Tabs peut le fermer quand vous passez en plein écran."
+  },
+  "fullscreenReopenShortcut": {
+    "message": "Chrome ne permet pas aux extensions de rouvrir elles-mêmes le panneau latéral. Ensuite, réaffichez l'arbre avec le bouton de la barre d'outils ou avec $SHORTCUT$.",
+    "placeholders": {
+      "shortcut": {
+        "content": "$1",
+        "example": "Alt+Shift+T"
+      }
+    }
+  },
+  "fullscreenReopen": {
+    "message": "Chrome ne permet pas aux extensions de rouvrir elles-mêmes le panneau latéral. Ensuite, réaffichez l'arbre avec le bouton de la barre d'outils."
+  },
+  "hideDuringFullscreen": {
+    "message": "Masquer en plein écran"
+  },
+  "keepItOpen": {
+    "message": "Le laisser ouvert"
+  },
+  "changeLaterInSettings": {
+    "message": "Vous pourrez modifier ce choix plus tard dans les paramètres."
+  },
+  "newTabAsChild": {
+    "message": "Nouvel onglet enfant"
+  },
+  "newTabUnderCurrent": {
+    "message": "Nouvel onglet sous l'onglet actuel"
+  },
+  "reload": {
+    "message": "Actualiser"
+  },
+  "duplicate": {
+    "message": "Dupliquer"
+  },
+  "pin": {
+    "message": "Épingler"
+  },
+  "unpin": {
+    "message": "Retirer"
+  },
+  "expandTree": {
+    "message": "Développer l'arbre"
+  },
+  "collapseTree": {
+    "message": "Réduire l'arbre"
+  },
+  "collapseAll": {
+    "message": "Tout réduire"
+  },
+  "expandAll": {
+    "message": "Tout développer"
+  },
+  "indent": {
+    "message": "Augmenter le retrait"
+  },
+  "outdent": {
+    "message": "Diminuer le retrait"
+  },
+  "moveToNewWindow": {
+    "message": "Déplacer vers une nouvelle fenêtre"
+  },
+  "moveTreeToNewWindow": {
+    "message": "Déplacer l'arbre vers une nouvelle fenêtre"
+  },
+  "moveTabsToNewWindow": {
+    "message": "Déplacer les onglets vers une nouvelle fenêtre"
+  },
+  "closeChildren": {
+    "message": "Fermer les onglets enfants"
+  },
+  "closeTree": {
+    "message": "Fermer l'arbre"
+  },
+  "close": {
+    "message": "Fermer"
+  },
+  "closeTabs": {
+    "message": "Fermer les onglets"
+  },
+  "closeOtherTabs": {
+    "message": "Fermer les autres onglets"
+  },
+  "closeTabsBelow": {
+    "message": "Fermer les onglets en dessous"
+  },
+  "settings": {
+    "message": "Paramètres"
+  },
+  "settingsPageTitle": {
+    "message": "Paramètres de Tree of Tabs"
+  },
+  "newTabsHeading": {
+    "message": "Nouveaux onglets"
+  },
+  "placeTabs": {
+    "message": "Placer les onglets ouverts depuis un onglet"
+  },
+  "placeTabsHint": {
+    "message": "Liens, clics du milieu et pages qui ouvrent des onglets"
+  },
+  "asLastChild": {
+    "message": "Comme dernier enfant"
+  },
+  "asFirstChild": {
+    "message": "Comme premier enfant"
+  },
+  "newTabAsChildSetting": {
+    "message": "Ouvrir les nouveaux onglets (Ctrl+T) comme enfants de l'onglet actuel"
+  },
+  "newTabAsChildHint": {
+    "message": "Désactivé : les nouveaux onglets vides commencent leur propre arbre"
+  },
+  "closingTabsHeading": {
+    "message": "Fermeture des onglets"
+  },
+  "whenParentClosed": {
+    "message": "Quand un onglet parent est fermé"
+  },
+  "promoteFirst": {
+    "message": "Remonter le premier enfant"
+  },
+  "promoteAll": {
+    "message": "Remonter tous les enfants d'un niveau"
+  },
+  "closeAllChildren": {
+    "message": "Fermer aussi ses enfants"
+  },
+  "closeCollapsedTree": {
+    "message": "Fermer tout l'arbre quand son parent réduit est fermé"
+  },
+  "closeCollapsedTreeHint": {
+    "message": "Les onglets masqués se ferment avec le parent visible"
+  },
+  "appearanceHeading": {
+    "message": "Apparence"
+  },
+  "density": {
+    "message": "Densité"
+  },
+  "comfortable": {
+    "message": "Confortable"
+  },
+  "compact": {
+    "message": "Compacte"
+  },
+  "indentation": {
+    "message": "Retrait par niveau"
+  },
+  "medium": {
+    "message": "Moyen"
+  },
+  "wide": {
+    "message": "Large"
+  },
+  "hideGuideLines": {
+    "message": "Masquer les lignes de repère"
+  },
+  "hideGuideLinesHint": {
+    "message": "Les lignes fines qui relient chaque onglet à ses enfants. Les couleurs des groupes d'onglets restent visibles."
+  },
+  "turnOffCollapsing": {
+    "message": "Désactiver la réduction"
+  },
+  "turnOffCollapsingHint": {
+    "message": "Supprime les flèches et les options de réduction, et garde chaque arbre développé"
+  },
+  "autoExpand": {
+    "message": "Développer un arbre réduit quand l'un de ses onglets est sélectionné"
+  },
+  "autoExpandHint": {
+    "message": "Par exemple en changeant d'onglet avec Ctrl+Tab"
+  },
+  "hideInFullscreen": {
+    "message": "Masquer l'arbre quand une page passe en plein écran"
+  },
+  "hideInFullscreenHint": {
+    "message": "Par exemple une vidéo. Chrome ne permet pas aux extensions de rouvrir elles-mêmes le panneau latéral : réaffichez-le ensuite avec le bouton de la barre d'outils ou son raccourci clavier."
+  },
+  "advancedHeading": {
+    "message": "Paramètres avancés"
+  },
+  "advancedNote": {
+    "message": "Ces options modifient le comportement habituel de Chrome."
+  },
+  "keepWindow": {
+    "message": "Garder la fenêtre ouverte quand son dernier onglet est fermé depuis l'arbre"
+  },
+  "keepWindowHint": {
+    "message": "Normalement, Chrome ferme une fenêtre en même temps que son dernier onglet. Avec cette option, fermer le dernier onglet depuis l'arbre ouvre d'abord un nouvel onglet, et la fenêtre reste ouverte. Le fermer avec le raccourci clavier ou depuis les onglets en haut de la fenêtre ferme toujours la fenêtre, comme d'habitude."
+  },
+  "notAvailableWhile": {
+    "message": "Indisponible tant que « $SETTING$ » est activé",
+    "placeholders": {
+      "setting": {
+        "content": "$1",
+        "example": "Turn off collapsing"
+      }
+    }
+  },
+  "notNeededCloseAll": {
+    "message": "Inutile : fermer un parent ferme déjà ses enfants"
+  },
+  "sidePanelTip": {
+    "message": "Astuce : Chrome peut afficher le panneau latéral à gauche. Ouvrez $LINK$ et réglez $SETTING$ sur $VALUE$.",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "chrome://settings/appearance"
+      },
+      "setting": {
+        "content": "$2",
+        "example": "Side panel position"
+      },
+      "value": {
+        "content": "$3",
+        "example": "Left"
+      }
+    }
+  },
+  "chromeSidePanelPosition": {
+    "message": "Position du panneau latéral"
+  },
+  "chromeShowOnLeft": {
+    "message": "À gauche"
+  },
+  "feedback": {
+    "message": "Un bug ? $REPORT$. Une idée ? $SUGGEST$.",
+    "placeholders": {
+      "report": {
+        "content": "$1",
+        "example": "Report it on GitHub"
+      },
+      "suggest": {
+        "content": "$2",
+        "example": "Suggest a feature"
+      }
+    }
+  },
+  "reportIt": {
+    "message": "Signalez-le sur GitHub"
+  },
+  "suggestFeature": {
+    "message": "Proposez une fonctionnalité"
+  },
+  "madeBy": {
+    "message": "Tree of Tabs est conçu avec soin par Lawand, un développeur indépendant."
+  },
+  "macApps": {
+    "message": "Si vous aimez garder vos onglets bien rangés, vous aimerez peut-être Taskbar, mon app pour passer d'une fenêtre à l'autre sur Mac."
+  },
+  "discover": {
+    "message": "Découvrez mes autres logiciels sur $SITE$ et suivez $ACCOUNT$ sur X.",
+    "placeholders": {
+      "site": {
+        "content": "$1",
+        "example": "lawand.io"
+      },
+      "account": {
+        "content": "$2",
+        "example": "@lawand_dot_io"
+      }
+    }
+  }
+}

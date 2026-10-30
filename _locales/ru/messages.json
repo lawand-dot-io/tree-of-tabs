@@ -1,0 +1,343 @@
+{
+  "extDescription": {
+    "message": "Вертикальные вкладки деревом на боковой панели. Вкладки, открытые со страницы, появляются под ней, их можно перетаскивать."
+  },
+  "actionTitle": {
+    "message": "Показать Tree of Tabs"
+  },
+  "commandDescription": {
+    "message": "Показать или скрыть дерево"
+  },
+  "pinnedTabs": {
+    "message": "Закреплённые вкладки"
+  },
+  "tabs": {
+    "message": "Вкладки"
+  },
+  "newTab": {
+    "message": "Новая вкладка"
+  },
+  "newTabTooltip": {
+    "message": "Новая вкладка\nСредний щелчок: новая вкладка под текущей"
+  },
+  "untitledTab": {
+    "message": "Новая вкладка"
+  },
+  "closeTab": {
+    "message": "Закрыть вкладку"
+  },
+  "expand": {
+    "message": "Развернуть"
+  },
+  "collapse": {
+    "message": "Свернуть"
+  },
+  "muteTab": {
+    "message": "Отключить звук на вкладке"
+  },
+  "unmuteTab": {
+    "message": "Включить звук на вкладке"
+  },
+  "muteTabs": {
+    "message": "Отключить звук на вкладках"
+  },
+  "unmuteTabs": {
+    "message": "Включить звук на вкладках"
+  },
+  "windowTipTitle": {
+    "message": "У каждого окна своя боковая панель."
+  },
+  "windowTipShortcut": {
+    "message": "$TITLE$ Chrome не разрешает расширениям открывать её самостоятельно, поэтому в новом окне откройте дерево кнопкой на панели инструментов или сочетанием клавиш $SHORTCUT$.",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Each window has its own side panel."
+      },
+      "shortcut": {
+        "content": "$2",
+        "example": "Alt+Shift+T"
+      }
+    }
+  },
+  "windowTip": {
+    "message": "$TITLE$ Chrome не разрешает расширениям открывать её самостоятельно, поэтому в новом окне откройте дерево кнопкой на панели инструментов.",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Each window has its own side panel."
+      }
+    }
+  },
+  "gotIt": {
+    "message": "ОК"
+  },
+  "fullscreenTitle": {
+    "message": "Скрывать дерево в полноэкранном режиме?"
+  },
+  "fullscreenIntro": {
+    "message": "Chrome оставляет боковую панель открытой рядом с видео и страницами в полноэкранном режиме. Tree of Tabs может закрывать её, когда вы переходите в полноэкранный режим."
+  },
+  "fullscreenReopenShortcut": {
+    "message": "Chrome не разрешает расширениям снова открывать боковую панель самостоятельно, поэтому потом вернуть дерево можно кнопкой на панели инструментов или сочетанием клавиш $SHORTCUT$.",
+    "placeholders": {
+      "shortcut": {
+        "content": "$1",
+        "example": "Alt+Shift+T"
+      }
+    }
+  },
+  "fullscreenReopen": {
+    "message": "Chrome не разрешает расширениям снова открывать боковую панель самостоятельно, поэтому потом вернуть дерево можно кнопкой на панели инструментов."
+  },
+  "hideDuringFullscreen": {
+    "message": "Скрывать в полноэкранном режиме"
+  },
+  "keepItOpen": {
+    "message": "Оставить открытой"
+  },
+  "changeLaterInSettings": {
+    "message": "Это можно изменить позже в настройках."
+  },
+  "newTabAsChild": {
+    "message": "Новая дочерняя вкладка"
+  },
+  "newTabUnderCurrent": {
+    "message": "Новая вкладка под текущей"
+  },
+  "reload": {
+    "message": "Перезагрузить"
+  },
+  "duplicate": {
+    "message": "Дублировать"
+  },
+  "pin": {
+    "message": "Закрепить"
+  },
+  "unpin": {
+    "message": "Открепить"
+  },
+  "expandTree": {
+    "message": "Развернуть дерево"
+  },
+  "collapseTree": {
+    "message": "Свернуть дерево"
+  },
+  "collapseAll": {
+    "message": "Свернуть все"
+  },
+  "expandAll": {
+    "message": "Развернуть все"
+  },
+  "indent": {
+    "message": "Увеличить отступ"
+  },
+  "outdent": {
+    "message": "Уменьшить отступ"
+  },
+  "moveToNewWindow": {
+    "message": "Переместить в новое окно"
+  },
+  "moveTreeToNewWindow": {
+    "message": "Переместить дерево в новое окно"
+  },
+  "moveTabsToNewWindow": {
+    "message": "Переместить вкладки в новое окно"
+  },
+  "closeChildren": {
+    "message": "Закрыть дочерние вкладки"
+  },
+  "closeTree": {
+    "message": "Закрыть дерево"
+  },
+  "close": {
+    "message": "Закрыть"
+  },
+  "closeTabs": {
+    "message": "Закрыть вкладки"
+  },
+  "closeOtherTabs": {
+    "message": "Закрыть другие вкладки"
+  },
+  "closeTabsBelow": {
+    "message": "Закрыть вкладки ниже"
+  },
+  "settings": {
+    "message": "Настройки"
+  },
+  "settingsPageTitle": {
+    "message": "Настройки Tree of Tabs"
+  },
+  "newTabsHeading": {
+    "message": "Новые вкладки"
+  },
+  "placeTabs": {
+    "message": "Куда помещать вкладки, открытые из другой вкладки"
+  },
+  "placeTabsHint": {
+    "message": "Ссылки, средний щелчок и страницы, которые открывают вкладки"
+  },
+  "asLastChild": {
+    "message": "Последней дочерней вкладкой"
+  },
+  "asFirstChild": {
+    "message": "Первой дочерней вкладкой"
+  },
+  "newTabAsChildSetting": {
+    "message": "Открывать новые вкладки (Ctrl+T) как дочерние для текущей"
+  },
+  "newTabAsChildHint": {
+    "message": "Если выключено, пустые новые вкладки начинают своё дерево"
+  },
+  "closingTabsHeading": {
+    "message": "Закрытие вкладок"
+  },
+  "whenParentClosed": {
+    "message": "При закрытии родительской вкладки"
+  },
+  "promoteFirst": {
+    "message": "Поднять первую дочернюю вкладку"
+  },
+  "promoteAll": {
+    "message": "Поднять все дочерние на уровень выше"
+  },
+  "closeAllChildren": {
+    "message": "Закрыть и дочерние вкладки"
+  },
+  "closeCollapsedTree": {
+    "message": "Закрывать всё дерево при закрытии свёрнутой родительской вкладки"
+  },
+  "closeCollapsedTreeHint": {
+    "message": "Скрытые вкладки закрываются вместе с видимой родительской"
+  },
+  "appearanceHeading": {
+    "message": "Внешний вид"
+  },
+  "density": {
+    "message": "Плотность"
+  },
+  "comfortable": {
+    "message": "Свободно"
+  },
+  "compact": {
+    "message": "Компактно"
+  },
+  "indentation": {
+    "message": "Отступ для каждого уровня"
+  },
+  "medium": {
+    "message": "Средний"
+  },
+  "wide": {
+    "message": "Широкий"
+  },
+  "hideGuideLines": {
+    "message": "Скрыть направляющие линии"
+  },
+  "hideGuideLinesHint": {
+    "message": "Тонкие линии от каждой вкладки к её дочерним. Цвета групп вкладок по-прежнему видны."
+  },
+  "turnOffCollapsing": {
+    "message": "Отключить сворачивание"
+  },
+  "turnOffCollapsingHint": {
+    "message": "Убирает стрелки и команды сворачивания, все деревья остаются развёрнутыми"
+  },
+  "autoExpand": {
+    "message": "Разворачивать свёрнутое дерево, когда выбрана одна из его вкладок"
+  },
+  "autoExpandHint": {
+    "message": "Например, при переключении вкладок с помощью Ctrl+Tab"
+  },
+  "hideInFullscreen": {
+    "message": "Скрывать дерево, когда страница переходит в полноэкранный режим"
+  },
+  "hideInFullscreenHint": {
+    "message": "Например, при просмотре видео. Chrome не разрешает расширениям снова открывать боковую панель самостоятельно, поэтому потом её можно вернуть кнопкой на панели инструментов или сочетанием клавиш."
+  },
+  "advancedHeading": {
+    "message": "Дополнительно"
+  },
+  "advancedNote": {
+    "message": "Эти настройки меняют обычное поведение Chrome."
+  },
+  "keepWindow": {
+    "message": "Не закрывать окно, когда его последняя вкладка закрыта из дерева"
+  },
+  "keepWindowHint": {
+    "message": "Обычно Chrome закрывает окно вместе с последней вкладкой. Если этот параметр включён, при закрытии последней вкладки из дерева сначала открывается новая вкладка, и окно остаётся открытым. Если закрыть вкладку сочетанием клавиш или на панели вкладок вверху окна, окно закроется как обычно."
+  },
+  "notAvailableWhile": {
+    "message": "Недоступно, пока включён параметр «$SETTING$»",
+    "placeholders": {
+      "setting": {
+        "content": "$1",
+        "example": "Turn off collapsing"
+      }
+    }
+  },
+  "notNeededCloseAll": {
+    "message": "Не нужно: при закрытии родительской вкладки её дочерние уже закрываются"
+  },
+  "sidePanelTip": {
+    "message": "Совет: Chrome может показывать боковую панель слева. Откройте $LINK$ и выберите для параметра $SETTING$ значение $VALUE$.",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "chrome://settings/appearance"
+      },
+      "setting": {
+        "content": "$2",
+        "example": "Side panel position"
+      },
+      "value": {
+        "content": "$3",
+        "example": "Left"
+      }
+    }
+  },
+  "chromeSidePanelPosition": {
+    "message": "Расположение боковой панели"
+  },
+  "chromeShowOnLeft": {
+    "message": "Слева"
+  },
+  "feedback": {
+    "message": "Нашли ошибку? $REPORT$. Есть идея? $SUGGEST$.",
+    "placeholders": {
+      "report": {
+        "content": "$1",
+        "example": "Report it on GitHub"
+      },
+      "suggest": {
+        "content": "$2",
+        "example": "Suggest a feature"
+      }
+    }
+  },
+  "reportIt": {
+    "message": "Сообщите о ней на GitHub"
+  },
+  "suggestFeature": {
+    "message": "Предложите функцию"
+  },
+  "madeBy": {
+    "message": "Tree of Tabs с заботой создаёт Lawand, независимый разработчик."
+  },
+  "macApps": {
+    "message": "Если вы любите порядок во вкладках, вам может понравиться Taskbar, моё приложение для переключения между окнами на Mac."
+  },
+  "discover": {
+    "message": "Другие мои программы можно найти на $SITE$, а в X подписывайтесь на $ACCOUNT$.",
+    "placeholders": {
+      "site": {
+        "content": "$1",
+        "example": "lawand.io"
+      },
+      "account": {
+        "content": "$2",
+        "example": "@lawand_dot_io"
+      }
+    }
+  }
+}

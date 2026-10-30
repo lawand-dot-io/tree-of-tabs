@@ -957,8 +957,10 @@ async function showShortcut() {
   const commands = await chrome.commands.getAll().catch(() => []);
   const shortcut = commands.find((c) => c.name === '_execute_action')?.shortcut;
   for (const el of document.querySelectorAll('[data-shortcut]')) {
-    if (shortcut) fill(el, `${el.dataset.shortcut}Shortcut`, Object.assign(document.createElement('kbd'), { textContent: shortcut }));
-    else el.textContent = t(el.dataset.shortcut);
+    // The element's own children (the tip's bold first sentence) come first.
+    const parts = [...el.children];
+    if (shortcut) parts.push(Object.assign(document.createElement('kbd'), { textContent: shortcut }));
+    fill(el, `${el.dataset.shortcut}${shortcut ? 'Shortcut' : ''}`, ...parts);
   }
 }
 

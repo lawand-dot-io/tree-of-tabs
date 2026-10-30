@@ -1,0 +1,343 @@
+{
+  "extDescription": {
+    "message": "Vertikale Tabs als Baum in der Seitenleiste. Von einer Seite geöffnete Tabs erscheinen darunter und lassen sich verschieben."
+  },
+  "actionTitle": {
+    "message": "Tree of Tabs anzeigen"
+  },
+  "commandDescription": {
+    "message": "Baum ein- oder ausblenden"
+  },
+  "pinnedTabs": {
+    "message": "Angepinnte Tabs"
+  },
+  "tabs": {
+    "message": "Tabs"
+  },
+  "newTab": {
+    "message": "Neuer Tab"
+  },
+  "newTabTooltip": {
+    "message": "Neuer Tab\nMittelklick: neuer Tab unter dem aktuellen Tab"
+  },
+  "untitledTab": {
+    "message": "Neuer Tab"
+  },
+  "closeTab": {
+    "message": "Tab schließen"
+  },
+  "expand": {
+    "message": "Aufklappen"
+  },
+  "collapse": {
+    "message": "Zuklappen"
+  },
+  "muteTab": {
+    "message": "Tab stummschalten"
+  },
+  "unmuteTab": {
+    "message": "Stummschaltung des Tabs aufheben"
+  },
+  "muteTabs": {
+    "message": "Tabs stummschalten"
+  },
+  "unmuteTabs": {
+    "message": "Stummschaltung der Tabs aufheben"
+  },
+  "windowTipTitle": {
+    "message": "Jedes Fenster hat seine eigene Seitenleiste."
+  },
+  "windowTipShortcut": {
+    "message": "$TITLE$ Chrome erlaubt Erweiterungen nicht, sie selbst zu öffnen. Zeigen Sie den Baum in einem neuen Fenster deshalb über die Schaltfläche in der Symbolleiste oder mit $SHORTCUT$ an.",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Each window has its own side panel."
+      },
+      "shortcut": {
+        "content": "$2",
+        "example": "Alt+Shift+T"
+      }
+    }
+  },
+  "windowTip": {
+    "message": "$TITLE$ Chrome erlaubt Erweiterungen nicht, sie selbst zu öffnen. Zeigen Sie den Baum in einem neuen Fenster deshalb über die Schaltfläche in der Symbolleiste an.",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Each window has its own side panel."
+      }
+    }
+  },
+  "gotIt": {
+    "message": "OK"
+  },
+  "fullscreenTitle": {
+    "message": "Baum im Vollbildmodus ausblenden?"
+  },
+  "fullscreenIntro": {
+    "message": "Chrome lässt die Seitenleiste neben Videos und Seiten im Vollbildmodus geöffnet. Tree of Tabs kann sie schließen, wenn Sie in den Vollbildmodus wechseln."
+  },
+  "fullscreenReopenShortcut": {
+    "message": "Chrome erlaubt Erweiterungen nicht, die Seitenleiste selbst wieder zu öffnen. Danach holen Sie den Baum über die Schaltfläche in der Symbolleiste oder mit $SHORTCUT$ zurück.",
+    "placeholders": {
+      "shortcut": {
+        "content": "$1",
+        "example": "Alt+Shift+T"
+      }
+    }
+  },
+  "fullscreenReopen": {
+    "message": "Chrome erlaubt Erweiterungen nicht, die Seitenleiste selbst wieder zu öffnen. Danach holen Sie den Baum über die Schaltfläche in der Symbolleiste zurück."
+  },
+  "hideDuringFullscreen": {
+    "message": "Im Vollbildmodus ausblenden"
+  },
+  "keepItOpen": {
+    "message": "Geöffnet lassen"
+  },
+  "changeLaterInSettings": {
+    "message": "Sie können das später in den Einstellungen ändern."
+  },
+  "newTabAsChild": {
+    "message": "Neuer untergeordneter Tab"
+  },
+  "newTabUnderCurrent": {
+    "message": "Neuer Tab unter dem aktuellen Tab"
+  },
+  "reload": {
+    "message": "Neu laden"
+  },
+  "duplicate": {
+    "message": "Duplizieren"
+  },
+  "pin": {
+    "message": "Anpinnen"
+  },
+  "unpin": {
+    "message": "Loslösen"
+  },
+  "expandTree": {
+    "message": "Baum aufklappen"
+  },
+  "collapseTree": {
+    "message": "Baum zuklappen"
+  },
+  "collapseAll": {
+    "message": "Alle zuklappen"
+  },
+  "expandAll": {
+    "message": "Alle aufklappen"
+  },
+  "indent": {
+    "message": "Einrücken"
+  },
+  "outdent": {
+    "message": "Ausrücken"
+  },
+  "moveToNewWindow": {
+    "message": "In neues Fenster verschieben"
+  },
+  "moveTreeToNewWindow": {
+    "message": "Baum in neues Fenster verschieben"
+  },
+  "moveTabsToNewWindow": {
+    "message": "Tabs in neues Fenster verschieben"
+  },
+  "closeChildren": {
+    "message": "Untergeordnete Tabs schließen"
+  },
+  "closeTree": {
+    "message": "Baum schließen"
+  },
+  "close": {
+    "message": "Schließen"
+  },
+  "closeTabs": {
+    "message": "Tabs schließen"
+  },
+  "closeOtherTabs": {
+    "message": "Andere Tabs schließen"
+  },
+  "closeTabsBelow": {
+    "message": "Tabs darunter schließen"
+  },
+  "settings": {
+    "message": "Einstellungen"
+  },
+  "settingsPageTitle": {
+    "message": "Einstellungen für Tree of Tabs"
+  },
+  "newTabsHeading": {
+    "message": "Neue Tabs"
+  },
+  "placeTabs": {
+    "message": "Von einem Tab geöffnete Tabs einordnen"
+  },
+  "placeTabsHint": {
+    "message": "Links, Mittelklicks und Seiten, die Tabs öffnen"
+  },
+  "asLastChild": {
+    "message": "Als letzten untergeordneten Tab"
+  },
+  "asFirstChild": {
+    "message": "Als ersten untergeordneten Tab"
+  },
+  "newTabAsChildSetting": {
+    "message": "Neue Tabs (Strg+T) unter dem aktuellen Tab öffnen"
+  },
+  "newTabAsChildHint": {
+    "message": "Aus: Leere neue Tabs beginnen einen eigenen Baum"
+  },
+  "closingTabsHeading": {
+    "message": "Tabs schließen"
+  },
+  "whenParentClosed": {
+    "message": "Wenn ein übergeordneter Tab geschlossen wird"
+  },
+  "promoteFirst": {
+    "message": "Erster untergeordneter Tab rückt nach"
+  },
+  "promoteAll": {
+    "message": "Alle untergeordneten Tabs eine Ebene höher"
+  },
+  "closeAllChildren": {
+    "message": "Untergeordnete Tabs auch schließen"
+  },
+  "closeCollapsedTree": {
+    "message": "Ganzen Baum schließen, wenn sein zugeklappter übergeordneter Tab geschlossen wird"
+  },
+  "closeCollapsedTreeHint": {
+    "message": "Ausgeblendete Tabs werden mit dem sichtbaren übergeordneten Tab geschlossen"
+  },
+  "appearanceHeading": {
+    "message": "Darstellung"
+  },
+  "density": {
+    "message": "Dichte"
+  },
+  "comfortable": {
+    "message": "Großzügig"
+  },
+  "compact": {
+    "message": "Kompakt"
+  },
+  "indentation": {
+    "message": "Einrückung pro Ebene"
+  },
+  "medium": {
+    "message": "Mittel"
+  },
+  "wide": {
+    "message": "Breit"
+  },
+  "hideGuideLines": {
+    "message": "Hilfslinien ausblenden"
+  },
+  "hideGuideLinesHint": {
+    "message": "Die dünnen Linien von jedem Tab zu seinen untergeordneten Tabs. Die Farben von Tabgruppen bleiben sichtbar."
+  },
+  "turnOffCollapsing": {
+    "message": "Zuklappen deaktivieren"
+  },
+  "turnOffCollapsingHint": {
+    "message": "Entfernt die Pfeile und die Optionen zum Zuklappen und lässt jeden Baum aufgeklappt"
+  },
+  "autoExpand": {
+    "message": "Zugeklappten Baum aufklappen, wenn einer seiner Tabs ausgewählt wird"
+  },
+  "autoExpandHint": {
+    "message": "Zum Beispiel beim Wechseln zwischen Tabs mit Strg+Tab"
+  },
+  "hideInFullscreen": {
+    "message": "Baum ausblenden, wenn eine Seite in den Vollbildmodus wechselt"
+  },
+  "hideInFullscreenHint": {
+    "message": "Zum Beispiel bei einem Video. Chrome erlaubt Erweiterungen nicht, die Seitenleiste selbst wieder zu öffnen. Holen Sie sie danach über die Schaltfläche in der Symbolleiste oder ihre Tastenkombination zurück."
+  },
+  "advancedHeading": {
+    "message": "Erweitert"
+  },
+  "advancedNote": {
+    "message": "Diese Optionen ändern das normale Verhalten von Chrome."
+  },
+  "keepWindow": {
+    "message": "Fenster geöffnet lassen, wenn sein letzter Tab im Baum geschlossen wird"
+  },
+  "keepWindowHint": {
+    "message": "Normalerweise schließt Chrome ein Fenster zusammen mit seinem letzten Tab. Ist diese Option aktiviert, öffnet sich beim Schließen des letzten Tabs im Baum zuerst ein neuer Tab, sodass das Fenster geöffnet bleibt. Wenn Sie den Tab mit der Tastenkombination oder über die Tabs oben im Fenster schließen, wird das Fenster wie gewohnt geschlossen."
+  },
+  "notAvailableWhile": {
+    "message": "Nicht verfügbar, solange „$SETTING$“ aktiviert ist",
+    "placeholders": {
+      "setting": {
+        "content": "$1",
+        "example": "Turn off collapsing"
+      }
+    }
+  },
+  "notNeededCloseAll": {
+    "message": "Nicht nötig: Beim Schließen eines übergeordneten Tabs werden seine untergeordneten Tabs bereits geschlossen"
+  },
+  "sidePanelTip": {
+    "message": "Tipp: Chrome kann die Seitenleiste links anzeigen. Öffnen Sie $LINK$ und setzen Sie $SETTING$ auf $VALUE$.",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "chrome://settings/appearance"
+      },
+      "setting": {
+        "content": "$2",
+        "example": "Side panel position"
+      },
+      "value": {
+        "content": "$3",
+        "example": "Left"
+      }
+    }
+  },
+  "chromeSidePanelPosition": {
+    "message": "Position der Seitenleiste"
+  },
+  "chromeShowOnLeft": {
+    "message": "Links"
+  },
+  "feedback": {
+    "message": "Fehler gefunden? $REPORT$. Eine Idee? $SUGGEST$.",
+    "placeholders": {
+      "report": {
+        "content": "$1",
+        "example": "Report it on GitHub"
+      },
+      "suggest": {
+        "content": "$2",
+        "example": "Suggest a feature"
+      }
+    }
+  },
+  "reportIt": {
+    "message": "Auf GitHub melden"
+  },
+  "suggestFeature": {
+    "message": "Funktion vorschlagen"
+  },
+  "madeBy": {
+    "message": "Tree of Tabs wird mit Sorgfalt von Lawand entwickelt, einem unabhängigen Entwickler."
+  },
+  "macApps": {
+    "message": "Wenn Sie Ihre Tabs gern ordentlich halten, gefällt Ihnen vielleicht Taskbar, meine App zum Wechseln zwischen Fenstern auf dem Mac."
+  },
+  "discover": {
+    "message": "Entdecken Sie meine andere Software auf $SITE$ und folgen Sie $ACCOUNT$ auf X.",
+    "placeholders": {
+      "site": {
+        "content": "$1",
+        "example": "lawand.io"
+      },
+      "account": {
+        "content": "$2",
+        "example": "@lawand_dot_io"
+      }
+    }
+  }
+}

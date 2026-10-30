@@ -1,0 +1,343 @@
+{
+  "extDescription": {
+    "message": "在侧边栏中以树状结构显示垂直标签页。从网页打开的标签页会嵌套在该网页下方，还可拖动重新排列。"
+  },
+  "actionTitle": {
+    "message": "显示 Tree of Tabs"
+  },
+  "commandDescription": {
+    "message": "显示或隐藏标签页树"
+  },
+  "pinnedTabs": {
+    "message": "已固定的标签页"
+  },
+  "tabs": {
+    "message": "标签页"
+  },
+  "newTab": {
+    "message": "新标签页"
+  },
+  "newTabTooltip": {
+    "message": "新标签页\n点击鼠标中键：在当前标签页下打开新标签页"
+  },
+  "untitledTab": {
+    "message": "新标签页"
+  },
+  "closeTab": {
+    "message": "关闭标签页"
+  },
+  "expand": {
+    "message": "展开"
+  },
+  "collapse": {
+    "message": "收起"
+  },
+  "muteTab": {
+    "message": "将此标签页静音"
+  },
+  "unmuteTab": {
+    "message": "取消此标签页的静音"
+  },
+  "muteTabs": {
+    "message": "将这些标签页静音"
+  },
+  "unmuteTabs": {
+    "message": "取消这些标签页的静音"
+  },
+  "windowTipTitle": {
+    "message": "每个窗口都有自己的侧边栏。"
+  },
+  "windowTipShortcut": {
+    "message": "$TITLE$Chrome 不允许扩展程序自行打开侧边栏，因此在新窗口中，请使用工具栏按钮或 $SHORTCUT$ 显示标签页树。",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Each window has its own side panel."
+      },
+      "shortcut": {
+        "content": "$2",
+        "example": "Alt+Shift+T"
+      }
+    }
+  },
+  "windowTip": {
+    "message": "$TITLE$Chrome 不允许扩展程序自行打开侧边栏，因此在新窗口中，请使用工具栏按钮显示标签页树。",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Each window has its own side panel."
+      }
+    }
+  },
+  "gotIt": {
+    "message": "知道了"
+  },
+  "fullscreenTitle": {
+    "message": "全屏时隐藏标签页树？"
+  },
+  "fullscreenIntro": {
+    "message": "Chrome 会在全屏视频和网页旁保持侧边栏打开。Tree of Tabs 可以在您进入全屏时关闭侧边栏。"
+  },
+  "fullscreenReopenShortcut": {
+    "message": "Chrome 不允许扩展程序自行重新打开侧边栏，因此之后请使用工具栏按钮或 $SHORTCUT$ 重新显示标签页树。",
+    "placeholders": {
+      "shortcut": {
+        "content": "$1",
+        "example": "Alt+Shift+T"
+      }
+    }
+  },
+  "fullscreenReopen": {
+    "message": "Chrome 不允许扩展程序自行重新打开侧边栏，因此之后请使用工具栏按钮重新显示标签页树。"
+  },
+  "hideDuringFullscreen": {
+    "message": "全屏时隐藏"
+  },
+  "keepItOpen": {
+    "message": "保持打开"
+  },
+  "changeLaterInSettings": {
+    "message": "您以后可以在设置中更改此选项。"
+  },
+  "newTabAsChild": {
+    "message": "新建子标签页"
+  },
+  "newTabUnderCurrent": {
+    "message": "在当前标签页下新建标签页"
+  },
+  "reload": {
+    "message": "重新加载"
+  },
+  "duplicate": {
+    "message": "复制"
+  },
+  "pin": {
+    "message": "固定"
+  },
+  "unpin": {
+    "message": "取消固定"
+  },
+  "expandTree": {
+    "message": "展开树"
+  },
+  "collapseTree": {
+    "message": "收起树"
+  },
+  "collapseAll": {
+    "message": "全部收起"
+  },
+  "expandAll": {
+    "message": "全部展开"
+  },
+  "indent": {
+    "message": "增加缩进"
+  },
+  "outdent": {
+    "message": "减少缩进"
+  },
+  "moveToNewWindow": {
+    "message": "移至新窗口"
+  },
+  "moveTreeToNewWindow": {
+    "message": "将整个树移至新窗口"
+  },
+  "moveTabsToNewWindow": {
+    "message": "将标签页移至新窗口"
+  },
+  "closeChildren": {
+    "message": "关闭子标签页"
+  },
+  "closeTree": {
+    "message": "关闭整个树"
+  },
+  "close": {
+    "message": "关闭"
+  },
+  "closeTabs": {
+    "message": "关闭标签页"
+  },
+  "closeOtherTabs": {
+    "message": "关闭其他标签页"
+  },
+  "closeTabsBelow": {
+    "message": "关闭下方的标签页"
+  },
+  "settings": {
+    "message": "设置"
+  },
+  "settingsPageTitle": {
+    "message": "Tree of Tabs 设置"
+  },
+  "newTabsHeading": {
+    "message": "新标签页"
+  },
+  "placeTabs": {
+    "message": "从标签页打开的标签页的位置"
+  },
+  "placeTabsHint": {
+    "message": "链接、鼠标中键点击以及会打开标签页的网页"
+  },
+  "asLastChild": {
+    "message": "作为最后一个子标签页"
+  },
+  "asFirstChild": {
+    "message": "作为第一个子标签页"
+  },
+  "newTabAsChildSetting": {
+    "message": "将新标签页 (Ctrl+T) 作为当前标签页的子标签页打开"
+  },
+  "newTabAsChildHint": {
+    "message": "关闭时：空白的新标签页会成为一棵新树"
+  },
+  "closingTabsHeading": {
+    "message": "关闭标签页"
+  },
+  "whenParentClosed": {
+    "message": "关闭父标签页时"
+  },
+  "promoteFirst": {
+    "message": "将第一个子标签页上移"
+  },
+  "promoteAll": {
+    "message": "将所有子标签页上移一级"
+  },
+  "closeAllChildren": {
+    "message": "同时关闭其子标签页"
+  },
+  "closeCollapsedTree": {
+    "message": "关闭已收起的父标签页时关闭整个树"
+  },
+  "closeCollapsedTreeHint": {
+    "message": "隐藏的标签页会随可见的父标签页一起关闭"
+  },
+  "appearanceHeading": {
+    "message": "外观"
+  },
+  "density": {
+    "message": "密度"
+  },
+  "comfortable": {
+    "message": "宽松"
+  },
+  "compact": {
+    "message": "紧凑"
+  },
+  "indentation": {
+    "message": "每级缩进"
+  },
+  "medium": {
+    "message": "中"
+  },
+  "wide": {
+    "message": "宽"
+  },
+  "hideGuideLines": {
+    "message": "隐藏辅助线"
+  },
+  "hideGuideLinesHint": {
+    "message": "从每个标签页连到其子标签页的细线。标签页分组的颜色仍会显示。"
+  },
+  "turnOffCollapsing": {
+    "message": "关闭收起功能"
+  },
+  "turnOffCollapsingHint": {
+    "message": "移除箭头和收起选项，并让所有树保持展开"
+  },
+  "autoExpand": {
+    "message": "选中已收起树中的标签页时展开该树"
+  },
+  "autoExpandHint": {
+    "message": "例如使用 Ctrl+Tab 切换标签页时"
+  },
+  "hideInFullscreen": {
+    "message": "网页进入全屏时隐藏标签页树"
+  },
+  "hideInFullscreenHint": {
+    "message": "例如视频。Chrome 不允许扩展程序自行重新打开侧边栏，因此之后请使用工具栏按钮或其键盘快捷键重新显示。"
+  },
+  "advancedHeading": {
+    "message": "高级"
+  },
+  "advancedNote": {
+    "message": "以下选项会改变 Chrome 的默认行为。"
+  },
+  "keepWindow": {
+    "message": "从树中关闭最后一个标签页时保持窗口打开"
+  },
+  "keepWindowHint": {
+    "message": "Chrome 通常会在关闭最后一个标签页时一并关闭窗口。启用此选项后，从树中关闭最后一个标签页时会先打开一个新标签页，窗口会保持打开。使用键盘快捷键或窗口顶部的标签页关闭时，窗口仍会照常关闭。"
+  },
+  "notAvailableWhile": {
+    "message": "“$SETTING$”开启时不可用",
+    "placeholders": {
+      "setting": {
+        "content": "$1",
+        "example": "Turn off collapsing"
+      }
+    }
+  },
+  "notNeededCloseAll": {
+    "message": "无需设置：关闭父标签页时已经会关闭其子标签页"
+  },
+  "sidePanelTip": {
+    "message": "提示：Chrome 可以在左侧显示侧边栏。打开 $LINK$，将“$SETTING$”设为“$VALUE$”。",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "chrome://settings/appearance"
+      },
+      "setting": {
+        "content": "$2",
+        "example": "Side panel position"
+      },
+      "value": {
+        "content": "$3",
+        "example": "Left"
+      }
+    }
+  },
+  "chromeSidePanelPosition": {
+    "message": "侧边栏位置"
+  },
+  "chromeShowOnLeft": {
+    "message": "向左"
+  },
+  "feedback": {
+    "message": "发现了 bug？$REPORT$。有想法？$SUGGEST$。",
+    "placeholders": {
+      "report": {
+        "content": "$1",
+        "example": "Report it on GitHub"
+      },
+      "suggest": {
+        "content": "$2",
+        "example": "Suggest a feature"
+      }
+    }
+  },
+  "reportIt": {
+    "message": "在 GitHub 上报告"
+  },
+  "suggestFeature": {
+    "message": "提出功能建议"
+  },
+  "madeBy": {
+    "message": "Tree of Tabs 由独立开发者 Lawand 用心打造。"
+  },
+  "macApps": {
+    "message": "如果您喜欢让标签页井井有条，也许也会喜欢 Taskbar，这是我为 Mac 开发的窗口切换应用。"
+  },
+  "discover": {
+    "message": "欢迎访问 $SITE$ 了解我的其他软件，并在 X 上关注 $ACCOUNT$。",
+    "placeholders": {
+      "site": {
+        "content": "$1",
+        "example": "lawand.io"
+      },
+      "account": {
+        "content": "$2",
+        "example": "@lawand_dot_io"
+      }
+    }
+  }
+}

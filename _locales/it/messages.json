@@ -1,0 +1,343 @@
+{
+  "extDescription": {
+    "message": "Schede verticali ad albero nel riquadro laterale. Le schede aperte da una pagina si annidano sotto di essa e puoi trascinarle."
+  },
+  "actionTitle": {
+    "message": "Mostra Tree of Tabs"
+  },
+  "commandDescription": {
+    "message": "Mostra o nascondi l'albero"
+  },
+  "pinnedTabs": {
+    "message": "Schede fissate"
+  },
+  "tabs": {
+    "message": "Schede"
+  },
+  "newTab": {
+    "message": "Nuova scheda"
+  },
+  "newTabTooltip": {
+    "message": "Nuova scheda\nClic centrale: nuova scheda sotto la scheda attuale"
+  },
+  "untitledTab": {
+    "message": "Nuova scheda"
+  },
+  "closeTab": {
+    "message": "Chiudi scheda"
+  },
+  "expand": {
+    "message": "Espandi"
+  },
+  "collapse": {
+    "message": "Comprimi"
+  },
+  "muteTab": {
+    "message": "Disattiva audio scheda"
+  },
+  "unmuteTab": {
+    "message": "Riattiva audio scheda"
+  },
+  "muteTabs": {
+    "message": "Disattiva audio schede"
+  },
+  "unmuteTabs": {
+    "message": "Riattiva audio schede"
+  },
+  "windowTipTitle": {
+    "message": "Ogni finestra ha il suo riquadro laterale."
+  },
+  "windowTipShortcut": {
+    "message": "$TITLE$ Chrome non permette alle estensioni di aprirlo da sole, quindi in una nuova finestra mostra l'albero con il pulsante nella barra degli strumenti o con $SHORTCUT$.",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Each window has its own side panel."
+      },
+      "shortcut": {
+        "content": "$2",
+        "example": "Alt+Shift+T"
+      }
+    }
+  },
+  "windowTip": {
+    "message": "$TITLE$ Chrome non permette alle estensioni di aprirlo da sole, quindi in una nuova finestra mostra l'albero con il pulsante nella barra degli strumenti.",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Each window has its own side panel."
+      }
+    }
+  },
+  "gotIt": {
+    "message": "Ok"
+  },
+  "fullscreenTitle": {
+    "message": "Nascondere l'albero a schermo intero?"
+  },
+  "fullscreenIntro": {
+    "message": "Chrome lascia aperto il riquadro laterale accanto a video e pagine a schermo intero. Tree of Tabs può chiuderlo quando passi a schermo intero."
+  },
+  "fullscreenReopenShortcut": {
+    "message": "Chrome non permette alle estensioni di riaprire da sole il riquadro laterale, quindi in seguito puoi riportare l'albero con il pulsante nella barra degli strumenti o con $SHORTCUT$.",
+    "placeholders": {
+      "shortcut": {
+        "content": "$1",
+        "example": "Alt+Shift+T"
+      }
+    }
+  },
+  "fullscreenReopen": {
+    "message": "Chrome non permette alle estensioni di riaprire da sole il riquadro laterale, quindi in seguito puoi riportare l'albero con il pulsante nella barra degli strumenti."
+  },
+  "hideDuringFullscreen": {
+    "message": "Nascondi a schermo intero"
+  },
+  "keepItOpen": {
+    "message": "Lascialo aperto"
+  },
+  "changeLaterInSettings": {
+    "message": "Puoi cambiare questa scelta in seguito nelle impostazioni."
+  },
+  "newTabAsChild": {
+    "message": "Nuova scheda figlia"
+  },
+  "newTabUnderCurrent": {
+    "message": "Nuova scheda sotto quella attuale"
+  },
+  "reload": {
+    "message": "Ricarica"
+  },
+  "duplicate": {
+    "message": "Duplica"
+  },
+  "pin": {
+    "message": "Fissa"
+  },
+  "unpin": {
+    "message": "Stacca"
+  },
+  "expandTree": {
+    "message": "Espandi albero"
+  },
+  "collapseTree": {
+    "message": "Comprimi albero"
+  },
+  "collapseAll": {
+    "message": "Comprimi tutto"
+  },
+  "expandAll": {
+    "message": "Espandi tutto"
+  },
+  "indent": {
+    "message": "Aumenta rientro"
+  },
+  "outdent": {
+    "message": "Riduci rientro"
+  },
+  "moveToNewWindow": {
+    "message": "Sposta in una nuova finestra"
+  },
+  "moveTreeToNewWindow": {
+    "message": "Sposta albero in una nuova finestra"
+  },
+  "moveTabsToNewWindow": {
+    "message": "Sposta schede in una nuova finestra"
+  },
+  "closeChildren": {
+    "message": "Chiudi schede figlie"
+  },
+  "closeTree": {
+    "message": "Chiudi albero"
+  },
+  "close": {
+    "message": "Chiudi"
+  },
+  "closeTabs": {
+    "message": "Chiudi schede"
+  },
+  "closeOtherTabs": {
+    "message": "Chiudi le altre schede"
+  },
+  "closeTabsBelow": {
+    "message": "Chiudi le schede sotto"
+  },
+  "settings": {
+    "message": "Impostazioni"
+  },
+  "settingsPageTitle": {
+    "message": "Impostazioni di Tree of Tabs"
+  },
+  "newTabsHeading": {
+    "message": "Nuove schede"
+  },
+  "placeTabs": {
+    "message": "Posizione delle schede aperte da una scheda"
+  },
+  "placeTabsHint": {
+    "message": "Link, clic centrali e pagine che aprono schede"
+  },
+  "asLastChild": {
+    "message": "Come ultima scheda figlia"
+  },
+  "asFirstChild": {
+    "message": "Come prima scheda figlia"
+  },
+  "newTabAsChildSetting": {
+    "message": "Apri le nuove schede (Ctrl+T) come figlie della scheda attuale"
+  },
+  "newTabAsChildHint": {
+    "message": "Disattivato: le nuove schede vuote iniziano un proprio albero"
+  },
+  "closingTabsHeading": {
+    "message": "Chiusura delle schede"
+  },
+  "whenParentClosed": {
+    "message": "Quando si chiude una scheda madre"
+  },
+  "promoteFirst": {
+    "message": "Promuovi la prima scheda figlia"
+  },
+  "promoteAll": {
+    "message": "Sposta tutte le figlie su di un livello"
+  },
+  "closeAllChildren": {
+    "message": "Chiudi anche le sue figlie"
+  },
+  "closeCollapsedTree": {
+    "message": "Chiudi l'intero albero quando si chiude la sua scheda madre compressa"
+  },
+  "closeCollapsedTreeHint": {
+    "message": "Le schede nascoste si chiudono con la scheda madre visibile"
+  },
+  "appearanceHeading": {
+    "message": "Aspetto"
+  },
+  "density": {
+    "message": "Densità"
+  },
+  "comfortable": {
+    "message": "Comoda"
+  },
+  "compact": {
+    "message": "Compatta"
+  },
+  "indentation": {
+    "message": "Rientro per livello"
+  },
+  "medium": {
+    "message": "Medio"
+  },
+  "wide": {
+    "message": "Ampio"
+  },
+  "hideGuideLines": {
+    "message": "Nascondi le linee guida"
+  },
+  "hideGuideLinesHint": {
+    "message": "Le linee sottili che collegano ogni scheda alle sue figlie. I colori dei gruppi di schede restano visibili."
+  },
+  "turnOffCollapsing": {
+    "message": "Disattiva la compressione"
+  },
+  "turnOffCollapsingHint": {
+    "message": "Rimuove le frecce e le opzioni di compressione e tiene espanso ogni albero"
+  },
+  "autoExpand": {
+    "message": "Espandi un albero compresso quando viene selezionata una delle sue schede"
+  },
+  "autoExpandHint": {
+    "message": "Ad esempio passando da una scheda all'altra con Ctrl+Tab"
+  },
+  "hideInFullscreen": {
+    "message": "Nascondi l'albero quando una pagina passa a schermo intero"
+  },
+  "hideInFullscreenHint": {
+    "message": "Ad esempio un video. Chrome non permette alle estensioni di riaprire da sole il riquadro laterale, quindi in seguito riaprilo con il pulsante nella barra degli strumenti o con la sua scorciatoia da tastiera."
+  },
+  "advancedHeading": {
+    "message": "Avanzate"
+  },
+  "advancedNote": {
+    "message": "Queste opzioni cambiano il normale comportamento di Chrome."
+  },
+  "keepWindow": {
+    "message": "Mantieni aperta la finestra quando la sua ultima scheda viene chiusa dall'albero"
+  },
+  "keepWindowHint": {
+    "message": "Di solito Chrome chiude una finestra insieme alla sua ultima scheda. Con questa opzione attiva, chiudere l'ultima scheda dall'albero apre prima una nuova scheda, così la finestra resta aperta. Se la chiudi con la scorciatoia da tastiera o dalle schede in alto nella finestra, la finestra si chiude come sempre."
+  },
+  "notAvailableWhile": {
+    "message": "Non disponibile se «$SETTING$» è attivo",
+    "placeholders": {
+      "setting": {
+        "content": "$1",
+        "example": "Turn off collapsing"
+      }
+    }
+  },
+  "notNeededCloseAll": {
+    "message": "Non necessario: chiudere una scheda madre chiude già le sue figlie"
+  },
+  "sidePanelTip": {
+    "message": "Suggerimento: Chrome può mostrare il riquadro laterale a sinistra. Apri $LINK$ e imposta $SETTING$ su $VALUE$.",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "chrome://settings/appearance"
+      },
+      "setting": {
+        "content": "$2",
+        "example": "Side panel position"
+      },
+      "value": {
+        "content": "$3",
+        "example": "Left"
+      }
+    }
+  },
+  "chromeSidePanelPosition": {
+    "message": "Posizione del riquadro laterale"
+  },
+  "chromeShowOnLeft": {
+    "message": "Sinistra"
+  },
+  "feedback": {
+    "message": "Hai trovato un bug? $REPORT$. Hai un'idea? $SUGGEST$.",
+    "placeholders": {
+      "report": {
+        "content": "$1",
+        "example": "Report it on GitHub"
+      },
+      "suggest": {
+        "content": "$2",
+        "example": "Suggest a feature"
+      }
+    }
+  },
+  "reportIt": {
+    "message": "Segnalalo su GitHub"
+  },
+  "suggestFeature": {
+    "message": "Suggerisci una funzione"
+  },
+  "madeBy": {
+    "message": "Tree of Tabs è realizzato con cura da Lawand, uno sviluppatore indipendente."
+  },
+  "macApps": {
+    "message": "Se ti piace tenere le schede in ordine, potrebbe piacerti Taskbar, la mia app per passare da una finestra all'altra su Mac."
+  },
+  "discover": {
+    "message": "Scopri gli altri miei software su $SITE$ e segui $ACCOUNT$ su X.",
+    "placeholders": {
+      "site": {
+        "content": "$1",
+        "example": "lawand.io"
+      },
+      "account": {
+        "content": "$2",
+        "example": "@lawand_dot_io"
+      }
+    }
+  }
+}

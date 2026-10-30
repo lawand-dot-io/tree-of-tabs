@@ -117,7 +117,7 @@ want to tweak them.
 
 For the classic vertical tabs layout, put the side panel on the left: open
 `chrome://settings/appearance` and set **Side panel position** to
-**Show on left**.
+**Left**.
 
 ## Privacy
 

@@ -1,0 +1,343 @@
+{
+  "extDescription": {
+    "message": "측면 패널에 세로 탭을 트리로 표시합니다. 페이지에서 연 탭은 그 아래에 정리되며 드래그해서 다시 배치할 수 있습니다."
+  },
+  "actionTitle": {
+    "message": "Tree of Tabs 표시"
+  },
+  "commandDescription": {
+    "message": "트리 표시 또는 숨기기"
+  },
+  "pinnedTabs": {
+    "message": "고정된 탭"
+  },
+  "tabs": {
+    "message": "탭"
+  },
+  "newTab": {
+    "message": "새 탭"
+  },
+  "newTabTooltip": {
+    "message": "새 탭\n가운데 클릭: 현재 탭 아래에 새 탭 열기"
+  },
+  "untitledTab": {
+    "message": "새 탭"
+  },
+  "closeTab": {
+    "message": "탭 닫기"
+  },
+  "expand": {
+    "message": "펼치기"
+  },
+  "collapse": {
+    "message": "접기"
+  },
+  "muteTab": {
+    "message": "탭 음소거"
+  },
+  "unmuteTab": {
+    "message": "탭 음소거 해제"
+  },
+  "muteTabs": {
+    "message": "탭 음소거"
+  },
+  "unmuteTabs": {
+    "message": "탭 음소거 해제"
+  },
+  "windowTipTitle": {
+    "message": "창마다 별도의 측면 패널이 있습니다."
+  },
+  "windowTipShortcut": {
+    "message": "$TITLE$ Chrome에서는 확장 프로그램이 측면 패널을 직접 열 수 없으므로, 새 창에서는 툴바 버튼이나 $SHORTCUT$ 키로 트리를 표시하세요.",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Each window has its own side panel."
+      },
+      "shortcut": {
+        "content": "$2",
+        "example": "Alt+Shift+T"
+      }
+    }
+  },
+  "windowTip": {
+    "message": "$TITLE$ Chrome에서는 확장 프로그램이 측면 패널을 직접 열 수 없으므로, 새 창에서는 툴바 버튼으로 트리를 표시하세요.",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Each window has its own side panel."
+      }
+    }
+  },
+  "gotIt": {
+    "message": "확인"
+  },
+  "fullscreenTitle": {
+    "message": "전체화면에서 트리를 숨길까요?"
+  },
+  "fullscreenIntro": {
+    "message": "Chrome은 전체화면 동영상이나 페이지 옆에도 측면 패널을 열어 둡니다. Tree of Tabs는 전체화면으로 전환할 때 측면 패널을 닫을 수 있습니다."
+  },
+  "fullscreenReopenShortcut": {
+    "message": "Chrome에서는 확장 프로그램이 측면 패널을 직접 다시 열 수 없으므로, 그 후에는 툴바 버튼이나 $SHORTCUT$ 키로 트리를 다시 표시하세요.",
+    "placeholders": {
+      "shortcut": {
+        "content": "$1",
+        "example": "Alt+Shift+T"
+      }
+    }
+  },
+  "fullscreenReopen": {
+    "message": "Chrome에서는 확장 프로그램이 측면 패널을 직접 다시 열 수 없으므로, 그 후에는 툴바 버튼으로 트리를 다시 표시하세요."
+  },
+  "hideDuringFullscreen": {
+    "message": "전체화면에서 숨기기"
+  },
+  "keepItOpen": {
+    "message": "열어 두기"
+  },
+  "changeLaterInSettings": {
+    "message": "나중에 설정에서 변경할 수 있습니다."
+  },
+  "newTabAsChild": {
+    "message": "하위 탭으로 새 탭 열기"
+  },
+  "newTabUnderCurrent": {
+    "message": "현재 탭 아래에 새 탭 열기"
+  },
+  "reload": {
+    "message": "새로고침"
+  },
+  "duplicate": {
+    "message": "복제"
+  },
+  "pin": {
+    "message": "고정"
+  },
+  "unpin": {
+    "message": "고정 해제"
+  },
+  "expandTree": {
+    "message": "트리 펼치기"
+  },
+  "collapseTree": {
+    "message": "트리 접기"
+  },
+  "collapseAll": {
+    "message": "모두 접기"
+  },
+  "expandAll": {
+    "message": "모두 펼치기"
+  },
+  "indent": {
+    "message": "들여쓰기"
+  },
+  "outdent": {
+    "message": "내어쓰기"
+  },
+  "moveToNewWindow": {
+    "message": "새 창으로 이동"
+  },
+  "moveTreeToNewWindow": {
+    "message": "트리를 새 창으로 이동"
+  },
+  "moveTabsToNewWindow": {
+    "message": "탭을 새 창으로 이동"
+  },
+  "closeChildren": {
+    "message": "하위 탭 닫기"
+  },
+  "closeTree": {
+    "message": "트리 닫기"
+  },
+  "close": {
+    "message": "닫기"
+  },
+  "closeTabs": {
+    "message": "탭 닫기"
+  },
+  "closeOtherTabs": {
+    "message": "다른 탭 닫기"
+  },
+  "closeTabsBelow": {
+    "message": "아래쪽 탭 닫기"
+  },
+  "settings": {
+    "message": "설정"
+  },
+  "settingsPageTitle": {
+    "message": "Tree of Tabs 설정"
+  },
+  "newTabsHeading": {
+    "message": "새 탭"
+  },
+  "placeTabs": {
+    "message": "탭에서 연 탭의 위치"
+  },
+  "placeTabsHint": {
+    "message": "링크, 가운데 클릭, 탭을 여는 페이지"
+  },
+  "asLastChild": {
+    "message": "마지막 하위 탭으로"
+  },
+  "asFirstChild": {
+    "message": "첫 번째 하위 탭으로"
+  },
+  "newTabAsChildSetting": {
+    "message": "새 탭(Ctrl+T)을 현재 탭의 하위 탭으로 열기"
+  },
+  "newTabAsChildHint": {
+    "message": "사용 안함: 빈 새 탭은 별도의 트리로 시작합니다"
+  },
+  "closingTabsHeading": {
+    "message": "탭 닫기"
+  },
+  "whenParentClosed": {
+    "message": "상위 탭을 닫을 때"
+  },
+  "promoteFirst": {
+    "message": "첫 번째 하위 탭을 위로 올리기"
+  },
+  "promoteAll": {
+    "message": "모든 하위 탭을 한 단계 위로 올리기"
+  },
+  "closeAllChildren": {
+    "message": "하위 탭도 함께 닫기"
+  },
+  "closeCollapsedTree": {
+    "message": "접힌 상위 탭을 닫으면 트리 전체 닫기"
+  },
+  "closeCollapsedTreeHint": {
+    "message": "숨겨진 탭도 보이는 상위 탭과 함께 닫힙니다"
+  },
+  "appearanceHeading": {
+    "message": "모양"
+  },
+  "density": {
+    "message": "밀도"
+  },
+  "comfortable": {
+    "message": "넉넉하게"
+  },
+  "compact": {
+    "message": "좁게"
+  },
+  "indentation": {
+    "message": "단계별 들여쓰기"
+  },
+  "medium": {
+    "message": "보통"
+  },
+  "wide": {
+    "message": "넓게"
+  },
+  "hideGuideLines": {
+    "message": "안내선 숨기기"
+  },
+  "hideGuideLinesHint": {
+    "message": "각 탭에서 하위 탭으로 이어지는 가는 선입니다. 탭 그룹 색상은 계속 표시됩니다."
+  },
+  "turnOffCollapsing": {
+    "message": "접기 사용 안함"
+  },
+  "turnOffCollapsingHint": {
+    "message": "화살표와 접기 옵션을 없애고 모든 트리를 펼친 상태로 유지합니다"
+  },
+  "autoExpand": {
+    "message": "접힌 트리의 탭이 선택되면 트리 펼치기"
+  },
+  "autoExpandHint": {
+    "message": "예: Ctrl+Tab으로 탭을 전환할 때"
+  },
+  "hideInFullscreen": {
+    "message": "페이지가 전체화면으로 전환되면 트리 숨기기"
+  },
+  "hideInFullscreenHint": {
+    "message": "예: 동영상. Chrome에서는 확장 프로그램이 측면 패널을 직접 다시 열 수 없으므로, 그 후에는 툴바 버튼이나 단축키로 다시 표시하세요."
+  },
+  "advancedHeading": {
+    "message": "고급"
+  },
+  "advancedNote": {
+    "message": "아래 설정은 Chrome의 기본 동작을 변경합니다."
+  },
+  "keepWindow": {
+    "message": "트리에서 마지막 탭을 닫아도 창을 열어 두기"
+  },
+  "keepWindowHint": {
+    "message": "일반적으로 Chrome은 마지막 탭을 닫으면 창도 함께 닫습니다. 이 설정을 사용하면 트리에서 마지막 탭을 닫을 때 먼저 새 탭이 열려 창이 계속 열려 있습니다. 단축키나 창 상단의 탭에서 닫으면 평소처럼 창이 닫힙니다."
+  },
+  "notAvailableWhile": {
+    "message": "‘$SETTING$’ 설정이 켜져 있는 동안에는 사용할 수 없습니다",
+    "placeholders": {
+      "setting": {
+        "content": "$1",
+        "example": "Turn off collapsing"
+      }
+    }
+  },
+  "notNeededCloseAll": {
+    "message": "필요 없음: 상위 탭을 닫으면 하위 탭도 이미 함께 닫힙니다"
+  },
+  "sidePanelTip": {
+    "message": "도움말: Chrome에서 측면 패널을 왼쪽에 표시할 수 있습니다. $LINK$에서 $SETTING$를 $VALUE$으로 설정하세요.",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "chrome://settings/appearance"
+      },
+      "setting": {
+        "content": "$2",
+        "example": "Side panel position"
+      },
+      "value": {
+        "content": "$3",
+        "example": "Left"
+      }
+    }
+  },
+  "chromeSidePanelPosition": {
+    "message": "측면 패널 위치"
+  },
+  "chromeShowOnLeft": {
+    "message": "왼쪽"
+  },
+  "feedback": {
+    "message": "버그를 발견하셨나요? $REPORT$. 아이디어가 있으신가요? $SUGGEST$.",
+    "placeholders": {
+      "report": {
+        "content": "$1",
+        "example": "Report it on GitHub"
+      },
+      "suggest": {
+        "content": "$2",
+        "example": "Suggest a feature"
+      }
+    }
+  },
+  "reportIt": {
+    "message": "GitHub에서 신고하기"
+  },
+  "suggestFeature": {
+    "message": "기능 제안하기"
+  },
+  "madeBy": {
+    "message": "Tree of Tabs는 독립 개발자 Lawand가 정성껏 만들고 있습니다."
+  },
+  "macApps": {
+    "message": "탭을 깔끔하게 정리하는 것을 좋아하신다면 Mac에서 창을 전환하는 제 앱 Taskbar도 마음에 드실 거예요."
+  },
+  "discover": {
+    "message": "$SITE$에서 제 다른 소프트웨어를 만나 보시고, X에서 $ACCOUNT$를 팔로우하세요.",
+    "placeholders": {
+      "site": {
+        "content": "$1",
+        "example": "lawand.io"
+      },
+      "account": {
+        "content": "$2",
+        "example": "@lawand_dot_io"
+      }
+    }
+  }
+}

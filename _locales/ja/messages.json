@@ -1,0 +1,343 @@
+{
+  "extDescription": {
+    "message": "縦型タブをサイドパネルにツリー表示します。ページから開いたタブはそのページの下に入り、ドラッグで並べ替えられます。"
+  },
+  "actionTitle": {
+    "message": "Tree of Tabs を表示"
+  },
+  "commandDescription": {
+    "message": "ツリーを表示または非表示"
+  },
+  "pinnedTabs": {
+    "message": "固定したタブ"
+  },
+  "tabs": {
+    "message": "タブ"
+  },
+  "newTab": {
+    "message": "新しいタブ"
+  },
+  "newTabTooltip": {
+    "message": "新しいタブ\n中クリック: 現在のタブの下に新しいタブを開く"
+  },
+  "untitledTab": {
+    "message": "新しいタブ"
+  },
+  "closeTab": {
+    "message": "タブを閉じる"
+  },
+  "expand": {
+    "message": "展開"
+  },
+  "collapse": {
+    "message": "折りたたむ"
+  },
+  "muteTab": {
+    "message": "タブをミュート"
+  },
+  "unmuteTab": {
+    "message": "タブのミュートを解除"
+  },
+  "muteTabs": {
+    "message": "タブをミュート"
+  },
+  "unmuteTabs": {
+    "message": "タブのミュートを解除"
+  },
+  "windowTipTitle": {
+    "message": "サイドパネルはウィンドウごとに表示されます。"
+  },
+  "windowTipShortcut": {
+    "message": "$TITLE$Chrome では拡張機能がサイドパネルを自動で開くことはできません。新しいウィンドウでは、ツールバーのボタンまたは $SHORTCUT$ でツリーを表示してください。",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Each window has its own side panel."
+      },
+      "shortcut": {
+        "content": "$2",
+        "example": "Alt+Shift+T"
+      }
+    }
+  },
+  "windowTip": {
+    "message": "$TITLE$Chrome では拡張機能がサイドパネルを自動で開くことはできません。新しいウィンドウでは、ツールバーのボタンでツリーを表示してください。",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Each window has its own side panel."
+      }
+    }
+  },
+  "gotIt": {
+    "message": "OK"
+  },
+  "fullscreenTitle": {
+    "message": "全画面表示でツリーを非表示にしますか？"
+  },
+  "fullscreenIntro": {
+    "message": "Chrome では、全画面表示の動画やページの横でもサイドパネルが開いたままになります。Tree of Tabs は、全画面表示になったときにサイドパネルを閉じることができます。"
+  },
+  "fullscreenReopenShortcut": {
+    "message": "Chrome では拡張機能がサイドパネルを自動で開き直すことはできないため、その後はツールバーのボタンまたは $SHORTCUT$ でツリーを再表示してください。",
+    "placeholders": {
+      "shortcut": {
+        "content": "$1",
+        "example": "Alt+Shift+T"
+      }
+    }
+  },
+  "fullscreenReopen": {
+    "message": "Chrome では拡張機能がサイドパネルを自動で開き直すことはできないため、その後はツールバーのボタンでツリーを再表示してください。"
+  },
+  "hideDuringFullscreen": {
+    "message": "全画面表示で非表示にする"
+  },
+  "keepItOpen": {
+    "message": "開いたままにする"
+  },
+  "changeLaterInSettings": {
+    "message": "この設定は後で設定ページから変更できます。"
+  },
+  "newTabAsChild": {
+    "message": "子タブとして新しいタブを開く"
+  },
+  "newTabUnderCurrent": {
+    "message": "現在のタブの下に新しいタブを開く"
+  },
+  "reload": {
+    "message": "再読み込み"
+  },
+  "duplicate": {
+    "message": "タブを複製"
+  },
+  "pin": {
+    "message": "固定"
+  },
+  "unpin": {
+    "message": "固定を解除"
+  },
+  "expandTree": {
+    "message": "ツリーを展開"
+  },
+  "collapseTree": {
+    "message": "ツリーを折りたたむ"
+  },
+  "collapseAll": {
+    "message": "すべて折りたたむ"
+  },
+  "expandAll": {
+    "message": "すべて展開"
+  },
+  "indent": {
+    "message": "インデント"
+  },
+  "outdent": {
+    "message": "インデントを解除"
+  },
+  "moveToNewWindow": {
+    "message": "新しいウィンドウに移動"
+  },
+  "moveTreeToNewWindow": {
+    "message": "ツリーを新しいウィンドウに移動"
+  },
+  "moveTabsToNewWindow": {
+    "message": "タブを新しいウィンドウに移動"
+  },
+  "closeChildren": {
+    "message": "子タブを閉じる"
+  },
+  "closeTree": {
+    "message": "ツリーを閉じる"
+  },
+  "close": {
+    "message": "閉じる"
+  },
+  "closeTabs": {
+    "message": "タブを閉じる"
+  },
+  "closeOtherTabs": {
+    "message": "他のタブをすべて閉じる"
+  },
+  "closeTabsBelow": {
+    "message": "下にあるタブを閉じる"
+  },
+  "settings": {
+    "message": "設定"
+  },
+  "settingsPageTitle": {
+    "message": "Tree of Tabs の設定"
+  },
+  "newTabsHeading": {
+    "message": "新しいタブ"
+  },
+  "placeTabs": {
+    "message": "タブから開いたタブの位置"
+  },
+  "placeTabsHint": {
+    "message": "リンク、中クリック、タブを開くページ"
+  },
+  "asLastChild": {
+    "message": "最後の子タブとして"
+  },
+  "asFirstChild": {
+    "message": "最初の子タブとして"
+  },
+  "newTabAsChildSetting": {
+    "message": "新しいタブ（Ctrl+T）を現在のタブの子タブとして開く"
+  },
+  "newTabAsChildHint": {
+    "message": "オフ: 空白の新しいタブは独自のツリーになります"
+  },
+  "closingTabsHeading": {
+    "message": "タブを閉じるとき"
+  },
+  "whenParentClosed": {
+    "message": "親タブを閉じたとき"
+  },
+  "promoteFirst": {
+    "message": "最初の子タブを親の位置に上げる"
+  },
+  "promoteAll": {
+    "message": "すべての子タブを 1 階層上げる"
+  },
+  "closeAllChildren": {
+    "message": "子タブも閉じる"
+  },
+  "closeCollapsedTree": {
+    "message": "折りたたまれた親タブを閉じたらツリー全体を閉じる"
+  },
+  "closeCollapsedTreeHint": {
+    "message": "非表示のタブも、表示されている親タブと一緒に閉じます"
+  },
+  "appearanceHeading": {
+    "message": "デザイン"
+  },
+  "density": {
+    "message": "表示密度"
+  },
+  "comfortable": {
+    "message": "標準"
+  },
+  "compact": {
+    "message": "コンパクト"
+  },
+  "indentation": {
+    "message": "階層ごとのインデント"
+  },
+  "medium": {
+    "message": "中"
+  },
+  "wide": {
+    "message": "広い"
+  },
+  "hideGuideLines": {
+    "message": "ガイド線を非表示にする"
+  },
+  "hideGuideLinesHint": {
+    "message": "各タブから子タブにつながる細い線です。タブグループの色は引き続き表示されます。"
+  },
+  "turnOffCollapsing": {
+    "message": "折りたたみをオフにする"
+  },
+  "turnOffCollapsingHint": {
+    "message": "矢印と折りたたみのオプションがなくなり、すべてのツリーが展開されたままになります"
+  },
+  "autoExpand": {
+    "message": "折りたたまれたツリーのタブが選択されたらツリーを展開する"
+  },
+  "autoExpandHint": {
+    "message": "例: Ctrl+Tab でタブを切り替えたとき"
+  },
+  "hideInFullscreen": {
+    "message": "ページが全画面表示になったらツリーを非表示にする"
+  },
+  "hideInFullscreenHint": {
+    "message": "例: 動画。Chrome では拡張機能がサイドパネルを自動で開き直すことはできないため、その後はツールバーのボタンまたはキーボード ショートカットで再表示してください。"
+  },
+  "advancedHeading": {
+    "message": "詳細設定"
+  },
+  "advancedNote": {
+    "message": "以下の設定は Chrome の通常の動作を変更します。"
+  },
+  "keepWindow": {
+    "message": "ツリーから最後のタブを閉じたときにウィンドウを開いたままにする"
+  },
+  "keepWindowHint": {
+    "message": "通常、Chrome は最後のタブと一緒にウィンドウを閉じます。この設定をオンにすると、ツリーから最後のタブを閉じたときに先に新しいタブが開き、ウィンドウは開いたままになります。キーボード ショートカットやウィンドウ上部のタブから閉じた場合は、通常どおりウィンドウが閉じます。"
+  },
+  "notAvailableWhile": {
+    "message": "「$SETTING$」がオンの間は使用できません",
+    "placeholders": {
+      "setting": {
+        "content": "$1",
+        "example": "Turn off collapsing"
+      }
+    }
+  },
+  "notNeededCloseAll": {
+    "message": "不要: 親タブを閉じると子タブも閉じます"
+  },
+  "sidePanelTip": {
+    "message": "ヒント: Chrome ではサイドパネルを左側に表示できます。$LINK$ を開いて、[$SETTING$] を [$VALUE$] に設定してください。",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "chrome://settings/appearance"
+      },
+      "setting": {
+        "content": "$2",
+        "example": "Side panel position"
+      },
+      "value": {
+        "content": "$3",
+        "example": "Left"
+      }
+    }
+  },
+  "chromeSidePanelPosition": {
+    "message": "サイドパネルの位置"
+  },
+  "chromeShowOnLeft": {
+    "message": "左"
+  },
+  "feedback": {
+    "message": "不具合を見つけたら $REPORT$。アイデアがあれば $SUGGEST$。",
+    "placeholders": {
+      "report": {
+        "content": "$1",
+        "example": "Report it on GitHub"
+      },
+      "suggest": {
+        "content": "$2",
+        "example": "Suggest a feature"
+      }
+    }
+  },
+  "reportIt": {
+    "message": "GitHub で報告してください"
+  },
+  "suggestFeature": {
+    "message": "機能を提案してください"
+  },
+  "madeBy": {
+    "message": "Tree of Tabs は、個人開発者の Lawand が心を込めて開発しています。"
+  },
+  "macApps": {
+    "message": "タブを整理するのがお好きなら、Mac でウィンドウを切り替えるための私のアプリ Taskbar も気に入っていただけるかもしれません。"
+  },
+  "discover": {
+    "message": "私のその他のソフトウェアは $SITE$ でご覧いただけます。X では $ACCOUNT$ をフォローしてください。",
+    "placeholders": {
+      "site": {
+        "content": "$1",
+        "example": "lawand.io"
+      },
+      "account": {
+        "content": "$2",
+        "example": "@lawand_dot_io"
+      }
+    }
+  }
+}

@@ -1,0 +1,343 @@
+{
+  "extDescription": {
+    "message": "Yan panelde ağaç şeklinde dikey sekmeler. Bir sayfadan açtığınız sekmeler onun altına yerleşir ve sürükleyerek düzenlenebilir."
+  },
+  "actionTitle": {
+    "message": "Tree of Tabs'ı göster"
+  },
+  "commandDescription": {
+    "message": "Ağacı göster veya gizle"
+  },
+  "pinnedTabs": {
+    "message": "Sabitlenmiş sekmeler"
+  },
+  "tabs": {
+    "message": "Sekmeler"
+  },
+  "newTab": {
+    "message": "Yeni sekme"
+  },
+  "newTabTooltip": {
+    "message": "Yeni sekme\nOrta tıklama: geçerli sekmenin altında yeni sekme"
+  },
+  "untitledTab": {
+    "message": "Yeni Sekme"
+  },
+  "closeTab": {
+    "message": "Sekmeyi kapat"
+  },
+  "expand": {
+    "message": "Genişlet"
+  },
+  "collapse": {
+    "message": "Daralt"
+  },
+  "muteTab": {
+    "message": "Sekmenin sesini kapat"
+  },
+  "unmuteTab": {
+    "message": "Sekmenin sesini aç"
+  },
+  "muteTabs": {
+    "message": "Sekmelerin sesini kapat"
+  },
+  "unmuteTabs": {
+    "message": "Sekmelerin sesini aç"
+  },
+  "windowTipTitle": {
+    "message": "Her pencerenin kendi yan paneli vardır."
+  },
+  "windowTipShortcut": {
+    "message": "$TITLE$ Chrome, uzantıların yan paneli kendiliğinden açmasına izin vermez. Bu yüzden yeni bir pencerede ağacı araç çubuğundaki düğmeyle veya $SHORTCUT$ ile gösterin.",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Each window has its own side panel."
+      },
+      "shortcut": {
+        "content": "$2",
+        "example": "Alt+Shift+T"
+      }
+    }
+  },
+  "windowTip": {
+    "message": "$TITLE$ Chrome, uzantıların yan paneli kendiliğinden açmasına izin vermez. Bu yüzden yeni bir pencerede ağacı araç çubuğundaki düğmeyle gösterin.",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Each window has its own side panel."
+      }
+    }
+  },
+  "gotIt": {
+    "message": "Anladım"
+  },
+  "fullscreenTitle": {
+    "message": "Tam ekranda ağaç gizlensin mi?"
+  },
+  "fullscreenIntro": {
+    "message": "Chrome, tam ekran videoların ve sayfaların yanında yan paneli açık tutar. Tree of Tabs, tam ekrana geçtiğinizde yan paneli kapatabilir."
+  },
+  "fullscreenReopenShortcut": {
+    "message": "Chrome, uzantıların yan paneli kendiliğinden yeniden açmasına izin vermez. Bu yüzden sonrasında ağacı araç çubuğundaki düğmeyle veya $SHORTCUT$ ile geri getirirsiniz.",
+    "placeholders": {
+      "shortcut": {
+        "content": "$1",
+        "example": "Alt+Shift+T"
+      }
+    }
+  },
+  "fullscreenReopen": {
+    "message": "Chrome, uzantıların yan paneli kendiliğinden yeniden açmasına izin vermez. Bu yüzden sonrasında ağacı araç çubuğundaki düğmeyle geri getirirsiniz."
+  },
+  "hideDuringFullscreen": {
+    "message": "Tam ekranda gizle"
+  },
+  "keepItOpen": {
+    "message": "Açık tut"
+  },
+  "changeLaterInSettings": {
+    "message": "Bunu daha sonra Ayarlar'dan değiştirebilirsiniz."
+  },
+  "newTabAsChild": {
+    "message": "Alt sekme olarak yeni sekme"
+  },
+  "newTabUnderCurrent": {
+    "message": "Geçerli sekmenin altında yeni sekme"
+  },
+  "reload": {
+    "message": "Yeniden Yükle"
+  },
+  "duplicate": {
+    "message": "Yinele"
+  },
+  "pin": {
+    "message": "Sabitle"
+  },
+  "unpin": {
+    "message": "Sabitlemeyi kaldır"
+  },
+  "expandTree": {
+    "message": "Ağacı genişlet"
+  },
+  "collapseTree": {
+    "message": "Ağacı daralt"
+  },
+  "collapseAll": {
+    "message": "Tümünü daralt"
+  },
+  "expandAll": {
+    "message": "Tümünü genişlet"
+  },
+  "indent": {
+    "message": "Girintiyi artır"
+  },
+  "outdent": {
+    "message": "Girintiyi azalt"
+  },
+  "moveToNewWindow": {
+    "message": "Yeni pencereye taşı"
+  },
+  "moveTreeToNewWindow": {
+    "message": "Ağacı yeni pencereye taşı"
+  },
+  "moveTabsToNewWindow": {
+    "message": "Sekmeleri yeni pencereye taşı"
+  },
+  "closeChildren": {
+    "message": "Alt sekmeleri kapat"
+  },
+  "closeTree": {
+    "message": "Ağacı kapat"
+  },
+  "close": {
+    "message": "Kapat"
+  },
+  "closeTabs": {
+    "message": "Sekmeleri kapat"
+  },
+  "closeOtherTabs": {
+    "message": "Diğer sekmeleri kapat"
+  },
+  "closeTabsBelow": {
+    "message": "Alttaki sekmeleri kapat"
+  },
+  "settings": {
+    "message": "Ayarlar"
+  },
+  "settingsPageTitle": {
+    "message": "Tree of Tabs ayarları"
+  },
+  "newTabsHeading": {
+    "message": "Yeni sekmeler"
+  },
+  "placeTabs": {
+    "message": "Bir sekmeden açılan sekmelerin yeri"
+  },
+  "placeTabsHint": {
+    "message": "Bağlantılar, orta tıklamalar ve sekme açan sayfalar"
+  },
+  "asLastChild": {
+    "message": "Son alt sekme olarak"
+  },
+  "asFirstChild": {
+    "message": "İlk alt sekme olarak"
+  },
+  "newTabAsChildSetting": {
+    "message": "Yeni sekmeleri (Ctrl+T) geçerli sekmenin alt sekmesi olarak aç"
+  },
+  "newTabAsChildHint": {
+    "message": "Kapalıyken boş yeni sekmeler kendi ağaçlarını başlatır"
+  },
+  "closingTabsHeading": {
+    "message": "Sekmeleri kapatma"
+  },
+  "whenParentClosed": {
+    "message": "Bir üst sekme kapatıldığında"
+  },
+  "promoteFirst": {
+    "message": "İlk alt sekmeyi yukarı taşı"
+  },
+  "promoteAll": {
+    "message": "Tüm alt sekmeleri bir seviye yukarı taşı"
+  },
+  "closeAllChildren": {
+    "message": "Alt sekmelerini de kapat"
+  },
+  "closeCollapsedTree": {
+    "message": "Daraltılmış üst sekmesi kapatıldığında tüm ağacı kapat"
+  },
+  "closeCollapsedTreeHint": {
+    "message": "Gizli sekmeler, görünen üst sekmeyle birlikte kapanır"
+  },
+  "appearanceHeading": {
+    "message": "Görünüm"
+  },
+  "density": {
+    "message": "Yoğunluk"
+  },
+  "comfortable": {
+    "message": "Rahat"
+  },
+  "compact": {
+    "message": "Sıkı"
+  },
+  "indentation": {
+    "message": "Seviye başına girinti"
+  },
+  "medium": {
+    "message": "Orta"
+  },
+  "wide": {
+    "message": "Geniş"
+  },
+  "hideGuideLines": {
+    "message": "Kılavuz çizgilerini gizle"
+  },
+  "hideGuideLinesHint": {
+    "message": "Her sekmeden alt sekmelerine uzanan ince çizgiler. Sekme gruplarının renkleri görünmeye devam eder."
+  },
+  "turnOffCollapsing": {
+    "message": "Daraltmayı kapat"
+  },
+  "turnOffCollapsingHint": {
+    "message": "Okları ve daraltma seçeneklerini kaldırır, tüm ağaçları genişletilmiş tutar"
+  },
+  "autoExpand": {
+    "message": "Daraltılmış bir ağacın sekmelerinden biri seçildiğinde ağacı genişlet"
+  },
+  "autoExpandHint": {
+    "message": "Örneğin Ctrl+Tab ile sekmeler arasında geçiş yaparken"
+  },
+  "hideInFullscreen": {
+    "message": "Bir sayfa tam ekrana geçtiğinde ağacı gizle"
+  },
+  "hideInFullscreenHint": {
+    "message": "Örneğin bir video. Chrome, uzantıların yan paneli kendiliğinden yeniden açmasına izin vermez. Bu yüzden sonrasında paneli araç çubuğundaki düğmeyle veya klavye kısayoluyla geri getirin."
+  },
+  "advancedHeading": {
+    "message": "Gelişmiş"
+  },
+  "advancedNote": {
+    "message": "Bu ayarlar Chrome'un normal davranışını değiştirir."
+  },
+  "keepWindow": {
+    "message": "Son sekmesi ağaçtan kapatıldığında pencereyi açık tut"
+  },
+  "keepWindowHint": {
+    "message": "Chrome normalde bir pencereyi son sekmesiyle birlikte kapatır. Bu ayar açıkken son sekmeyi ağaçtan kapattığınızda önce yeni bir sekme açılır ve pencere açık kalır. Sekmeyi klavye kısayoluyla veya pencerenin üstündeki sekmelerden kapatırsanız pencere her zamanki gibi kapanır."
+  },
+  "notAvailableWhile": {
+    "message": "“$SETTING$” açıkken kullanılamaz",
+    "placeholders": {
+      "setting": {
+        "content": "$1",
+        "example": "Turn off collapsing"
+      }
+    }
+  },
+  "notNeededCloseAll": {
+    "message": "Gerekmez: Bir üst sekmeyi kapatmak alt sekmelerini zaten kapatır"
+  },
+  "sidePanelTip": {
+    "message": "İpucu: Chrome yan paneli solda gösterebilir. $LINK$ sayfasını açın ve $SETTING$ ayarını $VALUE$ olarak belirleyin.",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "chrome://settings/appearance"
+      },
+      "setting": {
+        "content": "$2",
+        "example": "Side panel position"
+      },
+      "value": {
+        "content": "$3",
+        "example": "Left"
+      }
+    }
+  },
+  "chromeSidePanelPosition": {
+    "message": "Yan panel konumu"
+  },
+  "chromeShowOnLeft": {
+    "message": "Sola"
+  },
+  "feedback": {
+    "message": "Hata mı buldunuz? $REPORT$. Bir fikriniz mi var? $SUGGEST$.",
+    "placeholders": {
+      "report": {
+        "content": "$1",
+        "example": "Report it on GitHub"
+      },
+      "suggest": {
+        "content": "$2",
+        "example": "Suggest a feature"
+      }
+    }
+  },
+  "reportIt": {
+    "message": "GitHub'da bildirin"
+  },
+  "suggestFeature": {
+    "message": "Özellik önerin"
+  },
+  "madeBy": {
+    "message": "Tree of Tabs, bağımsız bir geliştirici olan Lawand tarafından özenle geliştiriliyor."
+  },
+  "macApps": {
+    "message": "Sekmelerinizi düzenli tutmayı seviyorsanız, Mac'te pencereler arasında geçiş yapmak için geliştirdiğim Taskbar uygulamasını da beğenebilirsiniz."
+  },
+  "discover": {
+    "message": "Diğer yazılımlarımı $SITE$ adresinde keşfedin ve X'te $ACCOUNT$ hesabını takip edin.",
+    "placeholders": {
+      "site": {
+        "content": "$1",
+        "example": "lawand.io"
+      },
+      "account": {
+        "content": "$2",
+        "example": "@lawand_dot_io"
+      }
+    }
+  }
+}

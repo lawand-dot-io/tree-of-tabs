@@ -1,0 +1,343 @@
+{
+  "extDescription": {
+    "message": "Pestañas verticales en árbol en el panel lateral. Las pestañas que abres desde una página se anidan debajo y puedes arrastrarlas."
+  },
+  "actionTitle": {
+    "message": "Mostrar Tree of Tabs"
+  },
+  "commandDescription": {
+    "message": "Mostrar u ocultar el árbol"
+  },
+  "pinnedTabs": {
+    "message": "Pestañas fijadas"
+  },
+  "tabs": {
+    "message": "Pestañas"
+  },
+  "newTab": {
+    "message": "Nueva pestaña"
+  },
+  "newTabTooltip": {
+    "message": "Nueva pestaña\nClic central: nueva pestaña debajo de la pestaña actual"
+  },
+  "untitledTab": {
+    "message": "Nueva pestaña"
+  },
+  "closeTab": {
+    "message": "Cerrar pestaña"
+  },
+  "expand": {
+    "message": "Expandir"
+  },
+  "collapse": {
+    "message": "Contraer"
+  },
+  "muteTab": {
+    "message": "Silenciar pestaña"
+  },
+  "unmuteTab": {
+    "message": "Dejar de silenciar pestaña"
+  },
+  "muteTabs": {
+    "message": "Silenciar pestañas"
+  },
+  "unmuteTabs": {
+    "message": "Dejar de silenciar pestañas"
+  },
+  "windowTipTitle": {
+    "message": "Cada ventana tiene su propio panel lateral."
+  },
+  "windowTipShortcut": {
+    "message": "$TITLE$ Chrome no permite que las extensiones lo abran por sí solas, así que en una ventana nueva muestra el árbol con el botón de la barra de herramientas o con $SHORTCUT$.",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Each window has its own side panel."
+      },
+      "shortcut": {
+        "content": "$2",
+        "example": "Alt+Shift+T"
+      }
+    }
+  },
+  "windowTip": {
+    "message": "$TITLE$ Chrome no permite que las extensiones lo abran por sí solas, así que en una ventana nueva muestra el árbol con el botón de la barra de herramientas.",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Each window has its own side panel."
+      }
+    }
+  },
+  "gotIt": {
+    "message": "Entendido"
+  },
+  "fullscreenTitle": {
+    "message": "¿Ocultar el árbol en pantalla completa?"
+  },
+  "fullscreenIntro": {
+    "message": "Chrome mantiene abierto el panel lateral junto a los vídeos y las páginas en pantalla completa. Tree of Tabs puede cerrarlo cuando pasas a pantalla completa."
+  },
+  "fullscreenReopenShortcut": {
+    "message": "Chrome no permite que las extensiones vuelvan a abrir el panel lateral por sí solas, así que después puedes recuperar el árbol con el botón de la barra de herramientas o con $SHORTCUT$.",
+    "placeholders": {
+      "shortcut": {
+        "content": "$1",
+        "example": "Alt+Shift+T"
+      }
+    }
+  },
+  "fullscreenReopen": {
+    "message": "Chrome no permite que las extensiones vuelvan a abrir el panel lateral por sí solas, así que después puedes recuperar el árbol con el botón de la barra de herramientas."
+  },
+  "hideDuringFullscreen": {
+    "message": "Ocultar en pantalla completa"
+  },
+  "keepItOpen": {
+    "message": "Mantenerlo abierto"
+  },
+  "changeLaterInSettings": {
+    "message": "Puedes cambiarlo más adelante en Configuración."
+  },
+  "newTabAsChild": {
+    "message": "Nueva pestaña secundaria"
+  },
+  "newTabUnderCurrent": {
+    "message": "Nueva pestaña debajo de la actual"
+  },
+  "reload": {
+    "message": "Volver a cargar"
+  },
+  "duplicate": {
+    "message": "Duplicar"
+  },
+  "pin": {
+    "message": "Fijar"
+  },
+  "unpin": {
+    "message": "Desfijar"
+  },
+  "expandTree": {
+    "message": "Expandir árbol"
+  },
+  "collapseTree": {
+    "message": "Contraer árbol"
+  },
+  "collapseAll": {
+    "message": "Contraer todo"
+  },
+  "expandAll": {
+    "message": "Expandir todo"
+  },
+  "indent": {
+    "message": "Aumentar sangría"
+  },
+  "outdent": {
+    "message": "Reducir sangría"
+  },
+  "moveToNewWindow": {
+    "message": "Mover a una nueva ventana"
+  },
+  "moveTreeToNewWindow": {
+    "message": "Mover árbol a una nueva ventana"
+  },
+  "moveTabsToNewWindow": {
+    "message": "Mover pestañas a una nueva ventana"
+  },
+  "closeChildren": {
+    "message": "Cerrar pestañas secundarias"
+  },
+  "closeTree": {
+    "message": "Cerrar árbol"
+  },
+  "close": {
+    "message": "Cerrar"
+  },
+  "closeTabs": {
+    "message": "Cerrar pestañas"
+  },
+  "closeOtherTabs": {
+    "message": "Cerrar las demás pestañas"
+  },
+  "closeTabsBelow": {
+    "message": "Cerrar pestañas de abajo"
+  },
+  "settings": {
+    "message": "Configuración"
+  },
+  "settingsPageTitle": {
+    "message": "Configuración de Tree of Tabs"
+  },
+  "newTabsHeading": {
+    "message": "Pestañas nuevas"
+  },
+  "placeTabs": {
+    "message": "Colocar las pestañas abiertas desde otra pestaña"
+  },
+  "placeTabsHint": {
+    "message": "Enlaces, clics centrales y páginas que abren pestañas"
+  },
+  "asLastChild": {
+    "message": "Como última pestaña secundaria"
+  },
+  "asFirstChild": {
+    "message": "Como primera pestaña secundaria"
+  },
+  "newTabAsChildSetting": {
+    "message": "Abrir las pestañas nuevas (Ctrl+T) como secundarias de la pestaña actual"
+  },
+  "newTabAsChildHint": {
+    "message": "Desactivado: las pestañas nuevas en blanco empiezan su propio árbol"
+  },
+  "closingTabsHeading": {
+    "message": "Cerrar pestañas"
+  },
+  "whenParentClosed": {
+    "message": "Al cerrar una pestaña principal"
+  },
+  "promoteFirst": {
+    "message": "Subir la primera pestaña secundaria"
+  },
+  "promoteAll": {
+    "message": "Subir un nivel todas las secundarias"
+  },
+  "closeAllChildren": {
+    "message": "Cerrar también sus pestañas secundarias"
+  },
+  "closeCollapsedTree": {
+    "message": "Cerrar todo el árbol al cerrar su pestaña principal contraída"
+  },
+  "closeCollapsedTreeHint": {
+    "message": "Las pestañas ocultas se cierran junto con la pestaña principal visible"
+  },
+  "appearanceHeading": {
+    "message": "Aspecto"
+  },
+  "density": {
+    "message": "Densidad"
+  },
+  "comfortable": {
+    "message": "Cómoda"
+  },
+  "compact": {
+    "message": "Compacta"
+  },
+  "indentation": {
+    "message": "Sangría por nivel"
+  },
+  "medium": {
+    "message": "Media"
+  },
+  "wide": {
+    "message": "Ancha"
+  },
+  "hideGuideLines": {
+    "message": "Ocultar las líneas guía"
+  },
+  "hideGuideLinesHint": {
+    "message": "Las líneas finas que van de cada pestaña a sus pestañas secundarias. Los colores de los grupos de pestañas se siguen mostrando."
+  },
+  "turnOffCollapsing": {
+    "message": "Desactivar contraer"
+  },
+  "turnOffCollapsingHint": {
+    "message": "Quita las flechas y las opciones para contraer, y mantiene todos los árboles expandidos"
+  },
+  "autoExpand": {
+    "message": "Expandir un árbol contraído al seleccionar una de sus pestañas"
+  },
+  "autoExpandHint": {
+    "message": "Por ejemplo, al cambiar de pestaña con Ctrl+Tab"
+  },
+  "hideInFullscreen": {
+    "message": "Ocultar el árbol cuando una página pasa a pantalla completa"
+  },
+  "hideInFullscreenHint": {
+    "message": "Por ejemplo, un vídeo. Chrome no permite que las extensiones vuelvan a abrir el panel lateral por sí solas, así que después puedes recuperarlo con el botón de la barra de herramientas o con su combinación de teclas."
+  },
+  "advancedHeading": {
+    "message": "Opciones avanzadas"
+  },
+  "advancedNote": {
+    "message": "Estas opciones cambian el comportamiento normal de Chrome."
+  },
+  "keepWindow": {
+    "message": "Mantener abierta la ventana al cerrar su última pestaña desde el árbol"
+  },
+  "keepWindowHint": {
+    "message": "Normalmente, Chrome cierra una ventana junto con su última pestaña. Con esta opción activada, al cerrar la última pestaña desde el árbol primero se abre una pestaña nueva, así que la ventana sigue abierta. Si la cierras con la combinación de teclas o desde las pestañas de la parte superior de la ventana, la ventana se cierra como siempre."
+  },
+  "notAvailableWhile": {
+    "message": "No disponible mientras «$SETTING$» esté activado",
+    "placeholders": {
+      "setting": {
+        "content": "$1",
+        "example": "Turn off collapsing"
+      }
+    }
+  },
+  "notNeededCloseAll": {
+    "message": "No es necesario: al cerrar una pestaña principal ya se cierran sus pestañas secundarias"
+  },
+  "sidePanelTip": {
+    "message": "Consejo: Chrome puede mostrar el panel lateral a la izquierda. Abre $LINK$ y cambia $SETTING$ a $VALUE$.",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "chrome://settings/appearance"
+      },
+      "setting": {
+        "content": "$2",
+        "example": "Side panel position"
+      },
+      "value": {
+        "content": "$3",
+        "example": "Left"
+      }
+    }
+  },
+  "chromeSidePanelPosition": {
+    "message": "Posición del panel lateral"
+  },
+  "chromeShowOnLeft": {
+    "message": "Izquierda"
+  },
+  "feedback": {
+    "message": "¿Has encontrado un error? $REPORT$. ¿Tienes una idea? $SUGGEST$.",
+    "placeholders": {
+      "report": {
+        "content": "$1",
+        "example": "Report it on GitHub"
+      },
+      "suggest": {
+        "content": "$2",
+        "example": "Suggest a feature"
+      }
+    }
+  },
+  "reportIt": {
+    "message": "Infórmalo en GitHub"
+  },
+  "suggestFeature": {
+    "message": "Sugiere una función"
+  },
+  "madeBy": {
+    "message": "Tree of Tabs lo desarrolla con cariño Lawand, un desarrollador independiente."
+  },
+  "macApps": {
+    "message": "Si te gusta tener tus pestañas organizadas, puede que te guste Taskbar, mi aplicación para cambiar entre ventanas en Mac."
+  },
+  "discover": {
+    "message": "Descubre mis otras aplicaciones en $SITE$ y sigue a $ACCOUNT$ en X.",
+    "placeholders": {
+      "site": {
+        "content": "$1",
+        "example": "lawand.io"
+      },
+      "account": {
+        "content": "$2",
+        "example": "@lawand_dot_io"
+      }
+    }
+  }
+}

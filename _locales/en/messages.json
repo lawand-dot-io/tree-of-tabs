@@ -61,21 +61,31 @@
   },
   "windowTipTitle": {
     "message": "Each window has its own side panel.",
-    "description": "Bold first sentence of a one-time tip at the top of the panel, shown the first time the tree opens while several windows are open."
+    "description": "Bold first sentence of a one-time tip at the top of the panel; the rest of the tip is windowTipShortcut."
   },
   "windowTipShortcut": {
-    "message": "Chrome doesn't let extensions open it by themselves, so in a new window, show the tree with the toolbar button or $SHORTCUT$.",
-    "description": "Rest of the tip, after the bold sentence. \"It\" is the side panel. The toolbar button is the extension's button in Chrome's toolbar. The placeholder is the keyboard shortcut.",
+    "message": "$TITLE$ Chrome doesn't let extensions open it by themselves, so in a new window, show the tree with the toolbar button or $SHORTCUT$.",
+    "description": "A one-time tip at the top of the panel, shown the first time the tree opens while several windows are open. The first placeholder is the tip's bold first sentence (windowTipTitle), the second the keyboard shortcut. \"It\" is the side panel. The toolbar button is the extension's button in Chrome's toolbar.",
     "placeholders": {
-      "shortcut": {
+      "title": {
         "content": "$1",
+        "example": "Each window has its own side panel."
+      },
+      "shortcut": {
+        "content": "$2",
         "example": "Alt+Shift+T"
       }
     }
   },
   "windowTip": {
-    "message": "Chrome doesn't let extensions open it by themselves, so in a new window, show the tree with the toolbar button.",
-    "description": "The same as windowTipShortcut, for when the user removed the keyboard shortcut."
+    "message": "$TITLE$ Chrome doesn't let extensions open it by themselves, so in a new window, show the tree with the toolbar button.",
+    "description": "The same as windowTipShortcut, for when the user removed the keyboard shortcut.",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Each window has its own side panel."
+      }
+    }
   },
   "gotIt": {
     "message": "Got it",
@@ -367,7 +377,7 @@
       },
       "value": {
         "content": "$3",
-        "example": "Show on left"
+        "example": "Left"
       }
     }
   },
@@ -376,8 +386,8 @@
     "description": "The name of a setting on Chrome's own appearance settings page. Must be exactly Chrome's words in your language."
   },
   "chromeShowOnLeft": {
-    "message": "Show on left",
-    "description": "A value of Chrome's \"Side panel position\" setting. Must be exactly Chrome's words in your language."
+    "message": "Left",
+    "description": "A value of Chrome's \"Side panel position\" setting, on its appearance settings page. Must be exactly Chrome's words in your language."
   },
   "feedback": {
     "message": "Found a bug? $REPORT$. Have an idea? $SUGGEST$.",
