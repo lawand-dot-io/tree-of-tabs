@@ -1,5 +1,6 @@
 import { buildTree, descendantsOf } from '../tree.js';
 import { DEFAULTS, loadSettings, onSettingsChanged } from '../settings.js';
+import { fill, localize, t } from '../i18n.js';
 import { icon } from './icons.js';
 
 const DRAG_TYPE = 'application/x-tree-of-tabs';
@@ -187,7 +188,7 @@ function createPart(id, { partner = false } = {}) {
     <span class="title"></span>
     ${partner ? '' : '<span class="badge"></span>'}
     <button class="tab-button audio" tabindex="-1"></button>
-    <button class="tab-button close" tabindex="-1" aria-label="Close tab">${icon('close')}</button>`;
+    <button class="tab-button close" tabindex="-1" aria-label="${t('closeTab')}">${icon('close')}</button>`;
   const iconEl = part.querySelector('.icon');
   part.querySelector('.favicon').addEventListener('error', () => iconEl.classList.add('no-favicon'));
   return part;
@@ -216,7 +217,7 @@ function setFavicon(container, tab) {
 }
 
 function tabTitle(tab) {
-  return tab.title || tab.pendingUrl || tab.url || 'New Tab';
+  return tab.title || tab.pendingUrl || tab.url || t('untitledTab');
 }
 
 function updateRow(el, tab, row) {
@@ -237,7 +238,7 @@ function updateRow(el, tab, row) {
   if (row.hasChildren) el.setAttribute('aria-expanded', !row.collapsed);
   else el.removeAttribute('aria-expanded');
   const twisty = el.querySelector('.twisty');
-  twisty.title = row.collapsed ? 'Expand' : 'Collapse';
+  twisty.title = t(row.collapsed ? 'expand' : 'collapse');
   twisty.setAttribute('aria-label', twisty.title);
 
   const [part] = el.getElementsByClassName('part');
@@ -283,7 +284,7 @@ function updatePart(part, tab) {
   if (audio.dataset.state !== audioKey) {
     audio.dataset.state = audioKey;
     audio.innerHTML = icon(muted ? 'volumeOff' : 'volumeUp');
-    audio.setAttribute('aria-label', muted ? 'Unmute tab' : 'Mute tab');
+    audio.setAttribute('aria-label', t(muted ? 'unmuteTab' : 'muteTab'));
   }
 }
 
@@ -596,85 +597,85 @@ function tabMenuItems(id, tabId = id) {
   const others = [...tabsById.values()].filter((t) => !t.pinned && !rowTabs.includes(t.id)).map((t) => t.id);
   const below = others.filter((x) => tabsById.get(x).index > last);
   return [
-    { label: 'New tab as child', action: () => send({ type: 'new-child-tab', tabId: id }), hidden: tab.pinned },
-    { label: 'New tab', action: newTab },
+    { label: t('newTabAsChild'), action: () => send({ type: 'new-child-tab', tabId: id }), hidden: tab.pinned },
+    { label: t('newTab'), action: newTab },
     'separator',
-    { label: 'Reload', action: () => ids.forEach((x) => quietly(chrome.tabs.reload(x))) },
-    { label: 'Duplicate', action: () => send({ type: 'duplicate', ids }) },
+    { label: t('reload'), action: () => ids.forEach((x) => quietly(chrome.tabs.reload(x))) },
+    { label: t('duplicate'), action: () => send({ type: 'duplicate', ids }) },
     {
-      label: tab.pinned ? 'Unpin' : 'Pin',
+      label: t(tab.pinned ? 'unpin' : 'pin'),
       action: () => pinIds.forEach((x) => quietly(chrome.tabs.update(x, { pinned: !tab.pinned }))),
     },
     {
       // Only these tabs: Chrome's own "Mute site" mutes every tab of the site.
-      label: `${tab.mutedInfo?.muted ? 'Unmute' : 'Mute'} ${many ? 'tabs' : 'tab'}`,
+      label: t(`${tab.mutedInfo?.muted ? 'unmute' : 'mute'}${many ? 'Tabs' : 'Tab'}`),
       action: () => ids.forEach((x) => quietly(chrome.tabs.update(x, { muted: !tab.mutedInfo?.muted }))),
     },
     'separator',
     {
-      label: row?.collapsed ? 'Expand tree' : 'Collapse tree',
+      label: t(row?.collapsed ? 'expandTree' : 'collapseTree'),
       action: () => toggleCollapsed(id),
       hidden: !hasChildren || settings.disableCollapsing,
     },
     ...collapseAllItems(),
     {
-      label: 'Indent',
+      label: t('indent'),
       action: () => send({ type: 'indent', tabId: id }),
       hidden: tab.pinned,
       disabled: siblings?.indexOf(id) <= 0,
     },
     {
-      label: 'Outdent',
+      label: t('outdent'),
       action: () => send({ type: 'outdent', tabId: id }),
       hidden: tab.pinned,
       disabled: parent === null,
     },
     {
-      label: rows.length > 1 ? 'Move tabs to new window' : hasChildren ? 'Move tree to new window' : 'Move to new window',
+      label: t(rows.length > 1 ? 'moveTabsToNewWindow' : hasChildren ? 'moveTreeToNewWindow' : 'moveToNewWindow'),
       action: () => send({ type: 'move-to-new-window', ids: rows }),
       hidden: tab.pinned,
     },
     'separator',
-    { label: 'Close children', action: () => send({ type: 'close-children', tabId: id }), hidden: !hasChildren },
-    { label: 'Close tree', action: () => send({ type: 'close-tree', tabId: id }), hidden: !hasChildren },
-    { label: many ? 'Close tabs' : 'Close', action: () => send({ type: 'close-tabs', ids }) },
+    { label: t('closeChildren'), action: () => send({ type: 'close-children', tabId: id }), hidden: !hasChildren },
+    { label: t('closeTree'), action: () => send({ type: 'close-tree', tabId: id }), hidden: !hasChildren },
+    { label: t(many ? 'closeTabs' : 'close'), action: () => send({ type: 'close-tabs', ids }) },
     {
-      label: 'Close other tabs',
+      label: t('closeOtherTabs'),
       action: () => send({ type: 'close-tabs', ids: others, keep: rowTabs }),
       disabled: !others.length,
     },
     {
-      label: 'Close tabs below',
+      label: t('closeTabsBelow'),
       action: () => send({ type: 'close-tabs', ids: below, keep: rowTabs }),
       disabled: !below.length,
     },
     'separator',
-    { label: 'Settings', action: () => chrome.runtime.openOptionsPage() },
+    { label: t('settings'), action: () => chrome.runtime.openOptionsPage() },
   ];
 }
 
 function collapseAllItems() {
   const hidden = settings.disableCollapsing;
   return [
-    { label: 'Collapse all', action: () => send({ type: 'set-all-collapsed', windowId, collapsed: true }), hidden },
-    { label: 'Expand all', action: () => send({ type: 'set-all-collapsed', windowId, collapsed: false }), hidden },
+    { label: t('collapseAll'), action: () => send({ type: 'set-all-collapsed', windowId, collapsed: true }), hidden },
+    { label: t('expandAll'), action: () => send({ type: 'set-all-collapsed', windowId, collapsed: false }), hidden },
   ];
 }
 
 function newTabMenuItems() {
   return [
-    { label: 'New tab', action: newTab },
-    { label: 'New tab under the current tab', action: newChildOfActive },
+    { label: t('newTab'), action: newTab },
+    { label: t('newTabUnderCurrent'), action: newChildOfActive },
   ];
 }
 
 function windowMenuItems() {
   return [
-    { label: 'New tab', action: newTab },
+    { label: t('newTab'), action: newTab },
     'separator',
     ...collapseAllItems(),
     'separator',
-    { label: 'Settings', action: () => chrome.runtime.openOptionsPage() },
+    { label: t('settings'), action: () => chrome.runtime.openOptionsPage() },
   ];
 }
 
@@ -955,9 +956,9 @@ async function showShortcut() {
   // if the user removed it.
   const commands = await chrome.commands.getAll().catch(() => []);
   const shortcut = commands.find((c) => c.name === '_execute_action')?.shortcut;
-  for (const el of document.querySelectorAll('.shortcut')) {
-    el.replaceChildren();
-    if (shortcut) el.append(' or ', Object.assign(document.createElement('kbd'), { textContent: shortcut }));
+  for (const el of document.querySelectorAll('[data-shortcut]')) {
+    if (shortcut) fill(el, `${el.dataset.shortcut}Shortcut`, Object.assign(document.createElement('kbd'), { textContent: shortcut }));
+    else el.textContent = t(el.dataset.shortcut);
   }
 }
 
@@ -1017,6 +1018,7 @@ function applySettings(next) {
 }
 
 async function main() {
+  localize();
   newTabEl.querySelector('.new-tab-icon').innerHTML = icon('add');
   // ?windowId= shows another window's tabs (used by the end-to-end test).
   const forced = Number(new URLSearchParams(location.search).get('windowId'));

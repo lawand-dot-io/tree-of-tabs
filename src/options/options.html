@@ -3,133 +3,132 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Tree of Tabs settings</title>
+    <title data-i18n="settingsPageTitle"></title>
     <link rel="stylesheet" href="../theme.css" />
     <link rel="stylesheet" href="options.css" />
   </head>
   <body>
+    <!-- The texts come from _locales/ (see src/i18n.js). -->
     <main>
       <h1><img src="../../icons/icon128.png" alt="" />Tree of Tabs</h1>
 
-      <h2>New tabs</h2>
+      <h2 data-i18n="newTabsHeading"></h2>
       <section class="card">
         <label class="row">
           <span class="label">
-            Place tabs opened from a tab
-            <span class="hint">Links, middle clicks and pages that open tabs</span>
+            <span data-i18n="placeTabs"></span>
+            <span class="hint" data-i18n="placeTabsHint"></span>
           </span>
           <select name="childPosition">
-            <option value="end">As the last child</option>
-            <option value="first">As the first child</option>
+            <option value="end" data-i18n="asLastChild"></option>
+            <option value="first" data-i18n="asFirstChild"></option>
           </select>
         </label>
         <label class="row">
           <span class="label">
-            Open new tabs (Ctrl+T) as children of the current tab
-            <span class="hint">Off: blank new tabs start their own tree</span>
+            <span data-i18n="newTabAsChildSetting"></span>
+            <span class="hint" data-i18n="newTabAsChildHint"></span>
           </span>
           <input type="checkbox" name="newTabAsChild" class="switch" />
         </label>
       </section>
 
-      <h2>Closing tabs</h2>
+      <h2 data-i18n="closingTabsHeading"></h2>
       <section class="card">
         <label class="row">
-          <span class="label">When a parent tab is closed</span>
+          <span class="label" data-i18n="whenParentClosed"></span>
           <select name="onCloseParent">
-            <option value="promoteFirst">Promote the first child</option>
-            <option value="promoteAll">Move all children up a level</option>
-            <option value="closeAll">Close its children too</option>
+            <option value="promoteFirst" data-i18n="promoteFirst"></option>
+            <option value="promoteAll" data-i18n="promoteAll"></option>
+            <option value="closeAll" data-i18n="closeAllChildren"></option>
           </select>
         </label>
         <label class="row" data-needs-collapsing>
           <span class="label">
-            Close the whole tree when its collapsed parent is closed
-            <span class="hint">Hidden tabs close with the parent you can see</span>
+            <span data-i18n="closeCollapsedTree"></span>
+            <span class="hint" data-i18n="closeCollapsedTreeHint"></span>
           </span>
           <input type="checkbox" name="closeCollapsedTree" class="switch" />
         </label>
       </section>
 
-      <h2>Appearance</h2>
+      <h2 data-i18n="appearanceHeading"></h2>
       <section class="card">
         <label class="row">
-          <span class="label">Density</span>
+          <span class="label" data-i18n="density"></span>
           <select name="density">
-            <option value="comfortable">Comfortable</option>
-            <option value="compact">Compact</option>
+            <option value="comfortable" data-i18n="comfortable"></option>
+            <option value="compact" data-i18n="compact"></option>
           </select>
         </label>
         <label class="row">
-          <span class="label">Indentation per level</span>
+          <span class="label" data-i18n="indentation"></span>
           <select name="indent">
-            <option value="20">Medium</option>
-            <option value="28">Wide</option>
+            <option value="20" data-i18n="medium"></option>
+            <option value="28" data-i18n="wide"></option>
           </select>
         </label>
         <label class="row">
           <span class="label">
-            Hide the guide lines
-            <span class="hint">The thin lines from each tab down to its children. Tab group colors still show.</span>
+            <span data-i18n="hideGuideLines"></span>
+            <span class="hint" data-i18n="hideGuideLinesHint"></span>
           </span>
           <input type="checkbox" name="hideGuideLines" class="switch" />
         </label>
         <label class="row">
           <span class="label">
-            Turn off collapsing
-            <span class="hint">Removes the arrows and the collapse options, and keeps every tree expanded</span>
+            <span data-i18n="turnOffCollapsing"></span>
+            <span class="hint" data-i18n="turnOffCollapsingHint"></span>
           </span>
           <input type="checkbox" name="disableCollapsing" class="switch" />
         </label>
         <label class="row" data-needs-collapsing>
           <span class="label">
-            Expand a collapsed tree when one of its tabs is selected
-            <span class="hint">For example when switching tabs with Ctrl+Tab</span>
+            <span data-i18n="autoExpand"></span>
+            <span class="hint" data-i18n="autoExpandHint"></span>
           </span>
           <input type="checkbox" name="autoExpandOnActivate" class="switch" />
         </label>
         <label class="row">
           <span class="label">
-            Hide the tree when a page goes full screen
-            <span class="hint">For example a video. Chrome doesn't let extensions reopen the side panel by themselves, so
-              bring it back afterwards with the toolbar button or its keyboard shortcut.</span>
+            <span data-i18n="hideInFullscreen"></span>
+            <span class="hint" data-i18n="hideInFullscreenHint"></span>
           </span>
           <input type="checkbox" name="hideInFullscreen" class="switch" />
         </label>
       </section>
 
-      <h2>Advanced</h2>
-      <p class="section-note">These change how Chrome itself normally behaves.</p>
+      <h2 data-i18n="advancedHeading"></h2>
+      <p class="section-note" data-i18n="advancedNote"></p>
       <section class="card">
         <label class="row">
           <span class="label">
-            Keep the window open when its last tab is closed from the tree
-            <span class="hint">Chrome normally closes a window together with its last tab. With this on, closing the last
-              tab from the tree opens a new tab first, so the window stays open. Closing it with the keyboard shortcut or
-              from the tabs at the top of the window still closes the window, as usual.</span>
+            <span data-i18n="keepWindow"></span>
+            <span class="hint" data-i18n="keepWindowHint"></span>
           </span>
           <input type="checkbox" name="keepWindowOnLastTab" class="switch" />
         </label>
       </section>
 
-      <p class="footnote">
-        Tip: Chrome can show the side panel on the left. Open
-        <a class="mono" id="appearance-link" href="chrome://settings/appearance">chrome://settings/appearance</a> and set <em>Side panel position</em> to
-        <em>Show on left</em>.
+      <p class="footnote" data-i18n-fill="sidePanelTip">
+        <a class="mono" id="appearance-link" href="chrome://settings/appearance">chrome://settings/appearance</a>
+        <em data-i18n="chromeSidePanelPosition"></em>
+        <em data-i18n="chromeShowOnLeft"></em>
       </p>
 
       <footer class="about">
-        <p>
-          Found a bug? <a href="https://github.com/lawand-dot-io/tree-of-tabs/issues" target="_blank">Report it on GitHub</a>.
-          Have an idea? <a href="https://github.com/lawand-dot-io/tree-of-tabs/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+requests%22+sort%3Atop" target="_blank">Suggest a feature</a>.
+        <p data-i18n-fill="feedback">
+          <a href="https://github.com/lawand-dot-io/tree-of-tabs/issues" target="_blank" data-i18n="reportIt"></a>
+          <a href="https://github.com/lawand-dot-io/tree-of-tabs/discussions/categories/feature-requests?discussions_q=is%3Aopen+category%3A%22Feature+requests%22+sort%3Atop" target="_blank" data-i18n="suggestFeature"></a>
         </p>
         <p>
-          Tree of Tabs is made with care by Lawand, an independent developer.
+          <span data-i18n="madeBy"></span>
           <!-- Only on a Mac, since Taskbar is a Mac app. -->
-          <span id="mac-apps" hidden>If you like keeping your tabs organized, you might like Taskbar, my app for
-            switching between windows on the Mac.</span>
-          Discover my other software at <a href="https://lawand.io" target="_blank">lawand.io</a>, and
-          follow <a href="https://x.com/lawand_dot_io" target="_blank">@lawand_dot_io</a> on X.
+          <span id="mac-apps" hidden data-i18n="macApps"></span>
+          <span data-i18n-fill="discover">
+            <a href="https://lawand.io" target="_blank">lawand.io</a>
+            <a href="https://x.com/lawand_dot_io" target="_blank">@lawand_dot_io</a>
+          </span>
         </p>
       </footer>
     </main>

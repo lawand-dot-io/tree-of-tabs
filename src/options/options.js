@@ -1,4 +1,7 @@
 import { DEFAULTS, loadSettings } from '../settings.js';
+import { localize, t } from '../i18n.js';
+
+localize();
 
 const fields = document.querySelectorAll('[name]');
 
@@ -31,9 +34,9 @@ function updateDisabledRows() {
   const closeAll = document.querySelector('[name=onCloseParent]').value === 'closeAll';
   for (const row of document.querySelectorAll('[data-needs-collapsing]')) {
     const field = row.querySelector('[name]').name;
-    let reason = collapsingOff ? 'Not available while “Turn off collapsing” is on' : null;
+    let reason = collapsingOff ? t('notAvailableWhile', t('turnOffCollapsing')) : null;
     if (!reason && field === 'closeCollapsedTree' && closeAll) {
-      reason = 'Not needed: closing a parent already closes its children';
+      reason = t('notNeededCloseAll');
     }
     setRowDisabled(row, reason);
   }

@@ -1,0 +1,426 @@
+{
+  "extDescription": {
+    "message": "Vertical tabs as a tree in the side panel. Tabs you open from a page nest under it, and you can drag them to reorganize.",
+    "description": "The extension's description on chrome://extensions and in the Chrome Web Store. At most 132 characters. Lead with the words people search for, like \"vertical tabs\"."
+  },
+  "actionTitle": {
+    "message": "Show Tree of Tabs",
+    "description": "Tooltip of the extension's toolbar button, which opens the tree in the side panel. \"Tree of Tabs\" is the extension's name: keep it in English."
+  },
+  "commandDescription": {
+    "message": "Show or hide the tree",
+    "description": "Name of the keyboard shortcut on chrome://extensions/shortcuts. \"The tree\" is the tree of tabs in the side panel."
+  },
+  "pinnedTabs": {
+    "message": "Pinned tabs",
+    "description": "Screen reader name for the row of pinned tabs at the top of the panel."
+  },
+  "tabs": {
+    "message": "Tabs",
+    "description": "Screen reader name for the tree of tabs."
+  },
+  "newTab": {
+    "message": "New tab",
+    "description": "Button under the tree, and a menu item: opens a new tab. Use Chrome's own words for \"New tab\"."
+  },
+  "newTabTooltip": {
+    "message": "New tab\nMiddle-click: new tab under the current tab",
+    "description": "Tooltip of the \"New tab\" button, on two lines. A middle click opens the new tab nested under the tab that's open now."
+  },
+  "untitledTab": {
+    "message": "New Tab",
+    "description": "Shown for a tab that has no title yet. Chrome's own title for a blank new tab, so use Chrome's words."
+  },
+  "closeTab": {
+    "message": "Close tab",
+    "description": "Screen reader name of the X button on each tab."
+  },
+  "expand": {
+    "message": "Expand",
+    "description": "Tooltip of the arrow on a tab whose children are hidden: shows them again."
+  },
+  "collapse": {
+    "message": "Collapse",
+    "description": "Tooltip of the arrow on a tab with children: hides its children in the tree."
+  },
+  "muteTab": {
+    "message": "Mute tab",
+    "description": "Button and menu item: mutes this tab's sound."
+  },
+  "unmuteTab": {
+    "message": "Unmute tab",
+    "description": "Button and menu item: turns this tab's sound back on."
+  },
+  "muteTabs": {
+    "message": "Mute tabs",
+    "description": "Menu item when several tabs are selected: mutes them all."
+  },
+  "unmuteTabs": {
+    "message": "Unmute tabs",
+    "description": "Menu item when several tabs are selected: turns their sound back on."
+  },
+  "windowTipTitle": {
+    "message": "Each window has its own side panel.",
+    "description": "Bold first sentence of a one-time tip at the top of the panel, shown the first time the tree opens while several windows are open."
+  },
+  "windowTipShortcut": {
+    "message": "Chrome doesn't let extensions open it by themselves, so in a new window, show the tree with the toolbar button or $SHORTCUT$.",
+    "description": "Rest of the tip, after the bold sentence. \"It\" is the side panel. The toolbar button is the extension's button in Chrome's toolbar. The placeholder is the keyboard shortcut.",
+    "placeholders": {
+      "shortcut": {
+        "content": "$1",
+        "example": "Alt+Shift+T"
+      }
+    }
+  },
+  "windowTip": {
+    "message": "Chrome doesn't let extensions open it by themselves, so in a new window, show the tree with the toolbar button.",
+    "description": "The same as windowTipShortcut, for when the user removed the keyboard shortcut."
+  },
+  "gotIt": {
+    "message": "Got it",
+    "description": "Button that closes the tip for good."
+  },
+  "fullscreenTitle": {
+    "message": "Hide the tree during full screen?",
+    "description": "Title of a one-time question shown in the panel the first time a page goes full screen."
+  },
+  "fullscreenIntro": {
+    "message": "Chrome keeps the side panel open next to full screen videos and pages. Tree of Tabs can close it when you go full screen.",
+    "description": "First paragraph of the full screen question. \"Tree of Tabs\" is the extension's name: keep it in English."
+  },
+  "fullscreenReopenShortcut": {
+    "message": "Chrome doesn't let extensions reopen the side panel by themselves, so afterwards you bring the tree back with the toolbar button or $SHORTCUT$.",
+    "description": "Second paragraph of the full screen question. The toolbar button is the extension's button in Chrome's toolbar. The placeholder is the keyboard shortcut.",
+    "placeholders": {
+      "shortcut": {
+        "content": "$1",
+        "example": "Alt+Shift+T"
+      }
+    }
+  },
+  "fullscreenReopen": {
+    "message": "Chrome doesn't let extensions reopen the side panel by themselves, so afterwards you bring the tree back with the toolbar button.",
+    "description": "The same as fullscreenReopenShortcut, for when the user removed the keyboard shortcut."
+  },
+  "hideDuringFullscreen": {
+    "message": "Hide during full screen",
+    "description": "Main button of the full screen question: the panel closes whenever a page goes full screen."
+  },
+  "keepItOpen": {
+    "message": "Keep it open",
+    "description": "Other button of the full screen question: the panel stays open during full screen."
+  },
+  "changeLaterInSettings": {
+    "message": "You can change this later in Settings.",
+    "description": "Small note under the full screen question's buttons."
+  },
+  "newTabAsChild": {
+    "message": "New tab as child",
+    "description": "Menu item on a tab: opens a new tab nested under this tab."
+  },
+  "newTabUnderCurrent": {
+    "message": "New tab under the current tab",
+    "description": "Menu item of the \"New tab\" button: opens a new tab nested under the tab that's open now."
+  },
+  "reload": {
+    "message": "Reload",
+    "description": "Menu item: reloads the tab. Use Chrome's own word from its tab menu."
+  },
+  "duplicate": {
+    "message": "Duplicate",
+    "description": "Menu item: opens a copy of the tab. Use Chrome's own word from its tab menu."
+  },
+  "pin": {
+    "message": "Pin",
+    "description": "Menu item: pins the tab. Use Chrome's own word from its tab menu."
+  },
+  "unpin": {
+    "message": "Unpin",
+    "description": "Menu item: unpins the tab. Use Chrome's own word from its tab menu."
+  },
+  "expandTree": {
+    "message": "Expand tree",
+    "description": "Menu item: shows the hidden children of this tab again."
+  },
+  "collapseTree": {
+    "message": "Collapse tree",
+    "description": "Menu item: hides the children of this tab in the tree."
+  },
+  "collapseAll": {
+    "message": "Collapse all",
+    "description": "Menu item: hides the children of every tab in the window."
+  },
+  "expandAll": {
+    "message": "Expand all",
+    "description": "Menu item: shows every hidden tab in the window again."
+  },
+  "indent": {
+    "message": "Indent",
+    "description": "Menu item: makes the tab a child of the tab above it, one level deeper."
+  },
+  "outdent": {
+    "message": "Outdent",
+    "description": "Menu item: moves the tab one level up, out of its parent."
+  },
+  "moveToNewWindow": {
+    "message": "Move to new window",
+    "description": "Menu item on a tab without children: moves it to a new window."
+  },
+  "moveTreeToNewWindow": {
+    "message": "Move tree to new window",
+    "description": "Menu item on a tab with children: moves it and all its children to a new window."
+  },
+  "moveTabsToNewWindow": {
+    "message": "Move tabs to new window",
+    "description": "Menu item when several tabs are selected: moves them to a new window."
+  },
+  "closeChildren": {
+    "message": "Close children",
+    "description": "Menu item: closes the tabs nested under this tab, and keeps this tab."
+  },
+  "closeTree": {
+    "message": "Close tree",
+    "description": "Menu item: closes this tab and every tab nested under it."
+  },
+  "close": {
+    "message": "Close",
+    "description": "Menu item: closes the tab."
+  },
+  "closeTabs": {
+    "message": "Close tabs",
+    "description": "Menu item when several tabs are selected: closes them."
+  },
+  "closeOtherTabs": {
+    "message": "Close other tabs",
+    "description": "Menu item: closes every other tab in the window except pinned ones. Use Chrome's own words from its tab menu."
+  },
+  "closeTabsBelow": {
+    "message": "Close tabs below",
+    "description": "Menu item: closes the tabs below this one in the tree, except pinned ones. Like Chrome's \"Close tabs to the right\", but the tree is vertical."
+  },
+  "settings": {
+    "message": "Settings",
+    "description": "Menu item: opens the extension's settings page."
+  },
+  "settingsPageTitle": {
+    "message": "Tree of Tabs settings",
+    "description": "Title of the settings page, shown on its browser tab. \"Tree of Tabs\" is the extension's name: keep it in English."
+  },
+  "newTabsHeading": {
+    "message": "New tabs",
+    "description": "Heading of the settings about opening tabs."
+  },
+  "placeTabs": {
+    "message": "Place tabs opened from a tab",
+    "description": "Setting: where a tab opened from another tab goes among that tab's children."
+  },
+  "placeTabsHint": {
+    "message": "Links, middle clicks and pages that open tabs",
+    "description": "Explains what \"tabs opened from a tab\" means."
+  },
+  "asLastChild": {
+    "message": "As the last child",
+    "description": "Choice for where new child tabs go: below its other children."
+  },
+  "asFirstChild": {
+    "message": "As the first child",
+    "description": "Choice for where new child tabs go: above its other children."
+  },
+  "newTabAsChildSetting": {
+    "message": "Open new tabs (Ctrl+T) as children of the current tab",
+    "description": "Setting, on or off: blank new tabs nest under the tab that's open."
+  },
+  "newTabAsChildHint": {
+    "message": "Off: blank new tabs start their own tree",
+    "description": "What happens when the setting is off."
+  },
+  "closingTabsHeading": {
+    "message": "Closing tabs",
+    "description": "Heading of the settings about closing tabs."
+  },
+  "whenParentClosed": {
+    "message": "When a parent tab is closed",
+    "description": "Setting: what happens to a tab's children when that tab is closed."
+  },
+  "promoteFirst": {
+    "message": "Promote the first child",
+    "description": "Choice: the first child takes the closed tab's place, and the other children move under it."
+  },
+  "promoteAll": {
+    "message": "Move all children up a level",
+    "description": "Choice: every child moves up one level."
+  },
+  "closeAllChildren": {
+    "message": "Close its children too",
+    "description": "Choice: the children close together with the parent."
+  },
+  "closeCollapsedTree": {
+    "message": "Close the whole tree when its collapsed parent is closed",
+    "description": "Setting, on or off."
+  },
+  "closeCollapsedTreeHint": {
+    "message": "Hidden tabs close with the parent you can see",
+    "description": "Explains the setting: the tabs hidden inside a collapsed tree close too."
+  },
+  "appearanceHeading": {
+    "message": "Appearance",
+    "description": "Heading of the settings about how the tree looks."
+  },
+  "density": {
+    "message": "Density",
+    "description": "Setting: how much space each row takes."
+  },
+  "comfortable": {
+    "message": "Comfortable",
+    "description": "Choice of density: taller rows."
+  },
+  "compact": {
+    "message": "Compact",
+    "description": "Choice of density: shorter rows."
+  },
+  "indentation": {
+    "message": "Indentation per level",
+    "description": "Setting: how far each level of children is moved to the right."
+  },
+  "medium": {
+    "message": "Medium",
+    "description": "Choice of indentation."
+  },
+  "wide": {
+    "message": "Wide",
+    "description": "Choice of indentation."
+  },
+  "hideGuideLines": {
+    "message": "Hide the guide lines",
+    "description": "Setting, on or off."
+  },
+  "hideGuideLinesHint": {
+    "message": "The thin lines from each tab down to its children. Tab group colors still show.",
+    "description": "Explains what the guide lines are."
+  },
+  "turnOffCollapsing": {
+    "message": "Turn off collapsing",
+    "description": "Setting, on or off. Also quoted in notAvailableWhile, so keep the two the same."
+  },
+  "turnOffCollapsingHint": {
+    "message": "Removes the arrows and the collapse options, and keeps every tree expanded",
+    "description": "Explains the setting."
+  },
+  "autoExpand": {
+    "message": "Expand a collapsed tree when one of its tabs is selected",
+    "description": "Setting, on or off."
+  },
+  "autoExpandHint": {
+    "message": "For example when switching tabs with Ctrl+Tab",
+    "description": "Example for the setting."
+  },
+  "hideInFullscreen": {
+    "message": "Hide the tree when a page goes full screen",
+    "description": "Setting, on or off."
+  },
+  "hideInFullscreenHint": {
+    "message": "For example a video. Chrome doesn't let extensions reopen the side panel by themselves, so bring it back afterwards with the toolbar button or its keyboard shortcut.",
+    "description": "Explains the setting. The toolbar button is the extension's button in Chrome's toolbar."
+  },
+  "advancedHeading": {
+    "message": "Advanced",
+    "description": "Heading of the advanced settings."
+  },
+  "advancedNote": {
+    "message": "These change how Chrome itself normally behaves.",
+    "description": "Note under the advanced heading."
+  },
+  "keepWindow": {
+    "message": "Keep the window open when its last tab is closed from the tree",
+    "description": "Setting, on or off."
+  },
+  "keepWindowHint": {
+    "message": "Chrome normally closes a window together with its last tab. With this on, closing the last tab from the tree opens a new tab first, so the window stays open. Closing it with the keyboard shortcut or from the tabs at the top of the window still closes the window, as usual.",
+    "description": "Explains the setting. \"The tabs at the top of the window\" is Chrome's own tab strip."
+  },
+  "notAvailableWhile": {
+    "message": "Not available while “$SETTING$” is on",
+    "description": "Note on a setting that's turned off because another setting is on. Use the quotation marks of your language.",
+    "placeholders": {
+      "setting": {
+        "content": "$1",
+        "example": "Turn off collapsing"
+      }
+    }
+  },
+  "notNeededCloseAll": {
+    "message": "Not needed: closing a parent already closes its children",
+    "description": "Note on \"Close the whole tree when its collapsed parent is closed\" when \"Close its children too\" is chosen."
+  },
+  "sidePanelTip": {
+    "message": "Tip: Chrome can show the side panel on the left. Open $LINK$ and set $SETTING$ to $VALUE$.",
+    "description": "Tip at the bottom of the settings page. The placeholders are a link to Chrome's appearance settings and the names of a Chrome setting and its value.",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "chrome://settings/appearance"
+      },
+      "setting": {
+        "content": "$2",
+        "example": "Side panel position"
+      },
+      "value": {
+        "content": "$3",
+        "example": "Show on left"
+      }
+    }
+  },
+  "chromeSidePanelPosition": {
+    "message": "Side panel position",
+    "description": "The name of a setting on Chrome's own appearance settings page. Must be exactly Chrome's words in your language."
+  },
+  "chromeShowOnLeft": {
+    "message": "Show on left",
+    "description": "A value of Chrome's \"Side panel position\" setting. Must be exactly Chrome's words in your language."
+  },
+  "feedback": {
+    "message": "Found a bug? $REPORT$. Have an idea? $SUGGEST$.",
+    "description": "Line at the bottom of the settings page. The placeholders are two links: reportIt and suggestFeature.",
+    "placeholders": {
+      "report": {
+        "content": "$1",
+        "example": "Report it on GitHub"
+      },
+      "suggest": {
+        "content": "$2",
+        "example": "Suggest a feature"
+      }
+    }
+  },
+  "reportIt": {
+    "message": "Report it on GitHub",
+    "description": "Link to the bug reports."
+  },
+  "suggestFeature": {
+    "message": "Suggest a feature",
+    "description": "Link to the feature requests."
+  },
+  "madeBy": {
+    "message": "Tree of Tabs is made with care by Lawand, an independent developer.",
+    "description": "About the developer, at the bottom of the settings page. Keep the names as they are."
+  },
+  "macApps": {
+    "message": "If you like keeping your tabs organized, you might like Taskbar, my app for switching between windows on the Mac.",
+    "description": "Shown only on a Mac. \"Taskbar\" is the name of an app: keep it in English."
+  },
+  "discover": {
+    "message": "Discover my other software at $SITE$, and follow $ACCOUNT$ on X.",
+    "description": "The placeholders are links to a website and an account on X.",
+    "placeholders": {
+      "site": {
+        "content": "$1",
+        "example": "lawand.io"
+      },
+      "account": {
+        "content": "$2",
+        "example": "@lawand_dot_io"
+      }
+    }
+  }
+}
