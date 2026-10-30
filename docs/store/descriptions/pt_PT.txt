@@ -1,0 +1,40 @@
+Separadores verticais para o Chrome, em árvore no painel lateral. Cada separador que abre a partir de uma página aparece por baixo dessa página, para saber sempre de onde veio um separador e que separadores estão relacionados.
+
+FUNCIONALIDADES
+• Organização automática: os links abertos num novo separador, os links abertos com o clique do meio e as páginas que abrem separadores aparecem por baixo do separador de onde vieram. Os separadores que abre diretamente, a partir da barra de endereço, de um marcador ou de um novo separador, começam a sua própria árvore.
+• Arrastar e largar: largue um separador sobre outro para o colocar por baixo dele, entre dois separadores para o mover ou abaixo da lista para começar uma nova árvore. O ramo inteiro acompanha-o, e pode arrastar vários separadores selecionados de uma vez ou movê-los para outra janela.
+• Sempre a par dos seus separadores: a árvore e a ordem dos separadores no topo da janela coincidem sempre. Mover um separador no topo também move o respetivo ramo.
+• Reduza os ramos que não está a usar: aponte para um separador e o ícone transforma-se numa seta. Um ramo reduzido mostra quantos separadores contém. Se nunca reduz nada, pode desativar completamente a redução.
+• Fechar um separador principal mantém o ramo unido: o primeiro separador filho toma o seu lugar. Também pode optar por fechar o ramo inteiro com ele.
+• Os separadores fixados aparecem como uma fila de ícones no topo. Os grupos de separadores aparecem como uma linha colorida ao lado dos respetivos separadores.
+• As vistas divididas (dois separadores lado a lado) aparecem numa só linha e movem-se em conjunto, para que a árvore nunca as separe.
+• Botão Novo separador: clique para começar uma nova árvore, ou use o clique do meio ou o botão direito para abrir um separador por baixo do atual.
+• Clique com o botão direito num separador para ações rápidas: novo separador neste ramo, recarregar, duplicar, fixar, desativar o som, aumentar ou diminuir o avanço, mover um ramo para uma nova janela, fechar um ramo, fechar todos os outros separadores ou os separadores abaixo.
+• Fácil de usar com o teclado: percorra a árvore com as setas, abra o menu com Shift+F10 e mostre ou oculte a árvore com um atalho de teclado (Alt+Shift+T por predefinição, Option+Shift+T no Mac).
+• Linhas-guia finas mostram que separadores pertencem a cada separador principal, mesmo em vários níveis. Pode ocultá-las se preferir.
+• Parece fazer parte do navegador, nos modos claro e escuro.
+• Os vídeos em ecrã inteiro ocupam o ecrã todo: a árvore pode ocultar-se quando uma página passa para ecrã inteiro.
+• Lembra-se da sua árvore quando reinicia o navegador.
+• Opcional: manter uma janela aberta quando fecha o último separador a partir da árvore.
+• Disponível em português, Deutsch, English, Español, Français, Italiano, Русский, Türkçe, 日本語, 한국어 e 简体中文.
+
+COMO UTILIZAR
+1. Clique no botão do Tree of Tabs na barra de ferramentas (ou use o atalho de teclado) para abrir a árvore no painel lateral.
+2. Navegue como habitualmente. Os separadores que abre a partir de uma página aparecem por baixo dela.
+3. Arraste os separadores para os reorganizar. Clique com o botão direito num separador para mais ações.
+4. Clique com o botão direito na árvore e escolha Definições para alterar o comportamento dos separadores novos e fechados, o espaçamento e muito mais.
+O Chrome abre o painel lateral em cada janela separadamente. Por isso, numa nova janela, abra a árvore com o botão da barra de ferramentas ou com o atalho de teclado.
+Sugestão: para mostrar a árvore à esquerda, abra as definições de aspeto do Chrome e defina «Posição do painel lateral» como «Esquerda».
+
+PRIVACIDADE
+O Tree of Tabs nunca envia os seus separadores nem a sua navegação para lado nenhum. Guarda a estrutura da sua árvore no seu próprio computador para a poder reconstruir depois de reiniciar, e não tem estatísticas, contas nem servidores. As suas definições são sincronizadas com o seu perfil do navegador se utilizar a sincronização.
+
+AUTORIZAÇÕES
+• «Ler o seu histórico de navegação»: o Tree of Tabs precisa dos títulos e endereços dos separadores abertos para os mostrar na árvore e saber a partir de que separador foi aberto um novo separador. Não lê o conteúdo de nenhuma página e não vê o histórico das páginas que fechou.
+
+CÓDIGO ABERTO
+O Tree of Tabs é gratuito e de código aberto: https://github.com/lawand-dot-io/tree-of-tabs
+
+APOIO
+Encontrou um erro? Comunique-o em https://github.com/lawand-dot-io/tree-of-tabs/issues
+Tem uma ideia? Sugira uma funcionalidade em https://github.com/lawand-dot-io/tree-of-tabs/discussions/categories/feature-requests

@@ -1,6 +1,6 @@
 {
   "extDescription": {
-    "message": "Guias verticais em árvore no painel lateral. As guias abertas de uma página ficam aninhadas abaixo dela e podem ser arrastadas."
+    "message": "Separadores verticais em árvore no painel lateral. Os separadores abertos de uma página ficam por baixo dela e pode arrastá-los."
   },
   "actionTitle": {
     "message": "Mostrar Tree of Tabs"
@@ -9,46 +9,46 @@
     "message": "Mostrar ou ocultar a árvore"
   },
   "pinnedTabs": {
-    "message": "Guias fixadas"
+    "message": "Separadores fixados"
   },
   "tabs": {
-    "message": "Guias"
+    "message": "Separadores"
   },
   "newTab": {
-    "message": "Nova guia"
+    "message": "Novo separador"
   },
   "newTabTooltip": {
-    "message": "Nova guia\nClique do meio: nova guia abaixo da guia atual"
+    "message": "Novo separador\nClique do meio: novo separador por baixo do separador atual"
   },
   "untitledTab": {
-    "message": "Nova guia"
+    "message": "Novo separador"
   },
   "closeTab": {
-    "message": "Fechar guia"
+    "message": "Fechar separador"
   },
   "expand": {
     "message": "Expandir"
   },
   "collapse": {
-    "message": "Recolher"
+    "message": "Reduzir"
   },
   "muteTab": {
-    "message": "Desativar som da guia"
+    "message": "Desativar som do separador"
   },
   "unmuteTab": {
-    "message": "Ativar som da guia"
+    "message": "Reativar som do separador"
   },
   "muteTabs": {
-    "message": "Desativar som das guias"
+    "message": "Desativar som dos separadores"
   },
   "unmuteTabs": {
-    "message": "Ativar som das guias"
+    "message": "Reativar som dos separadores"
   },
   "windowTipTitle": {
-    "message": "Cada janela tem o próprio painel lateral."
+    "message": "Cada janela tem o seu próprio painel lateral."
   },
   "windowTipShortcut": {
-    "message": "$TITLE$ O Chrome não permite que extensões o abram sozinhas. Por isso, em uma nova janela, mostre a árvore com o botão da barra de ferramentas ou com $SHORTCUT$.",
+    "message": "$TITLE$ O Chrome não permite que as extensões o abram sozinhas. Por isso, numa nova janela, mostre a árvore com o botão da barra de ferramentas ou com $SHORTCUT$.",
     "placeholders": {
       "title": {
         "content": "$1",
@@ -61,7 +61,7 @@
     }
   },
   "windowTip": {
-    "message": "$TITLE$ O Chrome não permite que extensões o abram sozinhas. Por isso, em uma nova janela, mostre a árvore com o botão da barra de ferramentas.",
+    "message": "$TITLE$ O Chrome não permite que as extensões o abram sozinhas. Por isso, numa nova janela, mostre a árvore com o botão da barra de ferramentas.",
     "placeholders": {
       "title": {
         "content": "$1",
@@ -70,16 +70,16 @@
     }
   },
   "gotIt": {
-    "message": "Entendi"
+    "message": "OK"
   },
   "fullscreenTitle": {
-    "message": "Ocultar a árvore em tela cheia?"
+    "message": "Ocultar a árvore em ecrã inteiro?"
   },
   "fullscreenIntro": {
-    "message": "O Chrome mantém o painel lateral aberto ao lado de vídeos e páginas em tela cheia. O Tree of Tabs pode fechá-lo quando você entra em tela cheia."
+    "message": "O Chrome mantém o painel lateral aberto ao lado de vídeos e páginas em ecrã inteiro. O Tree of Tabs pode fechá-lo quando passa para ecrã inteiro."
   },
   "fullscreenReopenShortcut": {
-    "message": "O Chrome não permite que extensões reabram o painel lateral sozinhas. Depois, traga a árvore de volta com o botão da barra de ferramentas ou com $SHORTCUT$.",
+    "message": "O Chrome não permite que as extensões voltem a abrir o painel lateral sozinhas. Depois, volte a mostrar a árvore com o botão da barra de ferramentas ou com $SHORTCUT$.",
     "placeholders": {
       "shortcut": {
         "content": "$1",
@@ -88,22 +88,22 @@
     }
   },
   "fullscreenReopen": {
-    "message": "O Chrome não permite que extensões reabram o painel lateral sozinhas. Depois, traga a árvore de volta com o botão da barra de ferramentas."
+    "message": "O Chrome não permite que as extensões voltem a abrir o painel lateral sozinhas. Depois, volte a mostrar a árvore com o botão da barra de ferramentas."
   },
   "hideDuringFullscreen": {
-    "message": "Ocultar em tela cheia"
+    "message": "Ocultar em ecrã inteiro"
   },
   "keepItOpen": {
     "message": "Manter aberto"
   },
   "changeLaterInSettings": {
-    "message": "Você pode mudar isso depois nas configurações."
+    "message": "Pode alterar esta opção mais tarde nas definições."
   },
   "newTabAsChild": {
-    "message": "Nova guia filha"
+    "message": "Novo separador filho"
   },
   "newTabUnderCurrent": {
-    "message": "Nova guia abaixo da guia atual"
+    "message": "Novo separador por baixo do atual"
   },
   "reload": {
     "message": "Recarregar"
@@ -115,37 +115,37 @@
     "message": "Fixar"
   },
   "unpin": {
-    "message": "Liberar guia"
+    "message": "Desafixar"
   },
   "expandTree": {
     "message": "Expandir árvore"
   },
   "collapseTree": {
-    "message": "Recolher árvore"
+    "message": "Reduzir árvore"
   },
   "collapseAll": {
-    "message": "Recolher tudo"
+    "message": "Reduzir tudo"
   },
   "expandAll": {
     "message": "Expandir tudo"
   },
   "indent": {
-    "message": "Aumentar recuo"
+    "message": "Aumentar avanço"
   },
   "outdent": {
-    "message": "Diminuir recuo"
+    "message": "Diminuir avanço"
   },
   "moveToNewWindow": {
-    "message": "Mover para uma nova janela"
+    "message": "Mover para nova janela"
   },
   "moveTreeToNewWindow": {
-    "message": "Mover árvore para uma nova janela"
+    "message": "Mover árvore para nova janela"
   },
   "moveTabsToNewWindow": {
-    "message": "Mover guias para uma nova janela"
+    "message": "Mover separadores para nova janela"
   },
   "closeChildren": {
-    "message": "Fechar guias filhas"
+    "message": "Fechar separadores filhos"
   },
   "closeTree": {
     "message": "Fechar árvore"
@@ -154,64 +154,64 @@
     "message": "Fechar"
   },
   "closeTabs": {
-    "message": "Fechar guias"
+    "message": "Fechar separadores"
   },
   "closeOtherTabs": {
-    "message": "Fechar outras guias"
+    "message": "Fechar os outros separadores"
   },
   "closeTabsBelow": {
-    "message": "Fechar guias abaixo"
+    "message": "Fechar os separadores abaixo"
   },
   "settings": {
-    "message": "Configurações"
+    "message": "Definições"
   },
   "settingsPageTitle": {
-    "message": "Configurações do Tree of Tabs"
+    "message": "Definições do Tree of Tabs"
   },
   "newTabsHeading": {
-    "message": "Novas guias"
+    "message": "Novos separadores"
   },
   "placeTabs": {
-    "message": "Posição das guias abertas a partir de outra guia"
+    "message": "Posição dos separadores abertos a partir de outro separador"
   },
   "placeTabsHint": {
-    "message": "Links, cliques do meio e páginas que abrem guias"
+    "message": "Links, cliques do meio e páginas que abrem separadores"
   },
   "asLastChild": {
-    "message": "Como a última guia filha"
+    "message": "Como último separador filho"
   },
   "asFirstChild": {
-    "message": "Como a primeira guia filha"
+    "message": "Como primeiro separador filho"
   },
   "newTabAsChildSetting": {
-    "message": "Abrir novas guias (Ctrl+T) como filhas da guia atual"
+    "message": "Abrir novos separadores (Ctrl+T) como filhos do separador atual"
   },
   "newTabAsChildHint": {
-    "message": "Desativado: novas guias em branco começam a própria árvore"
+    "message": "Desativado: os novos separadores em branco começam a sua própria árvore"
   },
   "closingTabsHeading": {
-    "message": "Fechamento de guias"
+    "message": "Fechar separadores"
   },
   "whenParentClosed": {
-    "message": "Quando uma guia mãe é fechada"
+    "message": "Quando um separador principal é fechado"
   },
   "promoteFirst": {
-    "message": "Promover a primeira guia filha"
+    "message": "O primeiro filho toma o seu lugar"
   },
   "promoteAll": {
-    "message": "Subir todas as filhas um nível"
+    "message": "Subir todos os filhos um nível"
   },
   "closeAllChildren": {
-    "message": "Fechar também as guias filhas"
+    "message": "Fechar também os seus filhos"
   },
   "closeCollapsedTree": {
-    "message": "Fechar a árvore inteira quando a guia mãe recolhida for fechada"
+    "message": "Fechar a árvore inteira quando o separador principal reduzido é fechado"
   },
   "closeCollapsedTreeHint": {
-    "message": "As guias ocultas são fechadas junto com a guia mãe visível"
+    "message": "Os separadores ocultos fecham-se com o separador principal visível"
   },
   "appearanceHeading": {
-    "message": "Aparência"
+    "message": "Aspeto"
   },
   "density": {
     "message": "Densidade"
@@ -223,7 +223,7 @@
     "message": "Compacta"
   },
   "indentation": {
-    "message": "Recuo por nível"
+    "message": "Avanço por nível"
   },
   "medium": {
     "message": "Médio"
@@ -235,40 +235,40 @@
     "message": "Ocultar as linhas-guia"
   },
   "hideGuideLinesHint": {
-    "message": "As linhas finas que ligam cada guia às guias filhas. As cores dos grupos de guias continuam aparecendo."
+    "message": "As linhas finas que ligam cada separador aos seus filhos. As cores dos grupos de separadores continuam visíveis."
   },
   "turnOffCollapsing": {
-    "message": "Desativar o recolhimento"
+    "message": "Desativar a redução"
   },
   "turnOffCollapsingHint": {
-    "message": "Remove as setas e as opções de recolher e mantém todas as árvores expandidas"
+    "message": "Remove as setas e as opções de redução e mantém todas as árvores expandidas"
   },
   "autoExpand": {
-    "message": "Expandir uma árvore recolhida quando uma das guias dela for selecionada"
+    "message": "Expandir uma árvore reduzida quando um dos seus separadores é selecionado"
   },
   "autoExpandHint": {
-    "message": "Por exemplo, ao alternar entre guias com Ctrl+Tab"
+    "message": "Por exemplo, ao mudar de separador com Ctrl+Tab"
   },
   "hideInFullscreen": {
-    "message": "Ocultar a árvore quando uma página entra em tela cheia"
+    "message": "Ocultar a árvore quando uma página passa para ecrã inteiro"
   },
   "hideInFullscreenHint": {
-    "message": "Por exemplo, um vídeo. O Chrome não permite que extensões reabram o painel lateral sozinhas. Depois, traga-o de volta com o botão da barra de ferramentas ou com o atalho de teclado."
+    "message": "Por exemplo, um vídeo. O Chrome não permite que as extensões voltem a abrir o painel lateral sozinhas. Depois, volte a mostrá-lo com o botão da barra de ferramentas ou com o respetivo atalho de teclado."
   },
   "advancedHeading": {
-    "message": "Avançado"
+    "message": "Avançadas"
   },
   "advancedNote": {
-    "message": "Estas opções mudam o comportamento normal do Chrome."
+    "message": "Estas opções alteram o comportamento normal do Chrome."
   },
   "keepWindow": {
-    "message": "Manter a janela aberta quando a última guia for fechada pela árvore"
+    "message": "Manter a janela aberta quando o último separador é fechado a partir da árvore"
   },
   "keepWindowHint": {
-    "message": "Normalmente, o Chrome fecha a janela junto com a última guia. Com esta opção ativada, fechar a última guia pela árvore abre primeiro uma nova guia, e a janela continua aberta. Fechar a guia com o atalho de teclado ou pelas guias na parte de cima da janela continua fechando a janela, como sempre."
+    "message": "Normalmente, o Chrome fecha a janela juntamente com o último separador. Com esta opção ativada, fechar o último separador a partir da árvore abre primeiro um novo separador, e a janela continua aberta. Fechá-lo com o atalho de teclado ou a partir dos separadores no topo da janela continua a fechar a janela, como habitualmente."
   },
   "notAvailableWhile": {
-    "message": "Indisponível enquanto “$SETTING$” estiver ativado",
+    "message": "Indisponível enquanto «$SETTING$» estiver ativado",
     "placeholders": {
       "setting": {
         "content": "$1",
@@ -277,10 +277,10 @@
     }
   },
   "notNeededCloseAll": {
-    "message": "Não é necessário: fechar uma guia mãe já fecha as guias filhas"
+    "message": "Não é necessário: fechar um separador principal já fecha os seus filhos"
   },
   "sidePanelTip": {
-    "message": "Dica: o Chrome pode mostrar o painel lateral à esquerda. Abra $LINK$ e defina $SETTING$ como $VALUE$.",
+    "message": "Sugestão: o Chrome pode mostrar o painel lateral à esquerda. Abra $LINK$ e defina $SETTING$ como $VALUE$.",
     "placeholders": {
       "link": {
         "content": "$1",
@@ -300,10 +300,10 @@
     "message": "Posição do painel lateral"
   },
   "chromeShowOnLeft": {
-    "message": "À esquerda"
+    "message": "Esquerda"
   },
   "feedback": {
-    "message": "Encontrou um bug? $REPORT$. Tem uma ideia? $SUGGEST$.",
+    "message": "Encontrou um erro? $REPORT$. Tem uma ideia? $SUGGEST$.",
     "placeholders": {
       "report": {
         "content": "$1",
@@ -316,19 +316,19 @@
     }
   },
   "reportIt": {
-    "message": "Informe no GitHub"
+    "message": "Comunique-o no GitHub"
   },
   "suggestFeature": {
-    "message": "Sugira um recurso"
+    "message": "Sugira uma funcionalidade"
   },
   "madeBy": {
-    "message": "O Tree of Tabs é feito com carinho por Lawand, um desenvolvedor independente."
+    "message": "O Tree of Tabs é feito com cuidado por Lawand, um programador independente."
   },
   "macApps": {
-    "message": "Se você gosta de manter as guias organizadas, talvez goste do Taskbar, meu app para alternar entre janelas no Mac."
+    "message": "Se gosta de manter os separadores organizados, talvez goste do Taskbar, a minha app para alternar entre janelas no Mac."
   },
   "discover": {
-    "message": "Conheça meus outros apps em $SITE$ e siga $ACCOUNT$ no X.",
+    "message": "Conheça as minhas outras apps em $SITE$ e siga $ACCOUNT$ no X.",
     "placeholders": {
       "site": {
         "content": "$1",

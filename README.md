@@ -104,8 +104,8 @@ Have an idea? [Suggest a feature](https://github.com/lawand-dot-io/tree-of-tabs/
   themselves, since that would end the split view in Chrome; it moves the tabs
   around them instead.
 - **Your language**: Tree of Tabs speaks English, German, Spanish, French,
-  Italian, Japanese, Korean, Brazilian Portuguese, Russian, Turkish and
-  Simplified Chinese, following Chrome's language.
+  Italian, Japanese, Korean, Portuguese (Brazil and Portugal), Russian,
+  Turkish and Simplified Chinese, following Chrome's language.
 - **Tab groups** show as a colored line along the group's tabs, and pinned
   tabs as a row of icons at the top. A spinner shows while a page loads.
 
@@ -178,10 +178,6 @@ the same texts and placeholders. Words Chrome itself shows (like "side panel"
 or "Close other tabs") should match Chrome's own translation. To check the
 result, `node tools/translation-shots.mjs <folder>` saves screenshots of the
 panel, its menu, the notices and the settings page in every language.
-
-`_locales/pt_PT` is a copy of `pt_BR`, so Portuguese from Portugal gets
-Brazilian Portuguese rather than English. Chrome doesn't use a general `pt`
-folder. Keep the two the same until there's a European Portuguese translation.
 
 ### Chrome DevTools MCP server
 

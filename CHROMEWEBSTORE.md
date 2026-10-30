@@ -77,14 +77,12 @@ English
 ### Other Languages
 
 The extension is translated into German, Spanish, French, Italian, Japanese,
-Korean, Brazilian Portuguese, Russian, Turkish and Simplified Chinese
+Korean, Brazilian and European Portuguese, Russian, Turkish and Simplified Chinese
 (`_locales/`). The store takes the name and short description from the package
 in each language by itself. The detailed description has to be entered per
 language: in the dashboard's Store listing, pick the language at the top and
 paste its text from `docs/store/descriptions/<language>.txt`. The screenshots
-can stay the same for every language. For Portuguese (Portugal), use
-`pt_BR.txt`: the extension uses its Brazilian texts there too
-(`_locales/pt_PT` is a copy of `pt_BR`).
+can stay the same for every language.
 
 The texts use Chrome's own words for what Chrome shows, such as "side panel",
 "Close other tabs", "Side panel position" and the "Read your browsing history"
