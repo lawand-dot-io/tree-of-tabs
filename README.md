@@ -179,6 +179,10 @@ or "Close other tabs") should match Chrome's own translation. To check the
 result, `node tools/translation-shots.mjs <folder>` saves screenshots of the
 panel, its menu, the notices and the settings page in every language.
 
+`_locales/pt_PT` is a copy of `pt_BR`, so Portuguese from Portugal gets
+Brazilian Portuguese rather than English. Chrome doesn't use a general `pt`
+folder. Keep the two the same until there's a European Portuguese translation.
+
 ### Chrome DevTools MCP server
 
 `.mcp.json` registers the [Chrome DevTools MCP server](https://github.com/ChromeDevTools/chrome-devtools-mcp)

@@ -1,0 +1,343 @@
+{
+  "extDescription": {
+    "message": "Guias verticais em árvore no painel lateral. As guias abertas de uma página ficam aninhadas abaixo dela e podem ser arrastadas."
+  },
+  "actionTitle": {
+    "message": "Mostrar Tree of Tabs"
+  },
+  "commandDescription": {
+    "message": "Mostrar ou ocultar a árvore"
+  },
+  "pinnedTabs": {
+    "message": "Guias fixadas"
+  },
+  "tabs": {
+    "message": "Guias"
+  },
+  "newTab": {
+    "message": "Nova guia"
+  },
+  "newTabTooltip": {
+    "message": "Nova guia\nClique do meio: nova guia abaixo da guia atual"
+  },
+  "untitledTab": {
+    "message": "Nova guia"
+  },
+  "closeTab": {
+    "message": "Fechar guia"
+  },
+  "expand": {
+    "message": "Expandir"
+  },
+  "collapse": {
+    "message": "Recolher"
+  },
+  "muteTab": {
+    "message": "Desativar som da guia"
+  },
+  "unmuteTab": {
+    "message": "Ativar som da guia"
+  },
+  "muteTabs": {
+    "message": "Desativar som das guias"
+  },
+  "unmuteTabs": {
+    "message": "Ativar som das guias"
+  },
+  "windowTipTitle": {
+    "message": "Cada janela tem o próprio painel lateral."
+  },
+  "windowTipShortcut": {
+    "message": "$TITLE$ O Chrome não permite que extensões o abram sozinhas. Por isso, em uma nova janela, mostre a árvore com o botão da barra de ferramentas ou com $SHORTCUT$.",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Each window has its own side panel."
+      },
+      "shortcut": {
+        "content": "$2",
+        "example": "Alt+Shift+T"
+      }
+    }
+  },
+  "windowTip": {
+    "message": "$TITLE$ O Chrome não permite que extensões o abram sozinhas. Por isso, em uma nova janela, mostre a árvore com o botão da barra de ferramentas.",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Each window has its own side panel."
+      }
+    }
+  },
+  "gotIt": {
+    "message": "Entendi"
+  },
+  "fullscreenTitle": {
+    "message": "Ocultar a árvore em tela cheia?"
+  },
+  "fullscreenIntro": {
+    "message": "O Chrome mantém o painel lateral aberto ao lado de vídeos e páginas em tela cheia. O Tree of Tabs pode fechá-lo quando você entra em tela cheia."
+  },
+  "fullscreenReopenShortcut": {
+    "message": "O Chrome não permite que extensões reabram o painel lateral sozinhas. Depois, traga a árvore de volta com o botão da barra de ferramentas ou com $SHORTCUT$.",
+    "placeholders": {
+      "shortcut": {
+        "content": "$1",
+        "example": "Alt+Shift+T"
+      }
+    }
+  },
+  "fullscreenReopen": {
+    "message": "O Chrome não permite que extensões reabram o painel lateral sozinhas. Depois, traga a árvore de volta com o botão da barra de ferramentas."
+  },
+  "hideDuringFullscreen": {
+    "message": "Ocultar em tela cheia"
+  },
+  "keepItOpen": {
+    "message": "Manter aberto"
+  },
+  "changeLaterInSettings": {
+    "message": "Você pode mudar isso depois nas configurações."
+  },
+  "newTabAsChild": {
+    "message": "Nova guia filha"
+  },
+  "newTabUnderCurrent": {
+    "message": "Nova guia abaixo da guia atual"
+  },
+  "reload": {
+    "message": "Recarregar"
+  },
+  "duplicate": {
+    "message": "Duplicar"
+  },
+  "pin": {
+    "message": "Fixar"
+  },
+  "unpin": {
+    "message": "Liberar guia"
+  },
+  "expandTree": {
+    "message": "Expandir árvore"
+  },
+  "collapseTree": {
+    "message": "Recolher árvore"
+  },
+  "collapseAll": {
+    "message": "Recolher tudo"
+  },
+  "expandAll": {
+    "message": "Expandir tudo"
+  },
+  "indent": {
+    "message": "Aumentar recuo"
+  },
+  "outdent": {
+    "message": "Diminuir recuo"
+  },
+  "moveToNewWindow": {
+    "message": "Mover para uma nova janela"
+  },
+  "moveTreeToNewWindow": {
+    "message": "Mover árvore para uma nova janela"
+  },
+  "moveTabsToNewWindow": {
+    "message": "Mover guias para uma nova janela"
+  },
+  "closeChildren": {
+    "message": "Fechar guias filhas"
+  },
+  "closeTree": {
+    "message": "Fechar árvore"
+  },
+  "close": {
+    "message": "Fechar"
+  },
+  "closeTabs": {
+    "message": "Fechar guias"
+  },
+  "closeOtherTabs": {
+    "message": "Fechar outras guias"
+  },
+  "closeTabsBelow": {
+    "message": "Fechar guias abaixo"
+  },
+  "settings": {
+    "message": "Configurações"
+  },
+  "settingsPageTitle": {
+    "message": "Configurações do Tree of Tabs"
+  },
+  "newTabsHeading": {
+    "message": "Novas guias"
+  },
+  "placeTabs": {
+    "message": "Posição das guias abertas a partir de outra guia"
+  },
+  "placeTabsHint": {
+    "message": "Links, cliques do meio e páginas que abrem guias"
+  },
+  "asLastChild": {
+    "message": "Como a última guia filha"
+  },
+  "asFirstChild": {
+    "message": "Como a primeira guia filha"
+  },
+  "newTabAsChildSetting": {
+    "message": "Abrir novas guias (Ctrl+T) como filhas da guia atual"
+  },
+  "newTabAsChildHint": {
+    "message": "Desativado: novas guias em branco começam a própria árvore"
+  },
+  "closingTabsHeading": {
+    "message": "Fechamento de guias"
+  },
+  "whenParentClosed": {
+    "message": "Quando uma guia mãe é fechada"
+  },
+  "promoteFirst": {
+    "message": "Promover a primeira guia filha"
+  },
+  "promoteAll": {
+    "message": "Subir todas as filhas um nível"
+  },
+  "closeAllChildren": {
+    "message": "Fechar também as guias filhas"
+  },
+  "closeCollapsedTree": {
+    "message": "Fechar a árvore inteira quando a guia mãe recolhida for fechada"
+  },
+  "closeCollapsedTreeHint": {
+    "message": "As guias ocultas são fechadas junto com a guia mãe visível"
+  },
+  "appearanceHeading": {
+    "message": "Aparência"
+  },
+  "density": {
+    "message": "Densidade"
+  },
+  "comfortable": {
+    "message": "Confortável"
+  },
+  "compact": {
+    "message": "Compacta"
+  },
+  "indentation": {
+    "message": "Recuo por nível"
+  },
+  "medium": {
+    "message": "Médio"
+  },
+  "wide": {
+    "message": "Largo"
+  },
+  "hideGuideLines": {
+    "message": "Ocultar as linhas-guia"
+  },
+  "hideGuideLinesHint": {
+    "message": "As linhas finas que ligam cada guia às guias filhas. As cores dos grupos de guias continuam aparecendo."
+  },
+  "turnOffCollapsing": {
+    "message": "Desativar o recolhimento"
+  },
+  "turnOffCollapsingHint": {
+    "message": "Remove as setas e as opções de recolher e mantém todas as árvores expandidas"
+  },
+  "autoExpand": {
+    "message": "Expandir uma árvore recolhida quando uma das guias dela for selecionada"
+  },
+  "autoExpandHint": {
+    "message": "Por exemplo, ao alternar entre guias com Ctrl+Tab"
+  },
+  "hideInFullscreen": {
+    "message": "Ocultar a árvore quando uma página entra em tela cheia"
+  },
+  "hideInFullscreenHint": {
+    "message": "Por exemplo, um vídeo. O Chrome não permite que extensões reabram o painel lateral sozinhas. Depois, traga-o de volta com o botão da barra de ferramentas ou com o atalho de teclado."
+  },
+  "advancedHeading": {
+    "message": "Avançado"
+  },
+  "advancedNote": {
+    "message": "Estas opções mudam o comportamento normal do Chrome."
+  },
+  "keepWindow": {
+    "message": "Manter a janela aberta quando a última guia for fechada pela árvore"
+  },
+  "keepWindowHint": {
+    "message": "Normalmente, o Chrome fecha a janela junto com a última guia. Com esta opção ativada, fechar a última guia pela árvore abre primeiro uma nova guia, e a janela continua aberta. Fechar a guia com o atalho de teclado ou pelas guias na parte de cima da janela continua fechando a janela, como sempre."
+  },
+  "notAvailableWhile": {
+    "message": "Indisponível enquanto “$SETTING$” estiver ativado",
+    "placeholders": {
+      "setting": {
+        "content": "$1",
+        "example": "Turn off collapsing"
+      }
+    }
+  },
+  "notNeededCloseAll": {
+    "message": "Não é necessário: fechar uma guia mãe já fecha as guias filhas"
+  },
+  "sidePanelTip": {
+    "message": "Dica: o Chrome pode mostrar o painel lateral à esquerda. Abra $LINK$ e defina $SETTING$ como $VALUE$.",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "chrome://settings/appearance"
+      },
+      "setting": {
+        "content": "$2",
+        "example": "Side panel position"
+      },
+      "value": {
+        "content": "$3",
+        "example": "Left"
+      }
+    }
+  },
+  "chromeSidePanelPosition": {
+    "message": "Posição do painel lateral"
+  },
+  "chromeShowOnLeft": {
+    "message": "À esquerda"
+  },
+  "feedback": {
+    "message": "Encontrou um bug? $REPORT$. Tem uma ideia? $SUGGEST$.",
+    "placeholders": {
+      "report": {
+        "content": "$1",
+        "example": "Report it on GitHub"
+      },
+      "suggest": {
+        "content": "$2",
+        "example": "Suggest a feature"
+      }
+    }
+  },
+  "reportIt": {
+    "message": "Informe no GitHub"
+  },
+  "suggestFeature": {
+    "message": "Sugira um recurso"
+  },
+  "madeBy": {
+    "message": "O Tree of Tabs é feito com carinho por Lawand, um desenvolvedor independente."
+  },
+  "macApps": {
+    "message": "Se você gosta de manter as guias organizadas, talvez goste do Taskbar, meu app para alternar entre janelas no Mac."
+  },
+  "discover": {
+    "message": "Conheça meus outros apps em $SITE$ e siga $ACCOUNT$ no X.",
+    "placeholders": {
+      "site": {
+        "content": "$1",
+        "example": "lawand.io"
+      },
+      "account": {
+        "content": "$2",
+        "example": "@lawand_dot_io"
+      }
+    }
+  }
+}

@@ -82,7 +82,9 @@ Korean, Brazilian Portuguese, Russian, Turkish and Simplified Chinese
 in each language by itself. The detailed description has to be entered per
 language: in the dashboard's Store listing, pick the language at the top and
 paste its text from `docs/store/descriptions/<language>.txt`. The screenshots
-can stay the same for every language.
+can stay the same for every language. For Portuguese (Portugal), use
+`pt_BR.txt`: the extension uses its Brazilian texts there too
+(`_locales/pt_PT` is a copy of `pt_BR`).
 
 The texts use Chrome's own words for what Chrome shows, such as "side panel",
 "Close other tabs", "Side panel position" and the "Read your browsing history"
