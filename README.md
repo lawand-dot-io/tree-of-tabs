@@ -103,6 +103,9 @@ Have an idea? [Suggest a feature](https://github.com/lawand-dot-io/tree-of-tabs/
   half leaves the other in its place. Tree of Tabs never moves the halves
   themselves, since that would end the split view in Chrome; it moves the tabs
   around them instead.
+- **Your language**: Tree of Tabs speaks English, German, Spanish, French,
+  Italian, Japanese, Korean, Brazilian Portuguese, Russian, Turkish and
+  Simplified Chinese, following Chrome's language.
 - **Tab groups** show as a colored line along the group's tabs, and pinned
   tabs as a row of icons at the top. A spinner shows while a page loads.
 
@@ -131,20 +134,24 @@ this folder itself with **Load unpacked**, and reload it on `chrome://extensions
 after editing.
 
 ```
+_locales/            the texts in each language (English is the source)
 src/
   background.js      service worker: owns the tree and keeps the tab strip in sync
   tree.js            pure tree logic (planning moves, inferring parents, ...)
   settings.js        defaults and storage
+  i18n.js            reads the texts for the browser's language
   theme.css          Chrome-matching colors and type, shared by all pages
   sidepanel/         the tree UI
   options/           the settings page
 test/
   tree.test.js       unit tests for tree.js
+  i18n.test.js       checks every language has the same texts as English
   e2e/run.js         loads the extension into Chromium and drives real tabs
 CHROMEWEBSTORE.md    everything for the Chrome Web Store listing and how to package
 PRIVACY.md           the privacy policy the store listing links to
 docs/                screenshots, the README banner and social preview, release notes
 tools/make-icons.mjs regenerates icons/ (needs Playwright)
+tools/translation-shots.mjs  screenshots of every language, to check the translations
 tools/make-social-preview.py  rebuilds the banner from the captures in docs/store/raw/
 tools/demo/          records the demo video and GIF in docs/demo/ (see capture.mjs)
 tools/chrome-devtools-mcp.sh  starts the Chrome DevTools MCP server (see below)
@@ -161,6 +168,16 @@ GitHub runs both test suites on every push and pull request
 (`.github/workflows/release.yml`) builds the store ZIP and publishes it as a
 GitHub release: run it from the Actions tab, or push a version tag such as
 `v1.0.1`.
+
+### Translations
+
+Every text the extension shows is in `_locales/en/messages.json`, with a
+description of where it appears. To add or change one, edit it there and in
+every other language in `_locales/`: `npm test` fails until each language has
+the same texts and placeholders. Words Chrome itself shows (like "side panel"
+or "Close other tabs") should match Chrome's own translation. To check the
+result, `node tools/translation-shots.mjs <folder>` saves screenshots of the
+panel, its menu, the notices and the settings page in every language.
 
 ### Chrome DevTools MCP server
 

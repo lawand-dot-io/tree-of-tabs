@@ -1,0 +1,40 @@
+Des onglets verticaux pour Chrome, sous forme d'arbre dans le panneau latéral. Chaque onglet que vous ouvrez depuis une page apparaît sous cette page : vous savez toujours d'où vient un onglet et quels onglets vont ensemble.
+
+FONCTIONNALITÉS
+• Imbrication automatique : les liens ouverts dans un nouvel onglet, les liens ouverts d'un clic du milieu et les pages qui ouvrent des onglets apparaissent sous l'onglet dont ils viennent. Les onglets que vous ouvrez vous-même, depuis la barre d'adresse, un favori ou un nouvel onglet, commencent leur propre arbre.
+• Glisser-déposer : déposez un onglet sur un autre pour l'imbriquer, entre deux onglets pour le déplacer, ou sous la liste pour commencer un nouvel arbre. Toute la branche le suit, et vous pouvez glisser plusieurs onglets sélectionnés à la fois ou les déplacer vers une autre fenêtre.
+• Toujours en phase avec vos onglets : l'arbre et l'ordre des onglets en haut de la fenêtre correspondent toujours. Déplacer un onglet en haut déplace aussi sa branche.
+• Réduisez les branches dont vous ne vous servez pas : pointez sur un onglet et son icône devient une flèche. Une branche réduite indique combien d'onglets elle contient. Si vous ne réduisez jamais rien, vous pouvez désactiver complètement la réduction.
+• Fermer un onglet parent garde sa branche ensemble : son premier enfant prend sa place. Vous pouvez aussi choisir de fermer toute la branche avec lui.
+• Les onglets épinglés apparaissent sous forme d'une rangée d'icônes en haut. Les groupes d'onglets apparaissent sous forme d'une ligne de couleur le long de leurs onglets.
+• Les vues partagées (deux onglets côte à côte) apparaissent sur une seule ligne et se déplacent ensemble : l'arbre ne les sépare jamais.
+• Bouton Nouvel onglet : un clic commence un nouvel arbre, un clic du milieu ou un clic droit ouvre un onglet sous l'onglet actuel.
+• Clic droit sur un onglet pour des actions rapides : nouvel onglet dans cette branche, actualiser, dupliquer, épingler, couper le son, augmenter ou diminuer le retrait, déplacer une branche vers une nouvelle fenêtre, fermer une branche, fermer tous les autres onglets ou les onglets en dessous.
+• Pratique au clavier : parcourez l'arbre avec les touches fléchées, ouvrez le menu avec Maj+F10, et affichez ou masquez l'arbre avec un raccourci clavier (Alt+Maj+T par défaut, Option+Maj+T sur Mac).
+• De fines lignes de repère montrent quels onglets appartiennent à quel parent, même sur plusieurs niveaux. Vous pouvez les masquer si vous préférez.
+• S'intègre au navigateur, en mode clair comme en mode sombre.
+• Les vidéos en plein écran profitent de tout l'écran : l'arbre peut se masquer quand une page passe en plein écran.
+• Garde votre arbre en mémoire quand vous redémarrez le navigateur.
+• En option : garder une fenêtre ouverte quand vous fermez son dernier onglet depuis l'arbre.
+• Disponible en français, Deutsch, English, Español, Italiano, Português, Русский, Türkçe, 日本語, 한국어 et 简体中文.
+
+UTILISATION
+1. Cliquez sur le bouton Tree of Tabs dans la barre d'outils (ou utilisez son raccourci clavier) pour ouvrir l'arbre dans le panneau latéral.
+2. Naviguez comme d'habitude. Les onglets que vous ouvrez depuis une page apparaissent dessous.
+3. Glissez les onglets pour les réorganiser. Faites un clic droit sur un onglet pour plus d'actions.
+4. Faites un clic droit sur l'arbre et choisissez Paramètres pour régler le comportement des onglets nouveaux et fermés, l'espacement et plus encore.
+Chrome ouvre le panneau latéral fenêtre par fenêtre : dans une nouvelle fenêtre, ouvrez l'arbre avec le bouton de la barre d'outils ou le raccourci clavier.
+Astuce : pour placer l'arbre à gauche, ouvrez les paramètres d'apparence de Chrome et réglez « Position du panneau latéral » sur « À gauche ».
+
+CONFIDENTIALITÉ
+Tree of Tabs n'envoie jamais vos onglets ni votre navigation nulle part. Il garde la structure de votre arbre sur votre propre ordinateur pour pouvoir la reconstruire après un redémarrage, et il n'a ni statistiques, ni comptes, ni serveurs. Vos paramètres sont synchronisés avec votre profil de navigateur si vous utilisez la synchronisation.
+
+AUTORISATIONS
+• « Consulter votre historique de navigation » : Tree of Tabs a besoin des titres et des adresses de vos onglets ouverts pour les afficher dans l'arbre et savoir depuis quel onglet un nouvel onglet a été ouvert. Il ne lit le contenu d'aucune page et ne voit pas l'historique des pages que vous avez fermées.
+
+OPEN SOURCE
+Tree of Tabs est gratuit et open source : https://github.com/lawand-dot-io/tree-of-tabs
+
+ASSISTANCE
+Un bug ? Signalez-le sur https://github.com/lawand-dot-io/tree-of-tabs/issues
+Une idée ? Proposez une fonctionnalité sur https://github.com/lawand-dot-io/tree-of-tabs/discussions/categories/feature-requests

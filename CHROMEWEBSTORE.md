@@ -13,7 +13,7 @@ field from here.
 
 Tree of Tabs
 
-**Short Description** (120 of 132 characters; same as the manifest description)
+**Short Description** (120 of 132 characters; the extension's `extDescription` in `_locales/en/messages.json`, so the store fills it in from the package, in every language)
 
 Vertical tabs as a tree in the side panel. Tabs you open from a page nest under it, and you can drag them to reorganize.
 
@@ -38,6 +38,7 @@ FEATURES
 • Full screen videos get the whole screen: the tree can hide itself when a page goes full screen.
 • Remembers your tree when you restart the browser.
 • Optional: keep a window open when you close its last tab from the tree.
+• Available in English, Deutsch, Español, Français, Italiano, Português, Русский, Türkçe, 日本語, 한국어 and 简体中文.
 
 HOW TO USE
 1. Click the Tree of Tabs button in the toolbar (or use its keyboard shortcut) to open the tree in the side panel.
@@ -45,7 +46,7 @@ HOW TO USE
 3. Drag tabs to reorganize. Right-click a tab for more actions.
 4. Right-click the tree and choose Settings to change how new and closed tabs behave, the spacing, and more.
 Chrome opens the side panel one window at a time, so in a new window, open the tree with the toolbar button or the keyboard shortcut.
-Tip: to put the tree on the left, open the browser's appearance settings and set the side panel position to the left.
+Tip: to put the tree on the left, open Chrome's appearance settings and set "Side panel position" to "Left".
 
 PRIVACY
 Tree of Tabs never sends your tabs or browsing anywhere. It keeps the shape of your tree on your own computer so it can rebuild it after a restart, and it has no analytics, no accounts and no servers. Your settings sync with your browser profile if you use browser sync.
@@ -72,6 +73,21 @@ Shows the user's open tabs as a tree in the browser's side panel, nesting each t
 **Primary Language**
 
 English
+
+### Other Languages
+
+The extension is translated into German, Spanish, French, Italian, Japanese,
+Korean, Brazilian Portuguese, Russian, Turkish and Simplified Chinese
+(`_locales/`). The store takes the name and short description from the package
+in each language by itself. The detailed description has to be entered per
+language: in the dashboard's Store listing, pick the language at the top and
+paste its text from `docs/store/descriptions/<language>.txt`. The screenshots
+can stay the same for every language.
+
+The texts use Chrome's own words for what Chrome shows, such as "side panel",
+"Close other tabs", "Side panel position" and the "Read your browsing history"
+warning, as translated in Chromium. When the English description changes, update
+every language the same way.
 
 ## Graphics & Assets
 
@@ -195,7 +211,7 @@ No account or setup is needed. After installing, click the Tree of Tabs button i
 
 ## Packaging
 
-Only these go in the ZIP: `manifest.json`, `LICENSE`, `icons/` and `src/`. The tests, tools,
+Only these go in the ZIP: `manifest.json`, `LICENSE`, `_locales/`, `icons/` and `src/`. The tests, tools,
 docs, `.claude/`, `.github/`, `.mcp.json`, `package.json`, the README, PRIVACY.md,
 SECURITY.md and this file stay out.
 
@@ -206,7 +222,7 @@ Actions tab, pick **Release** and click **Run workflow** (or push a tag such as
 upload to the store. By hand:
 
 ```sh
-zip -r tree-of-tabs-v1.0.1.zip manifest.json LICENSE icons src -x "*.DS_Store"
+zip -r tree-of-tabs-v1.1.0.zip manifest.json LICENSE _locales icons src -x "*.DS_Store"
 ```
 
 ## Version History
@@ -215,6 +231,7 @@ zip -r tree-of-tabs-v1.0.1.zip manifest.json LICENSE icons src -x "*.DS_Store"
 |---------|------|---------|--------|
 | 1.0.0 | 2026-10-27 | First release: tab tree in the side panel, automatic nesting, drag and drop, choice of what happens to a closed parent's children, optionally keeping a window open when its last tab is closed from the tree, collapsing (or turning it off), pinned tabs, tab group colors, right-click actions, keyboard navigation, hiding during full screen, tree restored after restart | Published |
 | 1.0.1 | 2026-10-28 | A one-time tip that each window has its own side panel, the icon on the settings page, a description that leads with "vertical tabs" | Published |
+| 1.1.0 | 2026-10-30 | The extension in 11 languages, with a translated store description for each | Released on GitHub, to upload |
 
 ## Review Notes
 

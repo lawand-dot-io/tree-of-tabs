@@ -1,0 +1,40 @@
+Guias verticais para o Chrome, em forma de árvore no painel lateral. Cada guia que você abre a partir de uma página aparece abaixo dela, então você sempre sabe de onde veio uma guia e quais guias estão relacionadas.
+
+RECURSOS
+• Aninhamento automático: links abertos em uma nova guia, links abertos com o clique do meio e páginas que abrem guias aparecem abaixo da guia de onde vieram. Guias que você mesmo abre, pela barra de endereço, por um favorito ou por uma nova guia, começam a própria árvore.
+• Arrastar e soltar: solte uma guia sobre outra para aninhá-la, entre duas guias para movê-la ou abaixo da lista para começar uma nova árvore. O ramo inteiro vai junto, e você pode arrastar várias guias selecionadas de uma vez ou movê-las para outra janela.
+• Sempre em sintonia com suas guias: a árvore e a ordem das guias na parte de cima da janela sempre coincidem. Mover uma guia lá em cima também move o ramo dela.
+• Recolha os ramos que você não está usando: aponte para uma guia e o ícone dela vira uma seta. Um ramo recolhido mostra quantas guias ele contém. Se você nunca recolhe nada, pode desativar o recolhimento por completo.
+• Fechar uma guia mãe mantém o ramo dela unido: a primeira guia filha assume o lugar. Você também pode escolher fechar o ramo inteiro junto.
+• As guias fixadas aparecem como uma fileira de ícones na parte de cima. Os grupos de guias aparecem como uma linha colorida ao lado das guias.
+• Visualizações divididas (duas guias lado a lado) aparecem em uma só linha e se movem juntas, então a árvore nunca as separa.
+• Botão Nova guia: clique para começar uma nova árvore, ou use o clique do meio ou o botão direito para abrir uma guia abaixo da atual.
+• Clique com o botão direito em uma guia para ações rápidas: nova guia neste ramo, recarregar, duplicar, fixar, desativar o som, aumentar ou diminuir o recuo, mover um ramo para uma nova janela, fechar um ramo, fechar todas as outras guias ou as guias abaixo.
+• Fácil de usar pelo teclado: navegue pela árvore com as setas, abra o menu com Shift+F10 e mostre ou oculte a árvore com um atalho de teclado (Alt+Shift+T por padrão, Option+Shift+T no Mac).
+• Linhas-guia finas mostram quais guias pertencem a cada guia mãe, mesmo em vários níveis. Você pode ocultá-las se preferir.
+• Parece parte do navegador, nos modos claro e escuro.
+• Vídeos em tela cheia ocupam a tela toda: a árvore pode se ocultar quando uma página entra em tela cheia.
+• Lembra da sua árvore quando você reinicia o navegador.
+• Opcional: manter uma janela aberta ao fechar a última guia dela pela árvore.
+• Disponível em português, Deutsch, English, Español, Français, Italiano, Русский, Türkçe, 日本語, 한국어 e 简体中文.
+
+COMO USAR
+1. Clique no botão do Tree of Tabs na barra de ferramentas (ou use o atalho de teclado) para abrir a árvore no painel lateral.
+2. Navegue normalmente. As guias que você abre a partir de uma página aparecem abaixo dela.
+3. Arraste as guias para reorganizá-las. Clique com o botão direito em uma guia para ver mais ações.
+4. Clique com o botão direito na árvore e escolha Configurações para mudar como as guias novas e fechadas se comportam, o espaçamento e mais.
+O Chrome abre o painel lateral em cada janela separadamente, então, em uma nova janela, abra a árvore com o botão da barra de ferramentas ou com o atalho de teclado.
+Dica: para colocar a árvore à esquerda, abra as configurações de aparência do Chrome e defina "Posição do painel lateral" como "À esquerda".
+
+PRIVACIDADE
+O Tree of Tabs nunca envia suas guias ou sua navegação para lugar nenhum. Ele guarda a estrutura da sua árvore no seu próprio computador para poder reconstruí-la depois de reiniciar, e não tem análises, contas nem servidores. Suas configurações são sincronizadas com o seu perfil do navegador se você usa a sincronização.
+
+PERMISSÕES
+• "Ler seu histórico de navegação": o Tree of Tabs precisa dos títulos e endereços das suas guias abertas para mostrá-las na árvore e saber de qual guia uma nova guia foi aberta. Ele não lê o conteúdo de nenhuma página e não vê o histórico das páginas que você fechou.
+
+CÓDIGO ABERTO
+O Tree of Tabs é gratuito e de código aberto: https://github.com/lawand-dot-io/tree-of-tabs
+
+SUPORTE
+Encontrou um bug? Informe em https://github.com/lawand-dot-io/tree-of-tabs/issues
+Tem uma ideia? Sugira um recurso em https://github.com/lawand-dot-io/tree-of-tabs/discussions/categories/feature-requests

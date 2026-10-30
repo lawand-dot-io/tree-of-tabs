@@ -1,0 +1,40 @@
+Chrome için dikey sekmeler, yan panelde ağaç şeklinde. Bir sayfadan açtığınız her sekme o sayfanın altında görünür. Böylece bir sekmenin nereden geldiğini ve hangi sekmelerin birlikte olduğunu her zaman bilirsiniz.
+
+ÖZELLİKLER
+• Otomatik iç içe yerleştirme: Yeni sekmede açtığınız bağlantılar, orta tıklamayla açılan bağlantılar ve sekme açan sayfalar, geldikleri sekmenin altında görünür. Adres çubuğundan, bir yer işaretinden veya yeni sekmeden kendi açtığınız sekmeler kendi ağaçlarını başlatır.
+• Sürükle ve bırak: Bir sekmeyi başka bir sekmenin üzerine bırakarak alt sekmesi yapın, iki sekmenin arasına bırakarak taşıyın veya listenin altına bırakarak yeni bir ağaç başlatın. Tüm dal onunla birlikte taşınır. Birden fazla seçili sekmeyi aynı anda sürükleyebilir veya başka bir pencereye taşıyabilirsiniz.
+• Sekmelerinizle her zaman uyumlu: Ağaç ile pencerenin üstündeki sekmelerin sırası her zaman aynıdır. Üstteki bir sekmeyi taşıdığınızda dalı da onunla birlikte taşınır.
+• Kullanmadığınız dalları daraltın: Bir sekmenin üzerine geldiğinizde simgesi oka dönüşür. Daraltılmış bir dal içinde kaç sekme olduğunu gösterir. Hiç daraltmıyorsanız daraltmayı tamamen kapatabilirsiniz.
+• Bir üst sekmeyi kapattığınızda dalı dağılmaz: İlk alt sekmesi onun yerini alır. İsterseniz dalın tamamının onunla birlikte kapanmasını da seçebilirsiniz.
+• Sabitlenmiş sekmeler üstte bir simge sırası olarak görünür. Sekme grupları, sekmelerinin yanında renkli bir çizgiyle gösterilir.
+• Bölünmüş görünümler (yan yana iki sekme) tek satırda görünür ve birlikte hareket eder. Böylece ağaç onları asla ayırmaz.
+• Yeni sekme düğmesi: Tıklayınca yeni bir ağaç başlar. Orta tıklama veya sağ tıklama ise geçerli sekmenin altında bir sekme açar.
+• Hızlı işlemler için bir sekmeyi sağ tıklayın: bu dalda yeni sekme, yeniden yükle, yinele, sabitle, sesini kapat, girintiyi artır veya azalt, bir dalı yeni pencereye taşı, bir dalı kapat, diğer tüm sekmeleri veya alttaki sekmeleri kapat.
+• Klavyeyle kolay kullanım: Ağaçta ok tuşlarıyla gezinin, menüyü Shift+F10 ile açın ve ağacı bir klavye kısayoluyla gösterin veya gizleyin (varsayılan olarak Alt+Shift+T, Mac'te Option+Shift+T).
+• İnce kılavuz çizgileri, birden fazla seviyede bile hangi sekmelerin hangi üst sekmeye ait olduğunu gösterir. İsterseniz gizleyebilirsiniz.
+• Açık ve koyu modda tarayıcının bir parçası gibi görünür.
+• Tam ekran videolar tüm ekranı kullanır: Bir sayfa tam ekrana geçtiğinde ağaç kendini gizleyebilir.
+• Tarayıcıyı yeniden başlattığınızda ağacınızı hatırlar.
+• İsteğe bağlı: Ağaçtan son sekmesini kapattığınızda pencere açık kalabilir.
+• Türkçe, Deutsch, English, Español, Français, Italiano, Português, Русский, 日本語, 한국어 ve 简体中文 dillerinde kullanılabilir.
+
+NASIL KULLANILIR
+1. Ağacı yan panelde açmak için araç çubuğundaki Tree of Tabs düğmesini tıklayın (veya klavye kısayolunu kullanın).
+2. Her zamanki gibi gezinin. Bir sayfadan açtığınız sekmeler onun altında görünür.
+3. Sekmeleri sürükleyerek düzenleyin. Diğer işlemler için bir sekmeyi sağ tıklayın.
+4. Yeni ve kapatılan sekmelerin davranışını, aralıkları ve daha fazlasını değiştirmek için ağacı sağ tıklayıp Ayarlar'ı seçin.
+Chrome yan paneli her pencerede ayrı açar. Bu yüzden yeni bir pencerede ağacı araç çubuğundaki düğmeyle veya klavye kısayoluyla açın.
+İpucu: Ağacı solda göstermek için Chrome'un görünüm ayarlarını açın ve "Yan panel konumu" ayarını "Sola" olarak belirleyin.
+
+GİZLİLİK
+Tree of Tabs sekmelerinizi veya gezinme bilgilerinizi hiçbir yere göndermez. Ağacınızın yapısını yeniden başlatmadan sonra geri yükleyebilmek için kendi bilgisayarınızda saklar. Analiz, hesap veya sunucu yoktur. Tarayıcı senkronizasyonunu kullanıyorsanız ayarlarınız tarayıcı profilinizle senkronize edilir.
+
+İZİNLER
+• "Göz atma geçmişinizi okuma": Tree of Tabs'ın açık sekmelerinizi ağaçta gösterebilmesi ve yeni bir sekmenin hangi sekmeden açıldığını bilmesi için bu sekmelerin başlıklarına ve adreslerine ihtiyacı vardır. Hiçbir sayfanın içeriğini okumaz ve kapattığınız sayfaların geçmişini görmez.
+
+AÇIK KAYNAK
+Tree of Tabs ücretsiz ve açık kaynaklıdır: https://github.com/lawand-dot-io/tree-of-tabs
+
+DESTEK
+Hata mı buldunuz? Buradan bildirin: https://github.com/lawand-dot-io/tree-of-tabs/issues
+Bir fikriniz mi var? Buradan özellik önerin: https://github.com/lawand-dot-io/tree-of-tabs/discussions/categories/feature-requests

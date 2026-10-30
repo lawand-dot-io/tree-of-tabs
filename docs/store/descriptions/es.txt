@@ -1,0 +1,40 @@
+Pestañas verticales para Chrome, en forma de árbol en el panel lateral. Cada pestaña que abres desde una página aparece debajo de esa página, así siempre sabes de dónde viene una pestaña y qué pestañas van juntas.
+
+FUNCIONES
+• Anidación automática: los enlaces que abres en una pestaña nueva, los enlaces abiertos con clic central y las páginas que abren pestañas aparecen debajo de la pestaña de la que vienen. Las pestañas que abres tú, desde la barra de direcciones, un marcador o una pestaña nueva, empiezan su propio árbol.
+• Arrastrar y soltar: suelta una pestaña sobre otra para anidarla, entre dos pestañas para moverla o debajo de la lista para empezar un árbol nuevo. Toda la rama se mueve con ella, y puedes arrastrar varias pestañas seleccionadas a la vez o moverlas a otra ventana.
+• Siempre en sintonía con tus pestañas: el árbol y el orden de las pestañas de la parte superior de la ventana siempre coinciden. Si mueves una pestaña arriba, su rama se mueve con ella.
+• Contrae las ramas que no estás usando: señala una pestaña y su icono se convierte en una flecha. Una rama contraída muestra cuántas pestañas contiene. Si nunca contraes nada, puedes desactivar esta opción por completo.
+• Al cerrar una pestaña principal, su rama sigue unida: su primera pestaña secundaria ocupa su lugar. También puedes hacer que toda la rama se cierre con ella.
+• Las pestañas fijadas aparecen como una fila de iconos en la parte superior. Los grupos de pestañas aparecen como una línea de color junto a sus pestañas.
+• Las vistas divididas (dos pestañas una al lado de la otra) aparecen en una sola fila y se mueven juntas, así el árbol nunca las separa.
+• Botón Nueva pestaña: haz clic para empezar un árbol nuevo, o haz clic central o clic derecho para abrir una pestaña debajo de la actual.
+• Haz clic derecho en una pestaña para acciones rápidas: nueva pestaña en esta rama, volver a cargar, duplicar, fijar, silenciar, aumentar o reducir la sangría, mover una rama a una nueva ventana, cerrar una rama, cerrar las demás pestañas o las pestañas de abajo.
+• Fácil de usar con el teclado: muévete por el árbol con las flechas, abre el menú con Mayús+F10 y muestra u oculta el árbol con una combinación de teclas (Alt+Mayús+T de forma predeterminada, Opción+Mayús+T en Mac).
+• Unas líneas guía finas muestran qué pestañas pertenecen a cada pestaña principal, incluso en varios niveles. Puedes ocultarlas si lo prefieres.
+• Parece parte del navegador, en modo claro y oscuro.
+• Los vídeos en pantalla completa ocupan toda la pantalla: el árbol puede ocultarse cuando una página pasa a pantalla completa.
+• Recuerda tu árbol cuando reinicias el navegador.
+• Opcional: mantener abierta una ventana al cerrar su última pestaña desde el árbol.
+• Disponible en español, Deutsch, English, Français, Italiano, Português, Русский, Türkçe, 日本語, 한국어 y 简体中文.
+
+CÓMO SE USA
+1. Haz clic en el botón de Tree of Tabs de la barra de herramientas (o usa su combinación de teclas) para abrir el árbol en el panel lateral.
+2. Navega como siempre. Las pestañas que abres desde una página aparecen debajo de ella.
+3. Arrastra las pestañas para organizarlas. Haz clic derecho en una pestaña para ver más acciones.
+4. Haz clic derecho en el árbol y elige Configuración para cambiar cómo se comportan las pestañas nuevas y cerradas, el espaciado y más.
+Chrome abre el panel lateral en cada ventana por separado, así que en una ventana nueva abre el árbol con el botón de la barra de herramientas o con la combinación de teclas.
+Consejo: para que el árbol aparezca a la izquierda, abre la configuración de aspecto de Chrome y cambia «Posición del panel lateral» a «Izquierda».
+
+PRIVACIDAD
+Tree of Tabs nunca envía tus pestañas ni tu navegación a ninguna parte. Guarda la estructura de tu árbol en tu propio ordenador para poder reconstruirlo después de un reinicio, y no tiene análisis, ni cuentas, ni servidores. Tu configuración se sincroniza con tu perfil del navegador si usas la sincronización.
+
+PERMISOS
+• «Leer tu historial de navegación»: Tree of Tabs necesita los títulos y las direcciones de tus pestañas abiertas para mostrarlas en el árbol y saber desde qué pestaña se abrió una pestaña nueva. No lee el contenido de ninguna página ni ve el historial de las páginas que has cerrado.
+
+CÓDIGO ABIERTO
+Tree of Tabs es gratis y de código abierto: https://github.com/lawand-dot-io/tree-of-tabs
+
+AYUDA
+¿Has encontrado un error? Infórmalo en https://github.com/lawand-dot-io/tree-of-tabs/issues
+¿Tienes una idea? Sugiere una función en https://github.com/lawand-dot-io/tree-of-tabs/discussions/categories/feature-requests

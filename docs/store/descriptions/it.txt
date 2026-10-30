@@ -1,0 +1,40 @@
+Schede verticali per Chrome, ad albero nel riquadro laterale. Ogni scheda che apri da una pagina compare sotto quella pagina, così sai sempre da dove viene una scheda e quali schede vanno insieme.
+
+FUNZIONI
+• Annidamento automatico: i link che apri in una nuova scheda, i link aperti con il clic centrale e le pagine che aprono schede compaiono sotto la scheda da cui provengono. Le schede che apri tu, dalla barra degli indirizzi, da un preferito o da una nuova scheda, iniziano un proprio albero.
+• Trascina e rilascia: rilascia una scheda su un'altra per annidarla, tra due schede per spostarla o sotto l'elenco per iniziare un nuovo albero. Tutto il ramo si sposta con lei, e puoi trascinare più schede selezionate insieme o spostarle in un'altra finestra.
+• Sempre allineato alle tue schede: l'albero e l'ordine delle schede in alto nella finestra corrispondono sempre. Se sposti una scheda in alto, si sposta anche il suo ramo.
+• Comprimi i rami che non stai usando: punta una scheda e la sua icona diventa una freccia. Un ramo compresso mostra quante schede contiene. Se non comprimi mai nulla, puoi disattivare del tutto la compressione.
+• Chiudere una scheda madre tiene unito il suo ramo: la sua prima scheda figlia ne prende il posto. Puoi anche scegliere di chiudere tutto il ramo insieme a lei.
+• Le schede fissate compaiono come una fila di icone in alto. I gruppi di schede compaiono come una linea colorata accanto alle loro schede.
+• Le visualizzazioni divise (due schede affiancate) compaiono su una sola riga e si spostano insieme, così l'albero non le separa mai.
+• Pulsante Nuova scheda: un clic inizia un nuovo albero, un clic centrale o un clic destro apre una scheda sotto quella attuale.
+• Clic destro su una scheda per azioni rapide: nuova scheda in questo ramo, ricarica, duplica, fissa, disattiva l'audio, aumenta o riduci il rientro, sposta un ramo in una nuova finestra, chiudi un ramo, chiudi tutte le altre schede o le schede sotto.
+• Comodo da tastiera: muoviti nell'albero con i tasti freccia, apri il menu con Maiusc+F10 e mostra o nascondi l'albero con una scorciatoia da tastiera (Alt+Maiusc+T per impostazione predefinita, Opzione+Maiusc+T su Mac).
+• Sottili linee guida mostrano quali schede appartengono a quale scheda madre, anche su più livelli. Puoi nasconderle se preferisci.
+• Sembra parte del browser, in modalità chiara e scura.
+• I video a schermo intero occupano tutto lo schermo: l'albero può nascondersi quando una pagina passa a schermo intero.
+• Ricorda il tuo albero quando riavvii il browser.
+• Facoltativo: mantieni aperta una finestra quando chiudi la sua ultima scheda dall'albero.
+• Disponibile in italiano, Deutsch, English, Español, Français, Português, Русский, Türkçe, 日本語, 한국어 e 简体中文.
+
+COME SI USA
+1. Fai clic sul pulsante di Tree of Tabs nella barra degli strumenti (o usa la sua scorciatoia da tastiera) per aprire l'albero nel riquadro laterale.
+2. Naviga come al solito. Le schede che apri da una pagina compaiono sotto di essa.
+3. Trascina le schede per riordinarle. Fai clic destro su una scheda per altre azioni.
+4. Fai clic destro sull'albero e scegli Impostazioni per cambiare il comportamento delle schede nuove e chiuse, la spaziatura e altro.
+Chrome apre il riquadro laterale una finestra alla volta, quindi in una nuova finestra apri l'albero con il pulsante nella barra degli strumenti o con la scorciatoia da tastiera.
+Suggerimento: per avere l'albero a sinistra, apri le impostazioni di aspetto di Chrome e imposta «Posizione del riquadro laterale» su «Sinistra».
+
+PRIVACY
+Tree of Tabs non invia mai le tue schede o la tua navigazione da nessuna parte. Conserva la struttura del tuo albero sul tuo computer per ricostruirla dopo un riavvio, e non ha statistiche, account o server. Le tue impostazioni si sincronizzano con il tuo profilo del browser se usi la sincronizzazione.
+
+AUTORIZZAZIONI
+• «Leggere la cronologia di navigazione»: Tree of Tabs ha bisogno dei titoli e degli indirizzi delle schede aperte per mostrarle nell'albero e per sapere da quale scheda è stata aperta una nuova scheda. Non legge il contenuto delle pagine e non vede la cronologia delle pagine che hai chiuso.
+
+OPEN SOURCE
+Tree of Tabs è gratuito e open source: https://github.com/lawand-dot-io/tree-of-tabs
+
+ASSISTENZA
+Hai trovato un bug? Segnalalo su https://github.com/lawand-dot-io/tree-of-tabs/issues
+Hai un'idea? Suggerisci una funzione su https://github.com/lawand-dot-io/tree-of-tabs/discussions/categories/feature-requests

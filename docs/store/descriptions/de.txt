@@ -1,0 +1,40 @@
+Vertikale Tabs für Chrome, als Baum in der Seitenleiste. Jeder Tab, den Sie von einer Seite aus öffnen, erscheint unter dieser Seite. So sehen Sie immer, woher ein Tab kommt und welche Tabs zusammengehören.
+
+FUNKTIONEN
+• Automatische Verschachtelung: Links, die Sie in einem neuen Tab öffnen, Links per Mittelklick und Seiten, die Tabs öffnen, erscheinen unter dem Tab, aus dem sie stammen. Tabs, die Sie selbst öffnen, etwa über die Adressleiste, ein Lesezeichen oder einen neuen Tab, beginnen einen eigenen Baum.
+• Drag-and-drop: Ziehen Sie einen Tab auf einen anderen, um ihn unterzuordnen, zwischen zwei Tabs, um ihn zu verschieben, oder unter die Liste, um einen neuen Baum zu beginnen. Der ganze Zweig wandert mit. Sie können auch mehrere ausgewählte Tabs auf einmal ziehen oder in ein anderes Fenster verschieben.
+• Immer im Einklang mit Ihren Tabs: Der Baum und die Reihenfolge der Tabs oben im Fenster stimmen immer überein. Wenn Sie oben einen Tab verschieben, wandert sein Zweig mit.
+• Zweige zuklappen, die Sie gerade nicht brauchen: Zeigen Sie auf einen Tab, und sein Symbol wird zu einem Pfeil. Ein zugeklappter Zweig zeigt, wie viele Tabs er enthält. Wenn Sie nie zuklappen, können Sie das Zuklappen ganz deaktivieren.
+• Wenn Sie einen übergeordneten Tab schließen, bleibt sein Zweig zusammen: Sein erster untergeordneter Tab rückt an seine Stelle. Sie können auch festlegen, dass der ganze Zweig mit ihm geschlossen wird.
+• Angepinnte Tabs erscheinen als Symbolleiste oben. Tabgruppen erscheinen als farbige Linie neben ihren Tabs.
+• Geteilte Ansichten (zwei Tabs nebeneinander) erscheinen als eine Zeile und bewegen sich gemeinsam, damit der Baum sie nie trennt.
+• Schaltfläche „Neuer Tab“: Ein Klick beginnt einen neuen Baum, ein Mittel- oder Rechtsklick öffnet einen Tab unter dem aktuellen.
+• Rechtsklick auf einen Tab für schnelle Aktionen: neuer Tab in diesem Zweig, neu laden, duplizieren, anpinnen, stummschalten, ein- oder ausrücken, einen Zweig in ein neues Fenster verschieben, einen Zweig schließen, alle anderen Tabs oder die Tabs darunter schließen.
+• Mit der Tastatur bedienbar: Bewegen Sie sich mit den Pfeiltasten durch den Baum, öffnen Sie das Menü mit Umschalt+F10 und blenden Sie den Baum mit einer Tastenkombination ein oder aus (standardmäßig Alt+Umschalt+T, auf dem Mac Option+Umschalt+T).
+• Dünne Hilfslinien zeigen, welche Tabs zu welchem übergeordneten Tab gehören, auch über mehrere Ebenen. Sie können sie ausblenden.
+• Sieht aus wie ein Teil des Browsers, im hellen und im dunklen Modus.
+• Videos im Vollbildmodus bekommen den ganzen Bildschirm: Der Baum kann sich ausblenden, wenn eine Seite in den Vollbildmodus wechselt.
+• Merkt sich Ihren Baum, wenn Sie den Browser neu starten.
+• Optional: Ein Fenster bleibt geöffnet, wenn Sie seinen letzten Tab im Baum schließen.
+• Verfügbar auf Deutsch, Englisch, Español, Français, Italiano, Português, Русский, Türkçe, 日本語, 한국어 und 简体中文.
+
+SO GEHT'S
+1. Klicken Sie in der Symbolleiste auf die Schaltfläche von Tree of Tabs (oder verwenden Sie ihre Tastenkombination), um den Baum in der Seitenleiste zu öffnen.
+2. Surfen Sie wie gewohnt. Tabs, die Sie von einer Seite aus öffnen, erscheinen darunter.
+3. Ziehen Sie Tabs, um sie neu zu ordnen. Mit einem Rechtsklick auf einen Tab finden Sie weitere Aktionen.
+4. Klicken Sie mit der rechten Maustaste auf den Baum und wählen Sie „Einstellungen“, um festzulegen, wie sich neue und geschlossene Tabs verhalten, den Abstand und mehr.
+Chrome öffnet die Seitenleiste für jedes Fenster einzeln. Öffnen Sie den Baum in einem neuen Fenster deshalb über die Schaltfläche in der Symbolleiste oder mit der Tastenkombination.
+Tipp: Wenn der Baum links erscheinen soll, öffnen Sie die Darstellungseinstellungen von Chrome und setzen Sie „Position der Seitenleiste“ auf „Links“.
+
+DATENSCHUTZ
+Tree of Tabs sendet Ihre Tabs oder Ihren Browserverlauf nirgendwohin. Es speichert die Struktur Ihres Baums auf Ihrem eigenen Computer, um sie nach einem Neustart wiederherzustellen, und hat keine Analysen, keine Konten und keine Server. Ihre Einstellungen werden mit Ihrem Browserprofil synchronisiert, wenn Sie die Browsersynchronisierung verwenden.
+
+BERECHTIGUNGEN
+• „Browserverlauf lesen“: Tree of Tabs braucht die Titel und Adressen Ihrer geöffneten Tabs, um sie im Baum anzuzeigen und um zu erkennen, aus welchem Tab ein neuer Tab geöffnet wurde. Es liest keine Seiteninhalte und sieht nicht den Verlauf geschlossener Seiten.
+
+OPEN SOURCE
+Tree of Tabs ist kostenlos und Open Source: https://github.com/lawand-dot-io/tree-of-tabs
+
+SUPPORT
+Einen Fehler gefunden? Melden Sie ihn unter https://github.com/lawand-dot-io/tree-of-tabs/issues
+Eine Idee? Schlagen Sie eine Funktion vor unter https://github.com/lawand-dot-io/tree-of-tabs/discussions/categories/feature-requests
