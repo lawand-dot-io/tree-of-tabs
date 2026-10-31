@@ -1,4 +1,4 @@
-Vertikale Tabs für Chrome, als Baum in der Seitenleiste. Jeder Tab, den Sie von einer Seite aus öffnen, erscheint unter dieser Seite. So sehen Sie immer, woher ein Tab kommt und welche Tabs zusammengehören.
+Sehen Sie auf einen Blick, woher jeder Tab kommt und welche Tabs zusammengehören. Der Baum entsteht beim Surfen von selbst, stimmt immer mit den Tabs oben im Fenster überein und sieht aus wie ein Teil von Chrome.
 
 FUNKTIONEN
 • Automatische Verschachtelung: Links, die Sie in einem neuen Tab öffnen, Links per Mittelklick und Seiten, die Tabs öffnen, erscheinen unter dem Tab, aus dem sie stammen. Tabs, die Sie selbst öffnen, etwa über die Adressleiste, ein Lesezeichen oder einen neuen Tab, beginnen einen eigenen Baum.

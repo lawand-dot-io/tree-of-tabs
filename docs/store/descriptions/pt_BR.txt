@@ -1,4 +1,4 @@
-Guias verticais para o Chrome, em forma de árvore no painel lateral. Cada guia que você abre a partir de uma página aparece abaixo dela, então você sempre sabe de onde veio uma guia e quais guias estão relacionadas.
+Veja de relance de onde veio cada guia e quais guias estão relacionadas. A árvore se monta sozinha enquanto você navega, acompanha sempre as guias na parte de cima da janela e parece parte do Chrome.
 
 RECURSOS
 • Aninhamento automático: links abertos em uma nova guia, links abertos com o clique do meio e páginas que abrem guias aparecem abaixo da guia de onde vieram. Guias que você mesmo abre, pela barra de endereço, por um favorito ou por uma nova guia, começam a própria árvore.

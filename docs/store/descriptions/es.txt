@@ -1,4 +1,4 @@
-Pestañas verticales para Chrome, en forma de árbol en el panel lateral. Cada pestaña que abres desde una página aparece debajo de esa página, así siempre sabes de dónde viene una pestaña y qué pestañas van juntas.
+Ve de un vistazo de dónde viene cada pestaña y qué pestañas van juntas. El árbol se crea solo mientras navegas, coincide siempre con las pestañas de la parte superior de la ventana y parece parte de Chrome.
 
 FUNCIONES
 • Anidación automática: los enlaces que abres en una pestaña nueva, los enlaces abiertos con clic central y las páginas que abren pestañas aparecen debajo de la pestaña de la que vienen. Las pestañas que abres tú, desde la barra de direcciones, un marcador o una pestaña nueva, empiezan su propio árbol.

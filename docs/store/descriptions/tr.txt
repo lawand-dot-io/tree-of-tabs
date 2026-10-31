@@ -1,4 +1,4 @@
-Chrome için dikey sekmeler, yan panelde ağaç şeklinde. Bir sayfadan açtığınız her sekme o sayfanın altında görünür. Böylece bir sekmenin nereden geldiğini ve hangi sekmelerin birlikte olduğunu her zaman bilirsiniz.
+Her sekmenin nereden geldiğini ve hangi sekmelerin birlikte olduğunu bir bakışta görün. Ağaç siz gezinirken kendiliğinden oluşur, pencerenin üstündeki sekmelerle her zaman uyumlu kalır ve Chrome'un bir parçası gibi görünür.
 
 ÖZELLİKLER
 • Otomatik iç içe yerleştirme: Yeni sekmede açtığınız bağlantılar, orta tıklamayla açılan bağlantılar ve sekme açan sayfalar, geldikleri sekmenin altında görünür. Adres çubuğundan, bir yer işaretinden veya yeni sekmeden kendi açtığınız sekmeler kendi ağaçlarını başlatır.

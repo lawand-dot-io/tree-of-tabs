@@ -1,4 +1,4 @@
-Des onglets verticaux pour Chrome, sous forme d'arbre dans le panneau latéral. Chaque onglet que vous ouvrez depuis une page apparaît sous cette page : vous savez toujours d'où vient un onglet et quels onglets vont ensemble.
+Voyez d'un coup d'œil d'où vient chaque onglet et quels onglets vont ensemble. L'arbre se construit tout seul pendant que vous naviguez, reste en phase avec les onglets en haut de la fenêtre et s'intègre à Chrome comme s'il en faisait partie.
 
 FONCTIONNALITÉS
 • Imbrication automatique : les liens ouverts dans un nouvel onglet, les liens ouverts d'un clic du milieu et les pages qui ouvrent des onglets apparaissent sous l'onglet dont ils viennent. Les onglets que vous ouvrez vous-même, depuis la barre d'adresse, un favori ou un nouvel onglet, commencent leur propre arbre.

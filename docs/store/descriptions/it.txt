@@ -1,4 +1,4 @@
-Schede verticali per Chrome, ad albero nel riquadro laterale. Ogni scheda che apri da una pagina compare sotto quella pagina, così sai sempre da dove viene una scheda e quali schede vanno insieme.
+Vedi a colpo d'occhio da dove viene ogni scheda e quali schede vanno insieme. L'albero si crea da solo mentre navighi, resta allineato alle schede in alto nella finestra e sembra parte di Chrome.
 
 FUNZIONI
 • Annidamento automatico: i link che apri in una nuova scheda, i link aperti con il clic centrale e le pagine che aprono schede compaiono sotto la scheda da cui provengono. Le schede che apri tu, dalla barra degli indirizzi, da un preferito o da una nuova scheda, iniziano un proprio albero.

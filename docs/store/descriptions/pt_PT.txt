@@ -1,4 +1,4 @@
-Separadores verticais para o Chrome, em árvore no painel lateral. Cada separador que abre a partir de uma página aparece por baixo dessa página, para saber sempre de onde veio um separador e que separadores estão relacionados.
+Veja num relance de onde veio cada separador e que separadores estão relacionados. A árvore constrói-se sozinha enquanto navega, acompanha sempre os separadores no topo da janela e parece fazer parte do Chrome.
 
 FUNCIONALIDADES
 • Organização automática: os links abertos num novo separador, os links abertos com o clique do meio e as páginas que abrem separadores aparecem por baixo do separador de onde vieram. Os separadores que abre diretamente, a partir da barra de endereço, de um marcador ou de um novo separador, começam a sua própria árvore.

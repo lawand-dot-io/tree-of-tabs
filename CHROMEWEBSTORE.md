@@ -17,10 +17,10 @@ Tree of Tabs
 
 Vertical tabs as a tree in the side panel. Tabs you open from a page nest under it, and you can drag them to reorganize.
 
-**Detailed Description** (plain text: the store strips Markdown)
+**Detailed Description** (plain text: the store strips Markdown). The store shows it right below the short description, so it opens with something new instead of repeating it.
 
 ```
-Vertical tabs for Chrome, shown as a tree in the side panel. Every tab you open from a page appears nested under that page, so you can always tell where a tab came from and which tabs belong together.
+See at a glance where each tab came from and which tabs belong together. The tree builds itself as you browse, stays in step with the tabs at the top of the window, and looks like part of Chrome.
 
 FEATURES
 • Automatic nesting: links you open in a new tab, middle-clicked links and pages that open tabs show up under the tab they came from. Tabs you open yourself, from the address bar, a bookmark or a new tab, start their own tree.
