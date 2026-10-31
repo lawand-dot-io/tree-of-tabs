@@ -232,7 +232,7 @@ zip -r tree-of-tabs-v1.1.1.zip manifest.json LICENSE _locales icons src -x "*.DS
 | 1.0.0 | 2026-10-27 | First release: tab tree in the side panel, automatic nesting, drag and drop, choice of what happens to a closed parent's children, optionally keeping a window open when its last tab is closed from the tree, collapsing (or turning it off), pinned tabs, tab group colors, right-click actions, keyboard navigation, hiding during full screen, tree restored after restart | Published |
 | 1.0.1 | 2026-10-28 | A one-time tip that each window has its own side panel, the icon on the settings page, a description that leads with "vertical tabs" | Published |
 | 1.1.0 | 2026-10-30 | The extension in 11 languages, with a translated store description for each | Released on GitHub, replaced by 1.1.1 before upload |
-| 1.1.1 | 2026-10-30 | European Portuguese, so the extension is in 12 languages | Released on GitHub, to upload |
+| 1.1.1 | 2026-10-30 | European Portuguese, so the extension is in 12 languages | Published |
 
 ## Review Notes
 
