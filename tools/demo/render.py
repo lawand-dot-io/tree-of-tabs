@@ -2,8 +2,9 @@
 the side panel on the left (where people who want vertical tabs put it) next
 to the page, a cursor, and a caption under them, with
 a title card at the start and the end. Writes docs/demo/tree-of-tabs-demo.mp4
-(1920x1080, for YouTube and the store listing) and docs/demo/demo.gif (for the
-README). Needs Pillow, ffmpeg and the Inter font.
+(1920x1080, for YouTube and the store listing), docs/demo/demo.gif (for the
+README) and docs/demo/demo-loop.mp4 (the GIF's loop as a sharp video, for sites
+that loop silent videos, like Reddit and X). Needs Pillow, ffmpeg and the Inter font.
 Usage: python3 tools/demo/render.py <capture folder>"""
 import json
 import os
@@ -215,6 +216,14 @@ def main():
         looper.stdin.write(Image.blend(last, first, ease(i / BACK)).tobytes())
     looper.stdin.close()
     looper.wait()
+
+    # The same loop at full size, for sites that loop silent videos.
+    loop_video = os.path.join(OUT, 'demo-loop.mp4')
+    subprocess.run(
+        ['ffmpeg', '-loglevel', 'error', '-y', '-i', loop, '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '20',
+         '-preset', 'slow', '-movflags', '+faststart', loop_video],
+        check=True)
+    print(f'{loop_video}: {os.path.getsize(loop_video) / 1e6:.1f} MB')
 
     # Smaller and slower than the video, with its own palette.
     gif = os.path.join(OUT, 'demo.gif')
