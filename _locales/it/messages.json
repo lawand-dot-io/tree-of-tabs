@@ -339,5 +339,17 @@
         "example": "@lawand_dot_io"
       }
     }
+  },
+  "panelWidthNote": {
+    "message": "Chrome imposta una larghezza minima per il riquadro laterale e le estensioni non possono renderlo più stretto. Se vorresti un riquadro più stretto, $LINK$.",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "vote for this on Chromium's issue tracker"
+      }
+    }
+  },
+  "panelWidthLink": {
+    "message": "vota la richiesta nel tracker dei problemi di Chromium"
   }
 }

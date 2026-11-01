@@ -339,5 +339,17 @@
         "example": "@lawand_dot_io"
       }
     }
+  },
+  "panelWidthNote": {
+    "message": "Chrome legt eine Mindestbreite für die Seitenleiste fest, und Erweiterungen können sie nicht schmaler machen. Wenn Sie sich eine schmalere Seitenleiste wünschen, $LINK$.",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "vote for this on Chromium's issue tracker"
+      }
+    }
+  },
+  "panelWidthLink": {
+    "message": "stimmen Sie im Issue-Tracker von Chromium dafür ab"
   }
 }

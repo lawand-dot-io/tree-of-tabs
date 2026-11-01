@@ -339,5 +339,17 @@
         "example": "@lawand_dot_io"
       }
     }
+  },
+  "panelWidthNote": {
+    "message": "Chrome задаёт минимальную ширину боковой панели, и расширения не могут сделать её уже. Если вам нужна более узкая панель, $LINK$.",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "vote for this on Chromium's issue tracker"
+      }
+    }
+  },
+  "panelWidthLink": {
+    "message": "проголосуйте за это в баг-трекере Chromium"
   }
 }

@@ -339,5 +339,17 @@
         "example": "@lawand_dot_io"
       }
     }
+  },
+  "panelWidthNote": {
+    "message": "Chrome은 측면 패널의 최소 너비를 정해 두고 있어 확장 프로그램이 더 좁게 만들 수 없습니다. 더 좁은 측면 패널을 원하시면 $LINK$.",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "vote for this on Chromium's issue tracker"
+      }
+    }
+  },
+  "panelWidthLink": {
+    "message": "Chromium 이슈 트래커에서 투표해 주세요"
   }
 }

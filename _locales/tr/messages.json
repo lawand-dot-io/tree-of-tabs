@@ -339,5 +339,17 @@
         "example": "@lawand_dot_io"
       }
     }
+  },
+  "panelWidthNote": {
+    "message": "Chrome yan panel için en küçük genişliği belirler ve uzantılar paneli bundan daha dar yapamaz. Daha dar bir panel istiyorsanız $LINK$.",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "vote for this on Chromium's issue tracker"
+      }
+    }
+  },
+  "panelWidthLink": {
+    "message": "Chromium'un sorun takip sisteminde oy verin"
   }
 }

@@ -339,5 +339,17 @@
         "example": "@lawand_dot_io"
       }
     }
+  },
+  "panelWidthNote": {
+    "message": "Chrome fija un ancho mínimo para el panel lateral y las extensiones no pueden hacerlo más estrecho. Si quieres un panel más estrecho, $LINK$.",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "vote for this on Chromium's issue tracker"
+      }
+    }
+  },
+  "panelWidthLink": {
+    "message": "vota por ello en el gestor de incidencias de Chromium"
   }
 }

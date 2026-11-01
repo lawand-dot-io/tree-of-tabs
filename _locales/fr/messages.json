@@ -339,5 +339,17 @@
         "example": "@lawand_dot_io"
       }
     }
+  },
+  "panelWidthNote": {
+    "message": "Chrome impose une largeur minimale au panneau latéral, et les extensions ne peuvent pas le rendre plus étroit. Si vous souhaitez un panneau plus étroit, $LINK$.",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "vote for this on Chromium's issue tracker"
+      }
+    }
+  },
+  "panelWidthLink": {
+    "message": "votez pour cette demande sur l'outil de suivi de Chromium"
   }
 }

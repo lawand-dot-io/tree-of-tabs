@@ -432,5 +432,19 @@
         "example": "@lawand_dot_io"
       }
     }
+  },
+  "panelWidthNote": {
+    "message": "Chrome sets a minimum width for the side panel, and extensions can't make it any narrower. If you'd like a narrower panel, $LINK$.",
+    "description": "Note at the bottom of the settings page, for people who find the side panel too wide. The placeholder is a link (panelWidthLink) to the Chromium issue asking for a smaller minimum width.",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "vote for this on Chromium's issue tracker"
+      }
+    }
+  },
+  "panelWidthLink": {
+    "message": "vote for this on Chromium's issue tracker",
+    "description": "Link to the Chromium issue asking for a narrower side panel. Voting there means starring the issue."
   }
 }

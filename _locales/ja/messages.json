@@ -339,5 +339,17 @@
         "example": "@lawand_dot_io"
       }
     }
+  },
+  "panelWidthNote": {
+    "message": "Chrome ではサイドパネルの最小幅が決められていて、拡張機能でこれより狭くすることはできません。もっと狭いサイドパネルを希望する場合は、$LINK$。",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "vote for this on Chromium's issue tracker"
+      }
+    }
+  },
+  "panelWidthLink": {
+    "message": "Chromium の Issue Tracker で投票してください"
   }
 }

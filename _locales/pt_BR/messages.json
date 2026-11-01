@@ -339,5 +339,17 @@
         "example": "@lawand_dot_io"
       }
     }
+  },
+  "panelWidthNote": {
+    "message": "O Chrome define uma largura mínima para o painel lateral, e as extensões não podem deixá-lo mais estreito. Se você quiser um painel mais estreito, $LINK$.",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "vote for this on Chromium's issue tracker"
+      }
+    }
+  },
+  "panelWidthLink": {
+    "message": "vote no pedido no rastreador de problemas do Chromium"
   }
 }

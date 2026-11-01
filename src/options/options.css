@@ -137,6 +137,10 @@ select {
   background: var(--switch-thumb);
 }
 
+.footnote + .footnote {
+  margin-top: 8px;
+}
+
 .footnote {
   margin-top: 24px;
   color: var(--text-secondary);

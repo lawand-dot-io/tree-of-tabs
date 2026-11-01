@@ -339,5 +339,17 @@
         "example": "@lawand_dot_io"
       }
     }
+  },
+  "panelWidthNote": {
+    "message": "Chrome 为侧边栏设置了最小宽度，扩展程序无法将其调得更窄。如果您希望侧边栏能更窄，$LINK$。",
+    "placeholders": {
+      "link": {
+        "content": "$1",
+        "example": "vote for this on Chromium's issue tracker"
+      }
+    }
+  },
+  "panelWidthLink": {
+    "message": "请在 Chromium 的问题跟踪器中投票"
   }
 }
