@@ -222,7 +222,7 @@ Actions tab, pick **Release** and click **Run workflow** (or push a tag such as
 upload to the store. By hand:
 
 ```sh
-zip -r tree-of-tabs-v1.1.1.zip manifest.json LICENSE _locales icons src -x "*.DS_Store"
+zip -r tree-of-tabs-v1.1.2.zip manifest.json LICENSE _locales icons src -x "*.DS_Store"
 ```
 
 ## Version History
@@ -233,6 +233,7 @@ zip -r tree-of-tabs-v1.1.1.zip manifest.json LICENSE _locales icons src -x "*.DS
 | 1.0.1 | 2026-10-28 | A one-time tip that each window has its own side panel, the icon on the settings page, a description that leads with "vertical tabs" | Published |
 | 1.1.0 | 2026-10-30 | The extension in 11 languages, with a translated store description for each | Released on GitHub, replaced by 1.1.1 before upload |
 | 1.1.1 | 2026-10-30 | European Portuguese, so the extension is in 12 languages | Published |
+| 1.1.2 | 2026-11-01 | A note on the settings page explaining the side panel's minimum width, with a link to vote for a narrower one | Released on GitHub, to upload |
 
 ## Review Notes
 
