@@ -197,7 +197,7 @@ notices to it)
 
 **Official URL**: lawand.io (verified in Google Search Console)
 
-**Homepage URL**: https://github.com/lawand-dot-io/tree-of-tabs
+**Homepage URL**: https://lawand.io/tree-of-tabs/
 
 **Mature content**: No
 
