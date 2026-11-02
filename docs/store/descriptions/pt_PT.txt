@@ -30,7 +30,7 @@ PRIVACIDADE
 O Tree of Tabs nunca envia os seus separadores nem a sua navegação para lado nenhum. Guarda a estrutura da sua árvore no seu próprio computador para a poder reconstruir depois de reiniciar, e não tem estatísticas, contas nem servidores. As suas definições são sincronizadas com o seu perfil do navegador se utilizar a sincronização.
 
 AUTORIZAÇÕES
-• «Ler o seu histórico de navegação»: o Tree of Tabs precisa dos títulos e endereços dos separadores abertos para os mostrar na árvore e saber a partir de que separador foi aberto um novo separador. Não lê o conteúdo de nenhuma página e não vê o histórico das páginas que fechou.
+• «Ler o seu histórico de navegação»: o Tree of Tabs precisa dos títulos e endereços dos separadores abertos para os mostrar na árvore e saber a partir de que separador foi aberto um novo separador. Não lê o conteúdo das páginas nem o seu histórico de navegação.
 
 CÓDIGO ABERTO
 O Tree of Tabs é gratuito e de código aberto: https://github.com/lawand-dot-io/tree-of-tabs

@@ -30,7 +30,7 @@ PRIVACIDAD
 Tree of Tabs nunca envía tus pestañas ni tu navegación a ninguna parte. Guarda la estructura de tu árbol en tu propio ordenador para poder reconstruirlo después de un reinicio, y no tiene análisis, ni cuentas, ni servidores. Tu configuración se sincroniza con tu perfil del navegador si usas la sincronización.
 
 PERMISOS
-• «Leer tu historial de navegación»: Tree of Tabs necesita los títulos y las direcciones de tus pestañas abiertas para mostrarlas en el árbol y saber desde qué pestaña se abrió una pestaña nueva. No lee el contenido de ninguna página ni ve el historial de las páginas que has cerrado.
+• «Leer tu historial de navegación»: Tree of Tabs necesita los títulos y las direcciones de tus pestañas abiertas para mostrarlas en el árbol y saber desde qué pestaña se abrió una pestaña nueva. No lee el contenido de ninguna página ni tu historial de navegación.
 
 CÓDIGO ABIERTO
 Tree of Tabs es gratis y de código abierto: https://github.com/lawand-dot-io/tree-of-tabs

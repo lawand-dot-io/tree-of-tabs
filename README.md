@@ -88,6 +88,10 @@ Have an idea? [Suggest a feature](https://github.com/lawand-dot-io/tree-of-tabs/
 - **Persistence**: the tree survives service worker restarts, extension
   updates and browser restarts. After a browser restart it is matched back to
   the restored tabs by URL.
+- **Reopened tabs go back in place.** Tabs you reopen with Ctrl+Shift+T (or
+  from History) return to where they were in the tree. Chrome reopens a closed
+  tree one tab at a time, children first, and the tree comes back together as
+  you go.
 - **Full screen**: Chrome keeps the side panel open next to full screen videos
   and pages, so Tree of Tabs can close it when you go full screen. The first time,
   the panel shows a short explanation instead of the tree and lets you choose

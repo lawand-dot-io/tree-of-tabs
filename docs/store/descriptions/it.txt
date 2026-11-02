@@ -30,7 +30,7 @@ PRIVACY
 Tree of Tabs non invia mai le tue schede o la tua navigazione da nessuna parte. Conserva la struttura del tuo albero sul tuo computer per ricostruirla dopo un riavvio, e non ha statistiche, account o server. Le tue impostazioni si sincronizzano con il tuo profilo del browser se usi la sincronizzazione.
 
 AUTORIZZAZIONI
-• «Leggere la cronologia di navigazione»: Tree of Tabs ha bisogno dei titoli e degli indirizzi delle schede aperte per mostrarle nell'albero e per sapere da quale scheda è stata aperta una nuova scheda. Non legge il contenuto delle pagine e non vede la cronologia delle pagine che hai chiuso.
+• «Leggere la cronologia di navigazione»: Tree of Tabs ha bisogno dei titoli e degli indirizzi delle schede aperte per mostrarle nell'albero e per sapere da quale scheda è stata aperta una nuova scheda. Non legge il contenuto delle pagine né la tua cronologia di navigazione.
 
 OPEN SOURCE
 Tree of Tabs è gratuito e open source: https://github.com/lawand-dot-io/tree-of-tabs

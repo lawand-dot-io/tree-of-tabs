@@ -8,6 +8,8 @@ import {
   planMove,
   planMoves,
   releaseChildren,
+  reopenedChildren,
+  reopenedParent,
   sanitize,
   splitPairs,
 } from './tree.js';
@@ -43,6 +45,17 @@ const openedFrom = new Map(); // tabId -> source tabId
 // Windows where a split view ended, so its tabs need laying out again.
 const needsLayout = new Set();
 
+// Recently closed tabs and where they were in the tree, so tabs Chrome reopens
+// (Ctrl+Shift+T, History) go back where they were. Kept in session storage.
+const closedTabs = new Map(); // old tabId -> { url, title, parent, reopenedAs?, placedUnder? }
+const MAX_CLOSED = 200;
+// Each open tab's address and title, to remember them when it closes.
+const tabInfo = new Map(); // tabId -> { url, title }
+// A closing tab's children move up right away (see releaseTab). When they
+// close in the same go, as a whole tree does, they're remembered under the
+// parent they had before.
+const formerParents = new Map(); // tabId -> { parent, at }
+
 // Blank new tabs (Ctrl+T), for the "Open new tabs as children" setting.
 const NEW_TAB_URLS = ['chrome://newtab/', 'chrome://new-tab-page/', 'chrome-search://local-ntp/local-ntp.html'];
 
@@ -63,9 +76,15 @@ function enqueue(task) {
 async function windowTabs(windowId) {
   const tabs = await chrome.tabs.query({ windowId });
   tabs.sort((a, b) => a.index - b.index);
+  for (const t of tabs) noteTab(t);
   const order = tabs.filter((t) => !t.pinned).map((t) => t.id);
   joinSplitViews(windowId, tabs, order);
   return { tabs, order, pinnedCount: tabs.length - order.length };
+}
+
+function noteTab(tab) {
+  const url = tab.url || tab.pendingUrl;
+  if (url) tabInfo.set(tab.id, { url, title: tab.title });
 }
 
 const splitOf = (tab) => ((tab?.splitViewId ?? -1) === -1 ? null : tab.splitViewId);
@@ -226,6 +245,7 @@ function releaseTab(tabId, order) {
 async function persist() {
   await chrome.storage.session.set({
     tree: { parents: [...state.parents], collapsed: [...state.collapsed], splits: [...state.splits] },
+    closedTabs: [...closedTabs],
   });
 }
 
@@ -268,6 +288,7 @@ async function saveSnapshot() {
       tabs: tabs.map((t) => ({
         id: t.id,
         url: t.pendingUrl || t.url || '',
+        title: t.title,
         parent: indexOf.get(state.parents.get(t.id)) ?? -1,
         collapsed: state.collapsed.has(t.id),
       })),
@@ -327,7 +348,8 @@ async function waitForStableTabs() {
 
 async function init() {
   settings = await loadSettings();
-  const { tree } = await chrome.storage.session.get('tree');
+  const { tree, closedTabs: closed = [] } = await chrome.storage.session.get(['tree', 'closedTabs']);
+  for (const [id, record] of closed) closedTabs.set(id, record);
   if (tree) {
     state.parents = new Map(tree.parents);
     state.collapsed = new Set(tree.collapsed);
@@ -340,6 +362,7 @@ async function init() {
 
   // Reconcile with the tabs that actually exist.
   const tabs = await chrome.tabs.query({});
+  for (const tab of tabs) noteTab(tab);
   const alive = new Set(tabs.map((t) => t.id));
   for (const id of state.parents.keys()) if (!alive.has(id)) state.parents.delete(id);
   for (const id of state.collapsed) if (!alive.has(id)) state.collapsed.delete(id);
@@ -389,10 +412,54 @@ async function onCreated(createdTab, latest) {
 
   if (placement) {
     await applyMove(tab.windowId, [tab.id], placement.targetId, placement.position);
-  } else {
+  } else if (!(source === undefined && opener === undefined && placeReopened(createdTab, order))) {
     state.parents.set(tab.id, inferParent(order, state.parents, tab.id));
   }
   await commit(tab.windowId);
+}
+
+/**
+ * A tab Chrome reopened (Ctrl+Shift+T, History) goes back where it was in the
+ * tree, and its children that were reopened before it come back under it.
+ * Chrome reopens a tab with its address and title already set, which a new
+ * tab doesn't have yet, so it's matched to the most recent closed tab with
+ * both the same. False if the tab isn't a reopened one.
+ */
+function placeReopened(tab, order) {
+  if (!tab.url || !tab.title) return false;
+  const match = [...closedTabs].reverse().find(([, r]) => r.reopenedAs === undefined && r.url === tab.url &&
+    (r.title === undefined || r.title === tab.title));
+  if (!match) return false;
+  const [oldId, record] = match;
+  const isOpen = (id) => id !== tab.id && order.includes(id);
+  const parent = record.parent === null ? null
+    : reopenedParent(closedTabs, record.parent, isOpen) ?? inferParent(order, state.parents, tab.id);
+  state.parents.set(tab.id, parent);
+  for (const kid of reopenedChildren(closedTabs, oldId, state.parents)) {
+    if (order.includes(kid)) state.parents.set(kid, tab.id);
+  }
+  Object.assign(record, { reopenedAs: tab.id, placedUnder: parent });
+  // Chrome puts it back at its old index; make sure its subtree is in one piece.
+  needsLayout.add(tab.windowId);
+  return true;
+}
+
+/** Remembers a closing tab and its place in the tree, for when it's reopened. */
+async function rememberClosed(tabId, removedAt) {
+  const former = formerParents.get(tabId);
+  formerParents.delete(tabId);
+  const parent = former && Math.abs(former.at - removedAt) < 2000 ? former.parent : state.parents.get(tabId) ?? null;
+  let info = tabInfo.get(tabId);
+  tabInfo.delete(tabId);
+  if (!info) {
+    // The worker was asleep while the tab was open: use the saved snapshot.
+    const { snapshots = [] } = await chrome.storage.local.get('snapshots');
+    info = snapshots.flatMap((snap) => snap.tabs).find((t) => t.id === tabId);
+  }
+  if (!info?.url) return;
+  closedTabs.delete(tabId);
+  closedTabs.set(tabId, { url: info.url, title: info.title, parent });
+  while (closedTabs.size > MAX_CLOSED) closedTabs.delete(closedTabs.keys().next().value);
 }
 
 const childPlacement = (parentId) => ({
@@ -436,6 +503,7 @@ const closedWithOthers = (at) => removalTimes.filter((t) => Math.abs(t - at) <= 
 async function onRemoved(tabId, { windowId, isWindowClosing }, removedAt) {
   const branchHandled = closedByTree.delete(tabId);
   if (!state.parents.has(tabId)) return;
+  await rememberClosed(tabId, removedAt);
   const partner = state.splits.get(tabId);
   for (const [head, p] of state.splits) if (head === tabId || p === tabId) state.splits.delete(head);
   if (isWindowClosing) {
@@ -458,6 +526,13 @@ async function onRemoved(tabId, { windowId, isWindowClosing }, removedAt) {
     const tree = buildTree([tabId, ...order], state.parents);
     const descendants = descendantsOf(tree, tabId);
     if (descendants.length) chrome.tabs.remove(descendants).catch(() => {});
+  }
+  for (const [id, { at }] of formerParents) if (removedAt - at > 10000) formerParents.delete(id);
+  for (const [id, parent] of state.parents) {
+    const former = formerParents.get(id);
+    if (parent === tabId && !(former && Math.abs(former.at - removedAt) < 2000)) {
+      formerParents.set(id, { parent: tabId, at: removedAt });
+    }
   }
   releaseTab(tabId, order);
   state.parents.delete(tabId);
@@ -783,6 +858,13 @@ chrome.tabs.onRemoved.addListener((tabId, info) => {
   enqueue(() => onRemoved(tabId, info, removedAt));
 });
 on(chrome.tabs.onMoved, onMoved);
+chrome.tabs.onUpdated.addListener((tabId, change, tab) => {
+  // Addresses and titles, to remember tabs when they close (see rememberClosed).
+  if (change.url !== undefined || change.title !== undefined) {
+    noteTab(tab);
+    scheduleSnapshot();
+  }
+});
 on(chrome.tabs.onUpdated, onUpdated);
 on(chrome.tabs.onActivated, onActivated);
 on(chrome.tabs.onDetached, onDetached);

@@ -30,7 +30,7 @@ GİZLİLİK
 Tree of Tabs sekmelerinizi veya gezinme bilgilerinizi hiçbir yere göndermez. Ağacınızın yapısını yeniden başlatmadan sonra geri yükleyebilmek için kendi bilgisayarınızda saklar. Analiz, hesap veya sunucu yoktur. Tarayıcı senkronizasyonunu kullanıyorsanız ayarlarınız tarayıcı profilinizle senkronize edilir.
 
 İZİNLER
-• "Göz atma geçmişinizi okuma": Tree of Tabs'ın açık sekmelerinizi ağaçta gösterebilmesi ve yeni bir sekmenin hangi sekmeden açıldığını bilmesi için bu sekmelerin başlıklarına ve adreslerine ihtiyacı vardır. Hiçbir sayfanın içeriğini okumaz ve kapattığınız sayfaların geçmişini görmez.
+• "Göz atma geçmişinizi okuma": Tree of Tabs'ın açık sekmelerinizi ağaçta gösterebilmesi ve yeni bir sekmenin hangi sekmeden açıldığını bilmesi için bu sekmelerin başlıklarına ve adreslerine ihtiyacı vardır. Sayfaların içeriğini ve göz atma geçmişinizi okumaz.
 
 AÇIK KAYNAK
 Tree of Tabs ücretsiz ve açık kaynaklıdır: https://github.com/lawand-dot-io/tree-of-tabs

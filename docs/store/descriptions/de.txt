@@ -30,7 +30,7 @@ DATENSCHUTZ
 Tree of Tabs sendet Ihre Tabs oder Ihren Browserverlauf nirgendwohin. Es speichert die Struktur Ihres Baums auf Ihrem eigenen Computer, um sie nach einem Neustart wiederherzustellen, und hat keine Analysen, keine Konten und keine Server. Ihre Einstellungen werden mit Ihrem Browserprofil synchronisiert, wenn Sie die Browsersynchronisierung verwenden.
 
 BERECHTIGUNGEN
-• „Browserverlauf lesen“: Tree of Tabs braucht die Titel und Adressen Ihrer geöffneten Tabs, um sie im Baum anzuzeigen und um zu erkennen, aus welchem Tab ein neuer Tab geöffnet wurde. Es liest keine Seiteninhalte und sieht nicht den Verlauf geschlossener Seiten.
+• „Browserverlauf lesen“: Tree of Tabs braucht die Titel und Adressen Ihrer geöffneten Tabs, um sie im Baum anzuzeigen und um zu erkennen, aus welchem Tab ein neuer Tab geöffnet wurde. Es liest keine Seiteninhalte und nicht Ihren Browserverlauf.
 
 OPEN SOURCE
 Tree of Tabs ist kostenlos und Open Source: https://github.com/lawand-dot-io/tree-of-tabs

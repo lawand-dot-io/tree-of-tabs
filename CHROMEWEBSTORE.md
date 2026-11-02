@@ -52,7 +52,7 @@ PRIVACY
 Tree of Tabs never sends your tabs or browsing anywhere. It keeps the shape of your tree on your own computer so it can rebuild it after a restart, and it has no analytics, no accounts and no servers. Your settings sync with your browser profile if you use browser sync.
 
 PERMISSIONS
-• "Read your browsing history": Tree of Tabs needs the titles and addresses of your open tabs to show them in the tree and to know which tab a new tab was opened from. It does not read the content of any page, and it does not see the history of pages you closed.
+• "Read your browsing history": Tree of Tabs needs the titles and addresses of your open tabs to show them in the tree and to know which tab a new tab was opened from. It does not read the content of any page or your browsing history.
 
 OPEN SOURCE
 Tree of Tabs is free and open source: https://github.com/lawand-dot-io/tree-of-tabs
@@ -145,7 +145,8 @@ What it handles, all of it kept on the user's device:
 |------|------------------|-----|
 | Open tabs' titles, addresses and icons | Only in memory while the tree is shown | To display the tree |
 | Tree structure: which tab is nested under which, plus collapsed branches | Browser session storage, cleared when the browser closes | To keep the tree when the extension's background process restarts |
-| A copy of the tree per window (tab addresses and their nesting, for the last 12 windows) | Local extension storage on the device | To rebuild the tree after the browser restarts, when tabs get new internal numbers |
+| Recently closed tabs (address, title and place in the tree, up to 200) | Browser session storage, cleared when the browser closes | To put tabs the user reopens (Ctrl+Shift+T) back in their place in the tree |
+| A copy of the tree per window (tab addresses, titles and their nesting, for the last 12 windows) | Local extension storage on the device | To rebuild the tree after the browser restarts, when tabs get new internal numbers |
 | Settings (choices on the settings page) | Browser sync storage | So settings follow the user's browser profile. When browser sync is on, the browser syncs them through the user's Google account. They contain no browsing data. |
 
 The tree also displays each tab's website icon. For most tabs, the icon image is

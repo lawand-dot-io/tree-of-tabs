@@ -30,7 +30,7 @@ CONFIDENTIALITÉ
 Tree of Tabs n'envoie jamais vos onglets ni votre navigation nulle part. Il garde la structure de votre arbre sur votre propre ordinateur pour pouvoir la reconstruire après un redémarrage, et il n'a ni statistiques, ni comptes, ni serveurs. Vos paramètres sont synchronisés avec votre profil de navigateur si vous utilisez la synchronisation.
 
 AUTORISATIONS
-• « Consulter votre historique de navigation » : Tree of Tabs a besoin des titres et des adresses de vos onglets ouverts pour les afficher dans l'arbre et savoir depuis quel onglet un nouvel onglet a été ouvert. Il ne lit le contenu d'aucune page et ne voit pas l'historique des pages que vous avez fermées.
+• « Consulter votre historique de navigation » : Tree of Tabs a besoin des titres et des adresses de vos onglets ouverts pour les afficher dans l'arbre et savoir depuis quel onglet un nouvel onglet a été ouvert. Il ne lit ni le contenu des pages ni votre historique de navigation.
 
 OPEN SOURCE
 Tree of Tabs est gratuit et open source : https://github.com/lawand-dot-io/tree-of-tabs

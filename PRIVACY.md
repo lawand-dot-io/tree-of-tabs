@@ -1,21 +1,26 @@
 # Privacy Policy for Tree of Tabs
 
-Last updated: October 27, 2026
+Last updated: November 2, 2026
 
 ## What data Tree of Tabs handles
 
 Tree of Tabs shows your open tabs as a tree. To do that it reads the title,
 website address and icon of each open tab, and remembers which tab each tab
-was opened from. It does not read the content of web pages, and it does not
-access the history of pages you have closed.
+was opened from. It does not read the content of web pages or your browsing
+history.
 
 ## How it is stored
 
 - The tree's structure is kept in the browser's session storage, which the
   browser clears when it closes.
-- A copy of the tree for your most recent windows (tab addresses and how they
-  are nested, for up to 12 windows) is kept in the extension's local storage on
-  your computer, so the tree can be rebuilt after you restart the browser.
+- So that tabs you reopen (for example with Ctrl+Shift+T) go back to their
+  place in the tree, the address, title and place in the tree of your most
+  recently closed tabs (up to 200) are also kept in session storage, which the
+  browser clears when it closes.
+- A copy of the tree for your most recent windows (tab addresses, titles and
+  how they are nested, for up to 12 windows) is kept in the extension's local
+  storage on your computer, so the tree can be rebuilt after you restart the
+  browser.
 - Your settings are kept in the browser's sync storage. If browser sync is
   turned on, your browser syncs them to your other devices through your Google
   account. Settings contain only your choices on the settings page, no browsing
@@ -23,7 +28,8 @@ access the history of pages you have closed.
 
 ## How it is used
 
-Only to display your tabs as a tree and to restore that tree after a restart.
+Only to display your tabs as a tree, to put reopened tabs back in their place,
+and to restore the tree after a restart.
 
 ## Third-party services
 

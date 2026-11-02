@@ -10,6 +10,8 @@ import {
   planMove,
   planMoves,
   releaseChildren,
+  reopenedChildren,
+  reopenedParent,
   sanitize,
   splitPairs,
 } from '../src/tree.js';
@@ -290,4 +292,43 @@ test('planMoves moves split view tabs only when their order changes', () => {
   const { moves, keptFixed } = planMoves(['H', 'P', 'K', 'Q'], ['K', 'Q', 'H', 'P'], new Set(['H', 'P', 'K', 'Q']));
   assert.equal(keptFixed, false);
   assert.ok(moves.length > 0);
+});
+
+test('a tree reopened child first goes back together', () => {
+  // Root > Parent > (A > GrandA, B) closed together; Chrome reopens B,
+  // GrandA, A and Parent, in that order. New ids are the old ones in lower case.
+  const closed = new Map([
+    ['Parent', { parent: 'Root' }],
+    ['A', { parent: 'Parent' }],
+    ['GrandA', { parent: 'A' }],
+    ['B', { parent: 'Parent' }],
+  ]);
+  const parents = new Map([['Root', null]]);
+  const reopen = (old) => {
+    const now = old.toLowerCase();
+    const placedUnder = reopenedParent(closed, closed.get(old).parent, (id) => parents.has(id));
+    parents.set(now, placedUnder);
+    for (const kid of reopenedChildren(closed, old, parents)) parents.set(kid, now);
+    Object.assign(closed.get(old), { reopenedAs: now, placedUnder });
+  };
+  reopen('B');
+  assert.equal(parents.get('b'), 'Root'); // Its parent is still closed.
+  reopen('GrandA');
+  assert.equal(parents.get('granda'), 'Root');
+  reopen('A');
+  assert.equal(parents.get('granda'), 'a');
+  reopen('Parent');
+  assert.deepEqual(Object.fromEntries(parents), { Root: null, b: 'parent', granda: 'a', a: 'parent', parent: 'Root' });
+});
+
+test('a reopened tab whose ancestors are all gone has no parent', () => {
+  const closed = new Map([['A', { parent: 'Gone' }]]);
+  assert.equal(reopenedParent(closed, 'A', () => false), null);
+  assert.equal(reopenedParent(closed, null, () => true), null);
+});
+
+test('reopening a parent leaves children the user moved since', () => {
+  const closed = new Map([['A', { parent: 'P', reopenedAs: 'a', placedUnder: 'Root' }]]);
+  assert.deepEqual(reopenedChildren(closed, 'P', new Map([['a', 'Root']])), ['a']);
+  assert.deepEqual(reopenedChildren(closed, 'P', new Map([['a', 'Elsewhere']])), []);
 });

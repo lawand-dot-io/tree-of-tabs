@@ -11,6 +11,9 @@ import assert from 'node:assert/strict';
 // require() also finds a globally installed Playwright.
 const { chromium } = createRequire(import.meta.url)('playwright');
 const root = path.resolve(import.meta.dirname, '../..');
+// A second extension that reopens closed tabs like Ctrl+Shift+T, which
+// Playwright can't press in the browser's own interface.
+const restoreHelper = path.resolve(import.meta.dirname, 'restore-helper');
 const shots = process.argv[2];
 
 // Pages with links, so tabs get a real opener like they do for users.
@@ -26,7 +29,7 @@ const base = `http://localhost:${server.address().port}`;
 const context = await chromium.launchPersistentContext(mkdtempSync(path.join(tmpdir(), 'tree-of-tabs-')), {
   headless: true,
   channel: 'chromium', // The headless shell cannot load extensions.
-  args: [`--disable-extensions-except=${root}`, `--load-extension=${root}`],
+  args: [`--disable-extensions-except=${root},${restoreHelper}`, `--load-extension=${root},${restoreHelper}`],
   viewport: { width: 320, height: 640 },
 });
 
@@ -45,7 +48,15 @@ async function check(name, fn) {
 }
 
 try {
-  let worker = context.serviceWorkers()[0] ?? (await context.waitForEvent('serviceworker'));
+  const findWorker = async (file) => {
+    for (;;) {
+      const found = context.serviceWorkers().find((w) => w.url().endsWith(file));
+      if (found) return found;
+      await context.waitForEvent('serviceworker');
+    }
+  };
+  let worker = await findWorker('/src/background.js');
+  const helper = await findWorker('/restore.js');
   const extensionId = new URL(worker.url()).host;
   const settle = () => new Promise((resolve) => setTimeout(resolve, 400));
 
@@ -845,6 +856,33 @@ try {
     ]);
   });
 
+  await check('a closed tree reopened with Ctrl+Shift+T goes back together', async () => {
+    const before = await outline();
+    const docsId = await idOf('Page Project docs');
+    await panel.evaluate((id) => chrome.runtime.sendMessage({ type: 'close-tree', tabId: id }), docsId);
+    await settle();
+    assert.equal((await outline()).includes('Project docs'), false);
+    // Chrome reopens the tree one tab per Ctrl+Shift+T, children first.
+    for (let i = 0; i < 4; i++) {
+      await helper.evaluate(() => chrome.sessions.restore());
+      await settle();
+    }
+    assert.equal(await outline(), before);
+  });
+
+  await check('tabs closed one by one come back to their place when reopened', async () => {
+    const before = await outline();
+    for (const title of ['Page Design spec', 'Page Review comments']) {
+      await worker.evaluate(async (id) => chrome.tabs.remove(id), await idOf(title));
+      await settle();
+    }
+    for (let i = 0; i < 2; i++) {
+      await helper.evaluate(() => chrome.sessions.restore());
+      await settle();
+    }
+    assert.equal(await outline(), before);
+  });
+
   await check('the tree is rebuilt from the snapshot when session state is lost', async () => {
     const newsId = await idOf('Page News');
     await panel.evaluate((id) => chrome.runtime.sendMessage({ type: 'set-collapsed', tabId: id, collapsed: true }), newsId);
@@ -857,7 +895,7 @@ try {
     await worker.evaluate(() => (self.marker = 'old worker'));
     await cdp.send('ServiceWorker.stopAllWorkers');
     await panel.evaluate(() => chrome.runtime.sendMessage({ type: 'get-tree' }));
-    worker = context.serviceWorkers().at(-1);
+    worker = await findWorker('/src/background.js');
     assert.equal(await worker.evaluate(() => self.marker), undefined);
     await worker.evaluate((id) => (self.mainWindowId = id), mainWindowId);
     await worker.evaluate(async () => {

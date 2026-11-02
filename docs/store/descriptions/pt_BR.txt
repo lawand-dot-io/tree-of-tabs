@@ -30,7 +30,7 @@ PRIVACIDADE
 O Tree of Tabs nunca envia suas guias ou sua navegação para lugar nenhum. Ele guarda a estrutura da sua árvore no seu próprio computador para poder reconstruí-la depois de reiniciar, e não tem análises, contas nem servidores. Suas configurações são sincronizadas com o seu perfil do navegador se você usa a sincronização.
 
 PERMISSÕES
-• "Ler seu histórico de navegação": o Tree of Tabs precisa dos títulos e endereços das suas guias abertas para mostrá-las na árvore e saber de qual guia uma nova guia foi aberta. Ele não lê o conteúdo de nenhuma página e não vê o histórico das páginas que você fechou.
+• "Ler seu histórico de navegação": o Tree of Tabs precisa dos títulos e endereços das suas guias abertas para mostrá-las na árvore e saber de qual guia uma nova guia foi aberta. Ele não lê o conteúdo das páginas nem o seu histórico de navegação.
 
 CÓDIGO ABERTO
 O Tree of Tabs é gratuito e de código aberto: https://github.com/lawand-dot-io/tree-of-tabs

@@ -216,6 +216,44 @@ export function releaseChildren(order, parents, id, mode) {
   return changes;
 }
 
+// --- Reopened tabs ----------------------------------------------------------------
+// Chrome reopens a closed tree (Ctrl+Shift+T) one tab at a time, children
+// first and the parent last. Each reopened tab goes back under its parent from
+// when it closed, or, while that one is still closed, under its nearest
+// ancestor that is open. Its children come back under it as it reopens.
+
+/**
+ * Where a reopened tab goes, given its parent when it closed. `closed` maps
+ * closed tab ids to { parent, reopenedAs }; `isOpen(id)` tells whether a tab is
+ * open in the reopened tab's window. Null if no ancestor is open.
+ */
+export function reopenedParent(closed, parent, isOpen) {
+  const seen = new Set();
+  while (parent !== null && parent !== undefined && !seen.has(parent)) {
+    seen.add(parent);
+    if (isOpen(parent)) return parent;
+    const record = closed.get(parent);
+    if (!record) return null;
+    if (record.reopenedAs !== undefined && isOpen(record.reopenedAs)) return record.reopenedAs;
+    parent = record.parent;
+  }
+  return null;
+}
+
+/**
+ * The tabs that come back under a tab reopened from closed tab `id`: those
+ * reopened before it whose parent was `id`, if they're still where they were
+ * put then (so nothing the user has moved since is taken back).
+ */
+export function reopenedChildren(closed, id, parents) {
+  const kids = [];
+  for (const record of closed.values()) {
+    if (record.parent !== id || record.reopenedAs === undefined) continue;
+    if (parents.get(record.reopenedAs) === record.placedUnder) kids.push(record.reopenedAs);
+  }
+  return kids;
+}
+
 // --- Split views ----------------------------------------------------------------
 // Chrome can show two tabs of a window side by side, as a split view. It keeps
 // them next to each other in the tab strip, and ends the split when an

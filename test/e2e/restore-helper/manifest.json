@@ -1,0 +1,8 @@
+{
+  "manifest_version": 3,
+  "name": "Reopen closed tabs (test helper)",
+  "version": "1",
+  "description": "Lets the end-to-end test reopen closed tabs the way Ctrl+Shift+T does.",
+  "permissions": ["sessions"],
+  "background": { "service_worker": "restore.js" }
+}
