@@ -5,7 +5,9 @@ a title card at the start and the end. Writes docs/demo/tree-of-tabs-demo.mp4
 (1920x1080, for YouTube and the store listing), docs/demo/demo.gif (for the
 README) and docs/demo/demo-loop.mp4 (for social feeds like Reddit and X, which
 loop silent videos: it starts right on the first link opening, under a bold
-headline for its first two seconds, to catch people scrolling past). Needs Pillow, ffmpeg and the Inter font.
+headline for its first two seconds, to catch people scrolling past) and
+docs/demo/demo-loop-plain.mp4 (the GIF's calm loop as a sharp video, for web
+pages that already show the name and tagline next to it). Needs Pillow, ffmpeg and the Inter font.
 Usage: python3 tools/demo/render.py <capture folder>"""
 import json
 import os
@@ -347,6 +349,14 @@ def main():
     social.stdin.close()
     social.wait()
     print(f'{loop_video}: {(social_count + BACK) / FPS:.1f} seconds, {os.path.getsize(loop_video) / 1e6:.1f} MB')
+
+    # The calm loop at full size, for web pages.
+    plain = os.path.join(OUT, 'demo-loop-plain.mp4')
+    subprocess.run(
+        ['ffmpeg', '-loglevel', 'error', '-y', '-i', loop, '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '20',
+         '-preset', 'slow', '-movflags', '+faststart', plain],
+        check=True)
+    print(f'{plain}: {os.path.getsize(plain) / 1e6:.1f} MB')
 
     # Smaller and slower than the video, with its own palette.
     gif = os.path.join(OUT, 'demo.gif')
