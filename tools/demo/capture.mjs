@@ -2,7 +2,8 @@
 // sites (Wikipedia articles about Lisbon, with OpenStreetMap, Wikivoyage,
 // Wikimedia Commons, GitHub and Chrome's documentation around them), and
 // saves a capture of the page and the panel after every step, plus a timeline
-// (steps.json) that tools/demo/render.py turns into the video. It also copies
+// (steps.json) that tools/demo/render.py turns into the video (and
+// tools/demo/render_short.py into the vertical YouTube Short). It also copies
 // the captures the store screenshots use to docs/store/raw/. Needs network
 // access; the Wikimedia pages are CC BY-SA, so credit them where the video is
 // published.
