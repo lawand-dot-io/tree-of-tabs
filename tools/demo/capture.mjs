@@ -181,9 +181,12 @@ async function moveTo(target, seconds = 0.85) {
 // The moments the store screenshots show, with where the cursor is.
 const keyframes = {};
 const keyframe = (name, extra = {}) => (keyframes[name] = { shot: current, scheme, cursor, ...extra });
+// Middle-clicks a link. The video then shows the link flying into the panel
+// and the new tab's row lighting up where it lands, under its page.
 async function middleClick(name) {
   const target = await linkTo(name);
   await moveTo(target);
+  const before = current;
   const page = pages.get(active);
   const [child] = await Promise.all([
     context.waitForEvent('page'),
@@ -192,8 +195,10 @@ async function middleClick(name) {
   await settle(child);
   pages.set(name, child);
   current = await shot(600);
-  step({ type: 'click', seconds: 0.25 });
-  hold(0.9);
+  const box = await (await row(name)).boundingBox();
+  steps.push({ shot: before, type: 'click', seconds: 0.25 });
+  steps.push({ shot: before, type: 'fly', seconds: 0.6, from: target, to: { on: 'panel', ...box }, label: name });
+  step({ type: 'hold', seconds: 0.9, glow: { on: 'panel', ...box } });
 }
 // A smooth scroll, captured in small steps.
 async function scroll(pixels, count = 8) {
