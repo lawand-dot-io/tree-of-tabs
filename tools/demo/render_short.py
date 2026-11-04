@@ -12,7 +12,7 @@ import os
 import subprocess
 import sys
 from functools import lru_cache
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageChops, ImageDraw, ImageFilter
 from frame import (ACCENT, BG, CHROME, GREEN_TINT, TEXT, TITLE, font, ghost, gradient, icon, landscape,
                    make_cursor, pointer, rounded_mask, shadow_for)
 
@@ -25,11 +25,13 @@ W, H, FPS = 1080, 1920, 30
 PAGE_BOX = (60, 330, 1020, 830)
 PAGE_SCALE = 1.45
 CROP = ((PAGE_BOX[2] - PAGE_BOX[0]) / PAGE_SCALE, (PAGE_BOX[3] - PAGE_BOX[1]) / PAGE_SCALE)
-# The panel: its top part, with Chrome's side panel header above it.
+# The panel, with Chrome's side panel header above it. It shows VISIBLE CSS pixels of the tree at a time and
+# scrolls to follow the cursor, so drags and menu items lower down stay in view.
 PANEL_SCALE = 1.9
 PANEL_W = round(320 * PANEL_SCALE)
 HEADER = round(34 * PANEL_SCALE)
 PANEL_BOX = ((W - PANEL_W) // 2, 960, (W + PANEL_W) // 2, 1640)
+VISIBLE = (PANEL_BOX[3] - PANEL_BOX[1] - HEADER) / PANEL_SCALE
 CAPTION_Y = 895
 TREES = [('pine', 70, 6), ('round', 150, 5), ('round', 830, 5), ('pine', 910, 6)]
 
@@ -63,7 +65,35 @@ def capture(kind, shot):
 
 
 @lru_cache(maxsize=8)
-def panel_card(shot):
+def panel_image(shot):
+    panel = capture('panel', shot)
+    width = PANEL_BOX[2] - PANEL_BOX[0]
+    return panel.resize((width, round(panel.height * width / panel.width)), Image.LANCZOS)
+
+
+@lru_cache(maxsize=64)
+def content_height(shot):
+    """How far down the panel's content goes, in CSS pixels."""
+    panel = capture('panel', shot)
+    background = Image.new('RGB', panel.size, panel.getpixel((panel.width - 10, panel.height - 10)))
+    box = ImageChops.difference(panel, background).convert('L').point(lambda v: 255 if v > 12 else 0).getbbox()
+    return box[3] / 2 if box else 0
+
+
+def scroll_for(top, y, shot):
+    """Scrolls the panel as little as possible so `y` sits in the middle part of the view."""
+    if y > top + VISIBLE * 0.72:
+        top = y - VISIBLE * 0.72
+    elif y < top + VISIBLE * 0.2:
+        top = y - VISIBLE * 0.2
+    return clamp_scroll(top, shot)
+
+
+def clamp_scroll(top, shot):
+    return min(max(top, 0), max(0, content_height(shot) + 12 - VISIBLE))
+
+
+def panel_card(shot, scroll):
     colors = CHROME[SCHEMES[shot]]
     width, height = PANEL_BOX[2] - PANEL_BOX[0], PANEL_BOX[3] - PANEL_BOX[1]
     card = Image.new('RGB', (width, height), colors['bg'])
@@ -73,22 +103,21 @@ def panel_card(shot):
     draw.text((round(HEADER * 1.07), HEADER // 2), 'Tree of Tabs', font=font('Inter-Medium.otf', round(HEADER * 0.41)),
               fill=colors['text'], anchor='lm')
     draw.line((0, HEADER - 1, width, HEADER - 1), fill=colors['divider'])
-    panel = capture('panel', shot)
-    panel = panel.resize((width, round(panel.height * width / panel.width)), Image.LANCZOS)
-    card.paste(panel.crop((0, 0, width, height - HEADER)), (0, HEADER))
+    top = round(scroll * PANEL_SCALE)
+    card.paste(panel_image(shot).crop((0, top, width, top + height - HEADER)), (0, HEADER))
     return card
 
 
 def page_card(shot, camera):
     page = capture('page', shot)
-    x, y = camera
+    x, y = camera[:2]
     crop = page.crop((round(x * 2), round(y * 2), round((x + CROP[0]) * 2), round((y + CROP[1]) * 2)))
     return crop.resize((PAGE_BOX[2] - PAGE_BOX[0], PAGE_BOX[3] - PAGE_BOX[1]), Image.LANCZOS)
 
 
 def scene(shot, camera):
     canvas = BACKGROUND.copy()
-    for box, card in ((PAGE_BOX, page_card(shot, camera)), (PANEL_BOX, panel_card(shot))):
+    for box, card in ((PAGE_BOX, page_card(shot, camera)), (PANEL_BOX, panel_card(shot, camera[2]))):
         canvas.paste(card, box[:2], rounded_mask(card.size, 22))
     return canvas
 
@@ -98,7 +127,7 @@ def to_screen(point, camera):
     if point['on'] == 'page':
         return (PAGE_BOX[0] + (point['x'] - camera[0]) * PAGE_SCALE,
                 PAGE_BOX[1] + (point['y'] - camera[1]) * PAGE_SCALE)
-    return PANEL_BOX[0] + point['x'] * PANEL_SCALE, PANEL_BOX[1] + HEADER + point['y'] * PANEL_SCALE
+    return PANEL_BOX[0] + point['x'] * PANEL_SCALE, PANEL_BOX[1] + HEADER + (point['y'] - camera[2]) * PANEL_SCALE
 
 
 def camera_for(point):
@@ -204,6 +233,7 @@ def frames():
     SCHEMES[:] = timeline['schemes']
     position = None  # The cursor, as a point in the page's or the panel's CSS pixels.
     camera = target = None
+    scroll = scroll_target = 0  # How far the panel is scrolled, in CSS pixels.
     text, caption_age = None, 0
     glowing = None
     started = False
@@ -221,6 +251,12 @@ def frames():
         if kind == 'move':
             if step['to']['on'] == 'page':
                 target = camera_for(step['to'])
+            else:
+                scroll_target = scroll_for(scroll_target, step['to']['y'], step['shot'])
+        if kind == 'fly':
+            box = step['to']
+            scroll_target = scroll_for(scroll_for(scroll_target, box['y'] + box['height'], step['shot']), box['y'],
+                                       step['shot'])
         if not started:
             if kind == 'move':
                 position = step['to']
@@ -232,6 +268,9 @@ def frames():
             # The close-up glides toward the cursor's spot on the page.
             camera = target if camera is None else (camera[0] + (target[0] - camera[0]) * 0.12,
                                                     camera[1] + (target[1] - camera[1]) * 0.12)
+            scroll_target = clamp_scroll(scroll_target, step['shot'])
+            scroll += (scroll_target - scroll) * 0.12
+            camera = camera[:2] + (scroll,)
             base = scene(step['shot'], camera)
             if kind == 'fade':
                 base = Image.blend(scene(step['from'], camera), base, ease((i + 1) / count))
