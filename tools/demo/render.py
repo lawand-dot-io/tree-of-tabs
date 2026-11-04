@@ -1,6 +1,7 @@
 """Renders the demo video from the captures that tools/demo/capture.mjs saves:
 the side panel on the left (where people who want vertical tabs put it) next
-to the page, a cursor, and a caption under them, with
+to the page, a cursor, arrows from each link opened to its new row in the tree,
+and a caption under them, with
 a title card at the start and the end. Writes docs/demo/tree-of-tabs-demo.mp4
 (1920x1080, for YouTube and the store listing), docs/demo/demo.gif (for the
 README) and docs/demo/demo-loop.mp4 (for social feeds like Reddit and X, which
@@ -118,26 +119,11 @@ def overlay(frame, position, click=None, drag=None):
     return pointer(frame, position, CURSOR, image)
 
 
-# --- A link flying into the tree, and the new row lighting up -----------------------
+# --- An arrow from the link to its new row in the tree -------------------------------
+# Drawn like a note on a tutorial, so nobody takes it for part of the extension:
+# in the real thing, the row just appears.
 
-LABEL_FONT = font('Inter-Medium.otf', 22)
-
-
-@lru_cache(maxsize=16)
-def label_image(text):
-    """The clicked link as a small card, like a tab on its way into the tree."""
-    width = round(LABEL_FONT.getlength(text)) + 58
-    height, pad = 44, 16
-    image = Image.new('RGBA', (width + pad * 2, height + pad * 2), (0, 0, 0, 0))
-    shadow = Image.new('RGBA', image.size, (0, 0, 0, 0))
-    ImageDraw.Draw(shadow).rounded_rectangle((pad, pad + 4, pad + width, pad + height + 4), radius=12, fill=(0, 0, 0, 70))
-    image = Image.alpha_composite(image, shadow.filter(ImageFilter.GaussianBlur(6)))
-    draw = ImageDraw.Draw(image)
-    draw.rounded_rectangle((pad, pad, pad + width, pad + height), radius=12, fill=(255, 255, 255, 255),
-                           outline=ACCENT + (255,), width=2)
-    draw.ellipse((pad + 16, pad + 16, pad + 28, pad + 28), fill=ACCENT + (255,))
-    draw.text((pad + 40, pad + height / 2), text, font=LABEL_FONT, fill=TITLE + (255,), anchor='lm')
-    return image
+SS = 3  # Supersampling, for smooth lines.
 
 
 def row_box(box):
@@ -147,37 +133,87 @@ def row_box(box):
     return x0, y0, x1, y1
 
 
-def fly(frame, step, t):
-    """The label on its way from the link to the new row, on a gentle arc."""
-    image = label_image(step['label'])
+def arrow_points(step):
+    """The arrow's path: from just beside the link to just right of the new row, on a gentle arc."""
     x0, y0 = to_screen(step['from'])
     bx0, by0, bx1, by1 = row_box(step['to'])
-    x1, y1 = bx0 + 24, (by0 + by1) / 2
-    x = x0 + (x1 - x0) * t
-    y = y0 + (y1 - y0) * t - 120 * 4 * t * (1 - t)
-    # It starts at full size and shrinks a little as it lands.
-    scale = 1 - 0.2 * t
-    image = image.resize((round(image.width * scale), round(image.height * scale)), Image.LANCZOS)
+    x0 -= 22
+    x1, y1 = bx1 + 14, (by0 + by1) / 2
+    cx, cy = (x0 + x1) / 2, min(y0, y1) - 90
+    points = []
+    for i in range(61):
+        t = i / 60
+        points.append(((1 - t) ** 2 * x0 + 2 * (1 - t) * t * cx + t * t * x1,
+                       (1 - t) ** 2 * y0 + 2 * (1 - t) * t * cy + t * t * y1))
+    return points
+
+
+def arrow(frame, step, drawn, alpha):
+    """The first `drawn` (0 to 1) of the arrow, with its head at the tip."""
+    if alpha <= 0 or drawn <= 0:
+        return frame
+    points = arrow_points(step)
+    points = points[:max(2, round(len(points) * drawn))]
+    left = min(x for x, _ in points) - 40
+    top = min(y for _, y in points) - 40
+    right = max(x for x, _ in points) + 40
+    bottom = max(y for _, y in points) + 40
+    size = (round(right - left) * SS, round(bottom - top) * SS)
+    layer = Image.new('RGBA', size, (0, 0, 0, 0))
+    draw = ImageDraw.Draw(layer)
+    local = [((x - left) * SS, (y - top) * SS) for x, y in points]
+    (ax, ay), (bx, by) = local[-2], local[-1]
+    length = max(1e-6, ((bx - ax) ** 2 + (by - ay) ** 2) ** 0.5)
+    ux, uy = (bx - ax) / length, (by - ay) / length
+    head = 20 * SS
+    wing = 11 * SS
+    tip = (bx + ux * 4 * SS, by + uy * 4 * SS)
+    base = (bx - ux * head, by - uy * head)
+    triangle = [tip, (base[0] - uy * wing, base[1] + ux * wing), (base[0] + uy * wing, base[1] - ux * wing)]
+    shaft = local[:-1] + [base] if drawn >= 1 or len(local) > 3 else local
+    for color, width, grow in (((255, 255, 255, 230), 11, 4), (ACCENT + (255,), 5, 0)):
+        draw.line(shaft, fill=color, width=width * SS, joint='curve')
+        r = width * SS / 2
+        x, y = shaft[0]
+        draw.ellipse((x - r, y - r, x + r, y + r), fill=color)
+        outline = triangle if not grow else [
+            (tip[0] + ux * grow * SS, tip[1] + uy * grow * SS),
+            (triangle[1][0] - uy * grow * SS - ux * grow * SS, triangle[1][1] + ux * grow * SS - uy * grow * SS),
+            (triangle[2][0] + uy * grow * SS - ux * grow * SS, triangle[2][1] - ux * grow * SS - uy * grow * SS)]
+        draw.polygon(outline, fill=color)
+    layer = layer.resize((size[0] // SS, size[1] // SS), Image.LANCZOS)
+    if alpha < 1:
+        layer.putalpha(layer.getchannel('A').point(lambda a: round(a * alpha)))
     frame = frame.convert('RGBA')
-    frame.alpha_composite(image, (round(x - 16 * scale), round(y - image.height / 2)))
+    frame.alpha_composite(layer, (round(left), round(top)))
     return frame.convert('RGB')
 
 
-def glow(frame, box, age):
-    """A soft highlight around the row that just appeared, fading out."""
-    strength = max(0.0, 1 - age / (1.2 * FPS))
-    if strength <= 0:
+def outline(frame, box, alpha):
+    """A plain marker around the row that just appeared."""
+    if alpha <= 0:
         return frame
     x0, y0, x1, y1 = row_box(box)
-    layer = Image.new('RGBA', (W, H), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(layer)
-    draw.rounded_rectangle((x0 - 3, y0 - 3, x1 + 3, y1 + 3), radius=12, fill=ACCENT + (round(40 * strength),),
-                           outline=ACCENT + (round(230 * strength),), width=3)
-    halo = Image.new('RGBA', (W, H), (0, 0, 0, 0))
-    ImageDraw.Draw(halo).rounded_rectangle((x0 - 6, y0 - 6, x1 + 6, y1 + 6), radius=14,
-                                           outline=ACCENT + (round(120 * strength),), width=8)
-    frame = Image.alpha_composite(frame.convert('RGBA'), halo.filter(ImageFilter.GaussianBlur(6)))
-    return Image.alpha_composite(frame, layer).convert('RGB')
+    size = (round(x1 - x0 + 24) * SS, round(y1 - y0 + 24) * SS)
+    layer = Image.new('RGBA', size, (0, 0, 0, 0))
+    ImageDraw.Draw(layer).rounded_rectangle((6 * SS, 6 * SS, size[0] - 6 * SS, size[1] - 6 * SS), radius=12 * SS,
+                                            outline=ACCENT + (round(255 * alpha),), width=4 * SS)
+    layer = layer.resize((size[0] // SS, size[1] // SS), Image.LANCZOS)
+    frame = frame.convert('RGBA')
+    frame.alpha_composite(layer, (round(x0 - 12), round(y0 - 12)))
+    return frame.convert('RGB')
+
+
+def note(frame, marking):
+    """The arrow while it draws itself and then holds, and the row's marker once
+    the row is there, both fading out together."""
+    step, age, drawing = marking['step'], marking['age'], marking['frames']
+    hold, fade = round(0.9 * FPS), round(0.4 * FPS)
+    alpha = 1 if age < drawing + hold else max(0.0, 1 - (age - drawing - hold) / fade)
+    frame = arrow(frame, step, ease(min(1, (age + 1) / drawing)), alpha)
+    if age >= drawing:
+        frame = outline(frame, step['to'], alpha)
+    return frame
 
 
 # --- The social version's opening headline ------------------------------------------
@@ -250,7 +286,7 @@ def frames():
     previous = None  # The last frame shown, to fade from after a title card.
     fade_from, fade_left = None, 0
     FADE = 12
-    glowing = None  # The row lighting up, and for how many frames so far.
+    marking = None  # The arrow to the newest row, and for how many frames it has shown.
     hooked = False  # From the first link opening on: where the social version starts.
 
     def emit(frame, card=False):
@@ -288,13 +324,11 @@ def frames():
             base = scene(step['shot'])
             if kind == 'fade':
                 base = Image.blend(scene(step['from']), base, ease((i + 1) / count))
-            if kind == 'fly':
-                base = fly(base, step, ease((i + 1) / count))
-            if i == 0 and step.get('glow'):
-                glowing = [step['glow'], 0]
-            if glowing:
-                base = glow(base, glowing[0], glowing[1])
-                glowing[1] += 1
+            if kind == 'fly' and i == 0:
+                marking = {'step': step, 'age': 0, 'frames': count}
+            if marking:
+                base = note(base, marking)
+                marking['age'] += 1
             frame = overlay(base, position, click, step.get('ghost'))
             caption_age += 1
             yield emit(with_caption(frame, text, min(1, caption_age / 10)))
