@@ -4,8 +4,9 @@ close-up of the page that follows the cursor, and the tree panel, large, below
 it. Arrows point from each link opened down to its new row in the tree. It starts on the first link
 opening and fades from its end back into its start, since Shorts loop.
 Everything important stays clear of the bottom and right edges, where YouTube
-shows its title, buttons and progress bar. Writes docs/demo/tree-of-tabs-short.mp4.
-Needs Pillow, ffmpeg and the Inter font.
+shows its title, buttons and progress bar. Its music comes from music.py, made
+to the video's length so both loop together. Writes docs/demo/tree-of-tabs-short.mp4.
+Needs Pillow, numpy, scipy, ffmpeg and the Inter font.
 Usage: python3 tools/demo/render_short.py <capture folder>"""
 import json
 import os
@@ -266,10 +267,11 @@ def frames():
 def main():
     os.makedirs(OUT, exist_ok=True)
     video = os.path.join(OUT, 'tree-of-tabs-short.mp4')
+    silent = os.path.join(CAPTURES, 'short-silent.mp4')
     encoder = subprocess.Popen(
         ['ffmpeg', '-loglevel', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}', '-r', str(FPS),
          '-i', '-', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '20', '-preset', 'slow', '-movflags', '+faststart',
-         video],
+         silent],
         stdin=subprocess.PIPE)
     count, first, last = 0, None, None
     for frame in frames():
@@ -281,6 +283,15 @@ def main():
         encoder.stdin.write(Image.blend(last, first, ease(i / BACK)).tobytes())
     encoder.stdin.close()
     encoder.wait()
+    # The music, as long as the video, at YouTube's loudness.
+    music = os.path.join(CAPTURES, 'short-music.wav')
+    subprocess.run([sys.executable, os.path.join(os.path.dirname(__file__), 'music.py'), str((count + BACK) / FPS), music],
+                   check=True)
+    subprocess.run(
+        ['ffmpeg', '-loglevel', 'error', '-y', '-i', silent, '-i', music, '-map', '0:v', '-map', '1:a', '-c:v', 'copy',
+         '-af', 'loudnorm=I=-16:TP=-1.5:LRA=11', '-ar', '44100', '-c:a', 'aac', '-b:a', '192k', '-shortest',
+         '-movflags', '+faststart', video],
+        check=True)
     print(f'{video}: {(count + BACK) / FPS:.1f} seconds, {os.path.getsize(video) / 1e6:.1f} MB')
 
 
