@@ -1,7 +1,7 @@
 """Renders a vertical version of the demo (1080x1920) for YouTube Shorts from
 the captures that tools/demo/capture.mjs saves: the headline at the top, a
 close-up of the page that follows the cursor, and the tree panel, large, below
-it. Links fly from the page down into the tree. It starts on the first link
+it. Arrows point from each link opened down to its new row in the tree. It starts on the first link
 opening and fades from its end back into its start, since Shorts loop.
 Everything important stays clear of the bottom and right edges, where YouTube
 shows its title, buttons and progress bar. Writes docs/demo/tree-of-tabs-short.mp4.
@@ -13,8 +13,8 @@ import subprocess
 import sys
 from functools import lru_cache
 from PIL import Image, ImageChops, ImageDraw, ImageFilter
-from frame import (ACCENT, BG, CHROME, GREEN_TINT, TEXT, TITLE, font, ghost, gradient, icon, landscape,
-                   make_cursor, pointer, rounded_mask, shadow_for)
+from frame import (ACCENT, BG, CHROME, GREEN_TINT, TEXT, TITLE, arrow, curve, font, ghost, gradient, icon, landscape,
+                   make_cursor, note_alpha, outline, pointer, rounded_mask, shadow_for)
 
 ROOT = os.path.join(os.path.dirname(__file__), '../..')
 OUT = os.path.join(ROOT, 'docs/demo')
@@ -140,60 +140,28 @@ def camera_for(point):
 # --- Overlays ----------------------------------------------------------------------------
 
 CURSOR = make_cursor(1.4)
-LABEL_FONT = font('Inter-Medium.otf', 30)
-
-
-@lru_cache(maxsize=16)
-def label_image(text):
-    width = round(LABEL_FONT.getlength(text)) + 74
-    height, pad = 58, 18
-    image = Image.new('RGBA', (width + pad * 2, height + pad * 2), (0, 0, 0, 0))
-    shadow = Image.new('RGBA', image.size, (0, 0, 0, 0))
-    ImageDraw.Draw(shadow).rounded_rectangle((pad, pad + 5, pad + width, pad + height + 5), radius=16, fill=(0, 0, 0, 80))
-    image = Image.alpha_composite(image, shadow.filter(ImageFilter.GaussianBlur(7)))
-    draw = ImageDraw.Draw(image)
-    draw.rounded_rectangle((pad, pad, pad + width, pad + height), radius=16, fill=(255, 255, 255, 255),
-                           outline=ACCENT + (255,), width=3)
-    draw.ellipse((pad + 20, pad + 21, pad + 36, pad + 37), fill=ACCENT + (255,))
-    draw.text((pad + 52, pad + height / 2), text, font=LABEL_FONT, fill=TITLE + (255,), anchor='lm')
-    return image
 
 
 def row_box(box, camera):
     x0, y0 = to_screen({'on': 'panel', 'x': box['x'], 'y': box['y']}, camera)
     x1, y1 = to_screen({'on': 'panel', 'x': box['x'] + box['width'], 'y': box['y'] + box['height']}, camera)
-    return x0, y0, x1, y1
+    return x0, y0, min(x1, PANEL_BOX[2] - 4), y1
 
 
-def fly(frame, step, t, camera):
-    image = label_image(step['label'])
+def note(frame, marking, camera):
+    """An arrow from beside the link down to just right of its new row, curving out to
+    the right, while it draws itself and holds; and the row's marker once the row is
+    there. In the real extension the row just appears: these are notes on the video."""
+    step, age, drawing = marking['step'], marking['age'], marking['frames']
+    alpha = note_alpha(age, drawing, FPS)
     x0, y0 = to_screen(step['from'], camera)
     bx0, by0, bx1, by1 = row_box(step['to'], camera)
-    x1, y1 = bx0 + 30, (by0 + by1) / 2
-    x = x0 + (x1 - x0) * t + 140 * 4 * t * (1 - t)  # A gentle curve to the right.
-    y = y0 + (y1 - y0) * t
-    scale = 1 - 0.15 * t
-    image = image.resize((round(image.width * scale), round(image.height * scale)), Image.LANCZOS)
-    frame = frame.convert('RGBA')
-    frame.alpha_composite(image, (round(x - 18 * scale), round(y - image.height / 2)))
-    return frame.convert('RGB')
-
-
-def glow(frame, box, age, camera):
-    strength = max(0.0, 1 - age / (1.2 * FPS))
-    if strength <= 0:
-        return frame
-    x0, y0, x1, y1 = row_box(box, camera)
-    x1 = min(x1, PANEL_BOX[2] - 4)
-    layer = Image.new('RGBA', (W, H), (0, 0, 0, 0))
-    ImageDraw.Draw(layer).rounded_rectangle((x0 - 3, y0 - 3, x1 + 3, y1 + 3), radius=16,
-                                            fill=ACCENT + (round(40 * strength),),
-                                            outline=ACCENT + (round(230 * strength),), width=4)
-    halo = Image.new('RGBA', (W, H), (0, 0, 0, 0))
-    ImageDraw.Draw(halo).rounded_rectangle((x0 - 7, y0 - 7, x1 + 7, y1 + 7), radius=18,
-                                           outline=ACCENT + (round(120 * strength),), width=10)
-    frame = Image.alpha_composite(frame.convert('RGBA'), halo.filter(ImageFilter.GaussianBlur(7)))
-    return Image.alpha_composite(frame, layer).convert('RGB')
+    start, end = (x0 + 10, y0 + 34), (bx1 + 18, (by0 + by1) / 2)
+    control = (min(max(start[0], end[0]) + 110, W - 90), (start[1] + end[1]) / 2)
+    frame = arrow(frame, curve(start, control, end), ease(min(1, (age + 1) / drawing)), alpha, width=7, head=26)
+    if age >= drawing:
+        frame = outline(frame, (bx0, by0, bx1, by1), alpha, width=5, radius=16)
+    return frame
 
 
 def click_ring(frame, position, t):
@@ -235,7 +203,7 @@ def frames():
     camera = target = None
     scroll = scroll_target = 0  # How far the panel is scrolled, in CSS pixels.
     text, caption_age = None, 0
-    glowing = None
+    marking = None  # The arrow to the newest row, and for how many frames it has shown.
     started = False
     for index, step in enumerate(steps):
         kind = step['type']
@@ -274,13 +242,11 @@ def frames():
             base = scene(step['shot'], camera)
             if kind == 'fade':
                 base = Image.blend(scene(step['from'], camera), base, ease((i + 1) / count))
-            if kind == 'fly':
-                base = fly(base, step, ease((i + 1) / count), camera)
-            if i == 0 and step.get('glow'):
-                glowing = [step['glow'], 0]
-            if glowing:
-                base = glow(base, glowing[0], glowing[1], camera)
-                glowing[1] += 1
+            if kind == 'fly' and i == 0:
+                marking = {'step': step, 'age': 0, 'frames': count}
+            if marking:
+                base = note(base, marking, camera)
+                marking['age'] += 1
             here = to_screen(start, camera)
             if kind == 'move':
                 there = to_screen(step['to'], camera)

@@ -204,3 +204,76 @@ def landscape(canvas, trees, block=8, base=70, bump=46, hill=HILL, strength=0.7)
                     draw.rectangle((x, y, x + size - 1, y + size - 1),
                                    fill=tuple(round(u + (v - u) * strength) for u, v in zip(under, color)))
     return canvas.convert('RGB')
+
+
+# --- Notes on the video: an arrow and a marker ----------------------------------------
+# Drawn like notes on a tutorial, so nobody takes them for part of the extension.
+
+SS = 3  # Supersampling, for smooth lines.
+
+
+def curve(start, control, end, count=60):
+    """Points along a quadratic curve."""
+    (x0, y0), (cx, cy), (x1, y1) = start, control, end
+    return [((1 - t) ** 2 * x0 + 2 * (1 - t) * t * cx + t * t * x1, (1 - t) ** 2 * y0 + 2 * (1 - t) * t * cy + t * t * y1)
+            for t in (i / count for i in range(count + 1))]
+
+
+def arrow(frame, points, drawn, alpha, width=5, head=20):
+    """The first `drawn` (0 to 1) of an arrow along `points`, with its head at the tip:
+    in ACCENT, with a thin white edge so it reads over any page."""
+    if alpha <= 0 or drawn <= 0:
+        return frame
+    points = points[:max(2, round(len(points) * drawn))]
+    margin = head * 2
+    left, top = min(x for x, _ in points) - margin, min(y for _, y in points) - margin
+    right, bottom = max(x for x, _ in points) + margin, max(y for _, y in points) + margin
+    size = (round(right - left) * SS, round(bottom - top) * SS)
+    layer = Image.new('RGBA', size, (0, 0, 0, 0))
+    draw = ImageDraw.Draw(layer)
+    local = [((x - left) * SS, (y - top) * SS) for x, y in points]
+    (ax, ay), (bx, by) = local[-2], local[-1]
+    length = max(1e-6, math.hypot(bx - ax, by - ay))
+    ux, uy = (bx - ax) / length, (by - ay) / length
+    wing = head * 0.55 * SS
+    tip = (bx + ux * 4 * SS, by + uy * 4 * SS)
+    base = (bx - ux * head * SS, by - uy * head * SS)
+    shaft = local[:-1] + [base]
+    for color, line, grow in (((255, 255, 255, 230), width + 6, 4 * SS), (ACCENT + (255,), width, 0)):
+        draw.line(shaft, fill=color, width=line * SS, joint='curve')
+        r = line * SS / 2
+        x, y = shaft[0]
+        draw.ellipse((x - r, y - r, x + r, y + r), fill=color)
+        w = wing + grow
+        b = (base[0] - ux * grow, base[1] - uy * grow)
+        draw.polygon([(tip[0] + ux * grow, tip[1] + uy * grow), (b[0] - uy * w, b[1] + ux * w),
+                      (b[0] + uy * w, b[1] - ux * w)], fill=color)
+    layer = layer.resize((size[0] // SS, size[1] // SS), Image.LANCZOS)
+    if alpha < 1:
+        layer.putalpha(layer.getchannel('A').point(lambda a: round(a * alpha)))
+    frame = frame.convert('RGBA')
+    frame.alpha_composite(layer, (round(left), round(top)))
+    return frame.convert('RGB')
+
+
+def outline(frame, box, alpha, width=4, radius=12):
+    """A plain marker around a box on the canvas."""
+    if alpha <= 0:
+        return frame
+    x0, y0, x1, y1 = box
+    pad = width + 8
+    size = (round(x1 - x0 + pad * 2) * SS, round(y1 - y0 + pad * 2) * SS)
+    layer = Image.new('RGBA', size, (0, 0, 0, 0))
+    inset = (pad - 3 - width / 2) * SS
+    ImageDraw.Draw(layer).rounded_rectangle((inset, inset, size[0] - inset, size[1] - inset), radius=radius * SS,
+                                            outline=ACCENT + (round(255 * alpha),), width=width * SS)
+    layer = layer.resize((size[0] // SS, size[1] // SS), Image.LANCZOS)
+    frame = frame.convert('RGBA')
+    frame.alpha_composite(layer, (round(x0 - pad), round(y0 - pad)))
+    return frame.convert('RGB')
+
+
+def note_alpha(age, drawing, fps):
+    """How visible the arrow and marker are: drawn over `drawing` frames, held, then faded."""
+    hold, fade = round(0.9 * fps), round(0.4 * fps)
+    return 1 if age < drawing + hold else max(0.0, 1 - (age - drawing - hold) / fade)

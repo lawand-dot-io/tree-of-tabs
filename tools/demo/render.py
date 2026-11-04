@@ -16,8 +16,8 @@ import subprocess
 import sys
 from functools import lru_cache
 from PIL import Image, ImageDraw, ImageFilter
-from frame import (ACCENT, BG, GREEN_TINT, TEXT, TITLE, Window, font, ghost, gradient, icon, landscape, make_cursor,
-                   pointer, rounded_mask, shadow_for)
+from frame import (ACCENT, BG, GREEN_TINT, TEXT, TITLE, Window, arrow, curve, font, ghost, gradient, icon, landscape,
+                   make_cursor, note_alpha, outline, pointer, rounded_mask, shadow_for)
 
 ROOT = os.path.join(os.path.dirname(__file__), '../..')
 OUT = os.path.join(ROOT, 'docs/demo')
@@ -120,11 +120,7 @@ def overlay(frame, position, click=None, drag=None):
 
 
 # --- An arrow from the link to its new row in the tree -------------------------------
-# Drawn like a note on a tutorial, so nobody takes it for part of the extension:
-# in the real thing, the row just appears.
-
-SS = 3  # Supersampling, for smooth lines.
-
+# In the real extension the row just appears; the arrow and marker are notes on the video.
 
 def row_box(box):
     """A row's box in the panel (CSS pixels) on the canvas."""
@@ -133,86 +129,18 @@ def row_box(box):
     return x0, y0, x1, y1
 
 
-def arrow_points(step):
-    """The arrow's path: from just beside the link to just right of the new row, on a gentle arc."""
+def note(frame, marking):
+    """The arrow from just beside the link to just right of the new row, on a gentle
+    arc, while it draws itself and holds; and the row's marker once the row is there."""
+    step, age, drawing = marking['step'], marking['age'], marking['frames']
+    alpha = note_alpha(age, drawing, FPS)
     x0, y0 = to_screen(step['from'])
     bx0, by0, bx1, by1 = row_box(step['to'])
-    x0 -= 22
-    x1, y1 = bx1 + 14, (by0 + by1) / 2
-    cx, cy = (x0 + x1) / 2, min(y0, y1) - 90
-    points = []
-    for i in range(61):
-        t = i / 60
-        points.append(((1 - t) ** 2 * x0 + 2 * (1 - t) * t * cx + t * t * x1,
-                       (1 - t) ** 2 * y0 + 2 * (1 - t) * t * cy + t * t * y1))
-    return points
-
-
-def arrow(frame, step, drawn, alpha):
-    """The first `drawn` (0 to 1) of the arrow, with its head at the tip."""
-    if alpha <= 0 or drawn <= 0:
-        return frame
-    points = arrow_points(step)
-    points = points[:max(2, round(len(points) * drawn))]
-    left = min(x for x, _ in points) - 40
-    top = min(y for _, y in points) - 40
-    right = max(x for x, _ in points) + 40
-    bottom = max(y for _, y in points) + 40
-    size = (round(right - left) * SS, round(bottom - top) * SS)
-    layer = Image.new('RGBA', size, (0, 0, 0, 0))
-    draw = ImageDraw.Draw(layer)
-    local = [((x - left) * SS, (y - top) * SS) for x, y in points]
-    (ax, ay), (bx, by) = local[-2], local[-1]
-    length = max(1e-6, ((bx - ax) ** 2 + (by - ay) ** 2) ** 0.5)
-    ux, uy = (bx - ax) / length, (by - ay) / length
-    head = 20 * SS
-    wing = 11 * SS
-    tip = (bx + ux * 4 * SS, by + uy * 4 * SS)
-    base = (bx - ux * head, by - uy * head)
-    triangle = [tip, (base[0] - uy * wing, base[1] + ux * wing), (base[0] + uy * wing, base[1] - ux * wing)]
-    shaft = local[:-1] + [base] if drawn >= 1 or len(local) > 3 else local
-    for color, width, grow in (((255, 255, 255, 230), 11, 4), (ACCENT + (255,), 5, 0)):
-        draw.line(shaft, fill=color, width=width * SS, joint='curve')
-        r = width * SS / 2
-        x, y = shaft[0]
-        draw.ellipse((x - r, y - r, x + r, y + r), fill=color)
-        outline = triangle if not grow else [
-            (tip[0] + ux * grow * SS, tip[1] + uy * grow * SS),
-            (triangle[1][0] - uy * grow * SS - ux * grow * SS, triangle[1][1] + ux * grow * SS - uy * grow * SS),
-            (triangle[2][0] + uy * grow * SS - ux * grow * SS, triangle[2][1] - ux * grow * SS - uy * grow * SS)]
-        draw.polygon(outline, fill=color)
-    layer = layer.resize((size[0] // SS, size[1] // SS), Image.LANCZOS)
-    if alpha < 1:
-        layer.putalpha(layer.getchannel('A').point(lambda a: round(a * alpha)))
-    frame = frame.convert('RGBA')
-    frame.alpha_composite(layer, (round(left), round(top)))
-    return frame.convert('RGB')
-
-
-def outline(frame, box, alpha):
-    """A plain marker around the row that just appeared."""
-    if alpha <= 0:
-        return frame
-    x0, y0, x1, y1 = row_box(box)
-    size = (round(x1 - x0 + 24) * SS, round(y1 - y0 + 24) * SS)
-    layer = Image.new('RGBA', size, (0, 0, 0, 0))
-    ImageDraw.Draw(layer).rounded_rectangle((6 * SS, 6 * SS, size[0] - 6 * SS, size[1] - 6 * SS), radius=12 * SS,
-                                            outline=ACCENT + (round(255 * alpha),), width=4 * SS)
-    layer = layer.resize((size[0] // SS, size[1] // SS), Image.LANCZOS)
-    frame = frame.convert('RGBA')
-    frame.alpha_composite(layer, (round(x0 - 12), round(y0 - 12)))
-    return frame.convert('RGB')
-
-
-def note(frame, marking):
-    """The arrow while it draws itself and then holds, and the row's marker once
-    the row is there, both fading out together."""
-    step, age, drawing = marking['step'], marking['age'], marking['frames']
-    hold, fade = round(0.9 * FPS), round(0.4 * FPS)
-    alpha = 1 if age < drawing + hold else max(0.0, 1 - (age - drawing - hold) / fade)
-    frame = arrow(frame, step, ease(min(1, (age + 1) / drawing)), alpha)
+    start, end = (x0 - 22, y0), (bx1 + 14, (by0 + by1) / 2)
+    points = curve(start, ((start[0] + end[0]) / 2, min(start[1], end[1]) - 90), end)
+    frame = arrow(frame, points, ease(min(1, (age + 1) / drawing)), alpha)
     if age >= drawing:
-        frame = outline(frame, step['to'], alpha)
+        frame = outline(frame, (bx0, by0, bx1, by1), alpha)
     return frame
 
 
