@@ -31,6 +31,9 @@ export const DEFAULTS = {
   // Whether the user has dismissed the tip that each window has its own side
   // panel, shown the first time the tree opens while several windows are open.
   windowTipSeen: false,
+  // Whether the one-time request for a store review was answered, either way
+  // (see review.js). Synced, so it doesn't come back on the user's other computers.
+  reviewAsked: false,
 };
 
 // Indentation sizes the panel is designed for (see the highlight and guide

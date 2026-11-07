@@ -91,6 +91,28 @@
     "message": "Got it",
     "description": "Button that closes the tip for good."
   },
+  "reviewTipTitle": {
+    "message": "Enjoying Tree of Tabs?",
+    "description": "Bold first sentence of a one-time request at the bottom of the panel, shown after two weeks of use; the rest is reviewTip. \"Tree of Tabs\" is the extension's name: keep it in English."
+  },
+  "reviewTip": {
+    "message": "$TITLE$ A review on the Chrome Web Store helps others find it.",
+    "description": "The one-time request for a review. The placeholder is its bold first sentence (reviewTipTitle). Use the store's official name in this language.",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Enjoying Tree of Tabs?"
+      }
+    }
+  },
+  "reviewTipReview": {
+    "message": "Leave a review",
+    "description": "Button that opens the extension's reviews on the Chrome Web Store."
+  },
+  "reviewTipNoThanks": {
+    "message": "No thanks",
+    "description": "Button that closes the review request for good."
+  },
   "fullscreenTitle": {
     "message": "Hide the tree during full screen?",
     "description": "Title of a one-time question shown in the panel the first time a page goes full screen."

@@ -961,6 +961,71 @@ try {
     await again.close();
   });
 
+  await check('the review request shows only after enough use, and either button ends it for good', async () => {
+    const usage = () => worker.evaluate(() => chrome.storage.local.get('reviewUsage').then((s) => s.reviewUsage));
+    const setUsage = (reviewUsage) => worker.evaluate((reviewUsage) => chrome.storage.local.set({ reviewUsage }), reviewUsage);
+    const today = await worker.evaluate(() => {
+      const now = new Date();
+      return Math.floor((now.getTime() - now.getTimezoneOffset() * 60000) / 86400000);
+    });
+    const shown = (page) => page.locator('#review-tip').isVisible();
+    await worker.evaluate(() => chrome.storage.local.remove('reviewUsage'));
+
+    // Opening the tree counts the day, once.
+    let own = await openOwnPanel();
+    await settled();
+    assert.deepEqual(await usage(), { firstDay: today, lastDay: today, daysUsed: 1 });
+    assert.equal(await shown(own), false, 'not on the first day');
+    await own.close();
+
+    // Seven days of use, but not two weeks yet.
+    await setUsage({ firstDay: today - 10, lastDay: today - 1, daysUsed: 9 });
+    own = await openOwnPanel();
+    await settled();
+    assert.equal(await shown(own), false, 'not before two weeks');
+    await own.close();
+
+    await setUsage({ firstDay: today - 20, lastDay: today - 1, daysUsed: 9 });
+    own = await openOwnPanel();
+    await own.waitForSelector('#review-tip:not([hidden])', { timeout: 5000 });
+    assert.equal((await usage()).daysUsed, 10);
+    assert.ok((await own.locator('#review-tip').textContent()).includes('Enjoying Tree of Tabs?'));
+    if (shots) {
+      for (const scheme of ['light', 'dark']) {
+        await own.emulateMedia({ colorScheme: scheme });
+        await own.screenshot({ path: path.join(shots, `review-tip-${scheme}.png`) });
+      }
+    }
+    await own.click('#review-tip-no');
+    assert.equal(await shown(own), false);
+    assert.equal(await worker.evaluate(() => chrome.storage.sync.get('reviewAsked').then((s) => s.reviewAsked)), true);
+    await own.close();
+    own = await openOwnPanel();
+    await settled();
+    assert.equal(await shown(own), false, 'never again after "No thanks"');
+    await own.close();
+
+    // "Leave a review" opens the store's reviews and also ends it.
+    await worker.evaluate(() => chrome.storage.sync.set({ reviewAsked: false }));
+    own = await openOwnPanel();
+    await own.waitForSelector('#review-tip:not([hidden])', { timeout: 5000 });
+    await own.click('#review-tip-yes');
+    let store;
+    for (let i = 0; i < 50 && !store; i++) {
+      store = await worker.evaluate(async () =>
+        (await chrome.tabs.query({})).find((t) => (t.pendingUrl || t.url).includes('chromewebstore.google.com')),
+      );
+      if (!store) await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    assert.ok(store, 'the store opened');
+    assert.ok((store.pendingUrl || store.url).endsWith('/goknfcebnofoghkgcmpjhlokkgefbokm/reviews'));
+    assert.equal(store.windowId, fullscreenWindow, 'in the panel\'s own window');
+    await worker.evaluate((id) => chrome.tabs.remove(id), store.id);
+    assert.equal(await shown(own), false);
+    assert.equal(await worker.evaluate(() => chrome.storage.sync.get('reviewAsked').then((s) => s.reviewAsked)), true);
+    await own.close();
+  });
+
   await check('the first full screen explains the choice instead of closing the panel', async () => {
     const own = context.pages().find((p) => p.url() === plainPanelUrl) ?? (await openOwnPanel());
     await own.waitForSelector('.tab');

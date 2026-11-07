@@ -1,6 +1,6 @@
 # Privacy Policy for Tree of Tabs
 
-Last updated: November 2, 2026
+Last updated: November 7, 2026
 
 ## What data Tree of Tabs handles
 
@@ -21,6 +21,10 @@ history.
   how they are nested, for up to 12 windows) is kept in the extension's local
   storage on your computer, so the tree can be rebuilt after you restart the
   browser.
+- So that it can ask for a review once, and only after you have used it for a
+  while, it counts on how many different days you have opened the tree, and
+  remembers the first and the latest of those days. This count is kept in the
+  extension's local storage on your computer. It contains no browsing data.
 - Your settings are kept in the browser's sync storage. If browser sync is
   turned on, your browser syncs them to your other devices through your Google
   account. Settings contain only your choices on the settings page, no browsing
@@ -29,7 +33,7 @@ history.
 ## How it is used
 
 Only to display your tabs as a tree, to put reopened tabs back in their place,
-and to restore the tree after a restart.
+to restore the tree after a restart, and to decide when to ask for a review.
 
 ## Third-party services
 

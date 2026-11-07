@@ -72,6 +72,24 @@
   "gotIt": {
     "message": "확인"
   },
+  "reviewTipTitle": {
+    "message": "Tree of Tabs가 마음에 드시나요?"
+  },
+  "reviewTip": {
+    "message": "$TITLE$ Chrome 웹 스토어에 리뷰를 남겨 주시면 다른 사람들이 이 확장 프로그램을 찾는 데 도움이 됩니다.",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Enjoying Tree of Tabs?"
+      }
+    }
+  },
+  "reviewTipReview": {
+    "message": "리뷰 남기기"
+  },
+  "reviewTipNoThanks": {
+    "message": "괜찮습니다"
+  },
   "fullscreenTitle": {
     "message": "전체화면에서 트리를 숨길까요?"
   },

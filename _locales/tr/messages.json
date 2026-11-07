@@ -72,6 +72,24 @@
   "gotIt": {
     "message": "Anladım"
   },
+  "reviewTipTitle": {
+    "message": "Tree of Tabs'ı beğendiniz mi?"
+  },
+  "reviewTip": {
+    "message": "$TITLE$ Chrome Web Mağazası'nda bırakacağınız bir yorum, başkalarının bu uzantıyı bulmasına yardımcı olur.",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Enjoying Tree of Tabs?"
+      }
+    }
+  },
+  "reviewTipReview": {
+    "message": "Yorum yaz"
+  },
+  "reviewTipNoThanks": {
+    "message": "Hayır, teşekkürler"
+  },
   "fullscreenTitle": {
     "message": "Tam ekranda ağaç gizlensin mi?"
   },

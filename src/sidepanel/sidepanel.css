@@ -518,7 +518,7 @@ body {
   background: var(--divider);
 }
 
-/* --- New window tip ---------------------------------------------------------- */
+/* --- Tips: new windows (top), the review request (bottom) -------------------- */
 
 .tip {
   display: flex;
@@ -537,6 +537,11 @@ body {
   color: var(--text-secondary);
 }
 
+/* Korean wraps between words, not inside them. */
+.tip p:lang(ko) {
+  word-break: keep-all;
+}
+
 .tip strong {
   color: var(--text);
   font-weight: 500;
@@ -544,6 +549,17 @@ body {
 
 .tip .button {
   height: 32px;
+}
+
+.review-tip {
+  margin: 6px var(--tree-padding);
+}
+
+.tip-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
 }
 
 .tip[hidden],

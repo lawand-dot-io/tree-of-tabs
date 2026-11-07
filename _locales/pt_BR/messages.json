@@ -72,6 +72,24 @@
   "gotIt": {
     "message": "Entendi"
   },
+  "reviewTipTitle": {
+    "message": "Está gostando do Tree of Tabs?"
+  },
+  "reviewTip": {
+    "message": "$TITLE$ Uma avaliação na Chrome Web Store ajuda outras pessoas a encontrar a extensão.",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Enjoying Tree of Tabs?"
+      }
+    }
+  },
+  "reviewTipReview": {
+    "message": "Avaliar"
+  },
+  "reviewTipNoThanks": {
+    "message": "Não, obrigado"
+  },
   "fullscreenTitle": {
     "message": "Ocultar a árvore em tela cheia?"
   },

@@ -72,6 +72,24 @@
   "gotIt": {
     "message": "知道了"
   },
+  "reviewTipTitle": {
+    "message": "喜欢 Tree of Tabs 吗？"
+  },
+  "reviewTip": {
+    "message": "$TITLE$在 Chrome 应用商店中留下评价，可以帮助其他人找到这个扩展程序。",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Enjoying Tree of Tabs?"
+      }
+    }
+  },
+  "reviewTipReview": {
+    "message": "留下评价"
+  },
+  "reviewTipNoThanks": {
+    "message": "不用了"
+  },
   "fullscreenTitle": {
     "message": "全屏时隐藏标签页树？"
   },

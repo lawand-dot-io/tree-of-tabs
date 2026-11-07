@@ -72,6 +72,24 @@
   "gotIt": {
     "message": "OK"
   },
+  "reviewTipTitle": {
+    "message": "Tree of Tabs はお役に立っていますか？"
+  },
+  "reviewTip": {
+    "message": "$TITLE$Chrome ウェブストアでレビューを書いていただくと、ほかの方がこの拡張機能を見つけやすくなります。",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Enjoying Tree of Tabs?"
+      }
+    }
+  },
+  "reviewTipReview": {
+    "message": "レビューを書く"
+  },
+  "reviewTipNoThanks": {
+    "message": "いいえ、結構です"
+  },
   "fullscreenTitle": {
     "message": "全画面表示でツリーを非表示にしますか？"
   },

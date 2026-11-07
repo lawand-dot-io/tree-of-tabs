@@ -2,6 +2,7 @@ import { buildTree, descendantsOf } from '../tree.js';
 import { DEFAULTS, loadSettings, onSettingsChanged } from '../settings.js';
 import { fill, localize, t } from '../i18n.js';
 import { icon } from './icons.js';
+import { REVIEW_URL, countDay, shouldAsk, today } from '../review.js';
 
 const DRAG_TYPE = 'application/x-tree-of-tabs';
 
@@ -1009,6 +1010,41 @@ async function showWindowTip() {
   });
 }
 
+// --- Review request ---------------------------------------------------------
+// Once, after someone has used the tree for a while (see review.js), a quiet
+// line at the bottom asks for a review. Both buttons hide it for good.
+
+const reviewTip = document.getElementById('review-tip');
+
+async function countUse() {
+  const { reviewUsage } = await chrome.storage.local.get('reviewUsage');
+  const next = countDay(reviewUsage, today());
+  if (next !== reviewUsage) await chrome.storage.local.set({ reviewUsage: next });
+  return next;
+}
+
+async function showReviewTip() {
+  const usage = await countUse();
+  // Never next to the new window tip, and never again once answered.
+  if (settings.reviewAsked || !windowTip.hidden || !shouldAsk(usage, today())) return;
+  reviewTip.hidden = false;
+}
+
+function watchReviewTip() {
+  const answer = () => {
+    reviewTip.hidden = true;
+    chrome.storage.sync.set({ reviewAsked: true });
+  };
+  document.getElementById('review-tip-no').addEventListener('click', answer);
+  document.getElementById('review-tip-yes').addEventListener('click', () => {
+    answer();
+    chrome.tabs.create({ url: REVIEW_URL, windowId });
+  });
+  showReviewTip();
+  // The panel can stay open for days: count each new day it's open.
+  setInterval(showReviewTip, 60 * 60 * 1000);
+}
+
 function applySettings(next) {
   settings = next;
   document.documentElement.style.setProperty('--indent', `${settings.indent}px`);
@@ -1017,6 +1053,7 @@ function applySettings(next) {
   document.documentElement.classList.toggle('no-guide-lines', settings.hideGuideLines);
   // Dismissed in another window's panel.
   if (settings.windowTipSeen) windowTip.hidden = true;
+  if (settings.reviewAsked) reviewTip.hidden = true;
 }
 
 async function main() {
@@ -1051,7 +1088,8 @@ async function main() {
   if (!forced) {
     showShortcut();
     await watchFullscreen();
-    showWindowTip();
+    await showWindowTip();
+    watchReviewTip();
   }
   await refresh();
 }

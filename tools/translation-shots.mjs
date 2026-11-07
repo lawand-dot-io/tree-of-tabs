@@ -1,6 +1,6 @@
 // Screenshots of the extension in every language in _locales/, to check
 // translations for wording and fit: the panel at its narrowest, the tab menu,
-// the two notices and the settings page.
+// the notices and tips and the settings page.
 // Usage: node tools/translation-shots.mjs <output folder> [language ...]
 import fs from 'node:fs';
 import http from 'node:http';
@@ -81,6 +81,12 @@ for (const lang of languages) {
     document.body.classList.remove('showing-notice');
   });
   await own.screenshot({ path: path.join(OUT, `${lang}-2-tip.png`), clip: { x: 0, y: 0, width: 320, height: 200 } });
+  // The review request, shown by hand (it waits for two weeks of use).
+  await own.evaluate(() => {
+    document.getElementById('window-tip').hidden = true;
+    document.getElementById('review-tip').hidden = false;
+  });
+  await own.screenshot({ path: path.join(OUT, `${lang}-2-review.png`), clip: { x: 0, y: 360, width: 320, height: 280 } });
 
   const settings = await context.newPage();
   await settings.setViewportSize({ width: 760, height: 900 });

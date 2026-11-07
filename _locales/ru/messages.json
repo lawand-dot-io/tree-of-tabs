@@ -72,6 +72,24 @@
   "gotIt": {
     "message": "ОК"
   },
+  "reviewTipTitle": {
+    "message": "Нравится Tree of Tabs?"
+  },
+  "reviewTip": {
+    "message": "$TITLE$ Отзыв в Интернет-магазине Chrome поможет другим найти это расширение.",
+    "placeholders": {
+      "title": {
+        "content": "$1",
+        "example": "Enjoying Tree of Tabs?"
+      }
+    }
+  },
+  "reviewTipReview": {
+    "message": "Оставить отзыв"
+  },
+  "reviewTipNoThanks": {
+    "message": "Нет, спасибо"
+  },
   "fullscreenTitle": {
     "message": "Скрывать дерево в полноэкранном режиме?"
   },

@@ -147,6 +147,7 @@ What it handles, all of it kept on the user's device:
 | Tree structure: which tab is nested under which, plus collapsed branches | Browser session storage, cleared when the browser closes | To keep the tree when the extension's background process restarts |
 | Recently closed tabs (address, title and place in the tree, up to 200) | Browser session storage, cleared when the browser closes | To put tabs the user reopens (Ctrl+Shift+T) back in their place in the tree |
 | A copy of the tree per window (tab addresses, titles and their nesting, for the last 12 windows) | Local extension storage on the device | To rebuild the tree after the browser restarts, when tabs get new internal numbers |
+| How many different days the tree was opened, and the first and latest of those days | Local extension storage on the device | To ask for a review once, only after two weeks and seven days of use. It contains no browsing data. |
 | Settings (choices on the settings page) | Browser sync storage | So settings follow the user's browser profile. When browser sync is on, the browser syncs them through the user's Google account. They contain no browsing data. |
 
 The tree also displays each tab's website icon. For most tabs, the icon image is
@@ -235,6 +236,7 @@ zip -r tree-of-tabs-v1.1.2.zip manifest.json LICENSE _locales icons src -x "*.DS
 | 1.1.0 | 2026-10-30 | The extension in 11 languages, with a translated store description for each | Released on GitHub, replaced by 1.1.1 before upload |
 | 1.1.1 | 2026-10-30 | European Portuguese, so the extension is in 12 languages | Published |
 | 1.1.2 | 2026-11-01 | A note on the settings page explaining the side panel's minimum width, with a link to vote for a narrower one | Published |
+| 1.2.0 | 2026-11-07 | Tabs reopened with Ctrl+Shift+T go back to their place in the tree; a one-time request for a review after two weeks of use | |
 
 ## Review Notes
 
