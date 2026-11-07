@@ -101,7 +101,7 @@ every language the same way.
 | Screenshot 5: dark mode | 1280×800 | ✅ Ready | `docs/store/screenshot-5-dark.png` |
 | Small Promo Tile | 440×280 | ✅ Ready | `docs/store/promo-tile.png` |
 | Marquee Promo Tile | 1400×560 | ✅ Ready | `docs/store/marquee-tile.png` |
-| Global Promo Video | YouTube | ✅ Ready | https://youtu.be/D9YaNPLDqzs (the loop, from `docs/demo/demo-loop.mp4`; the full demo is https://youtu.be/2g3V4neZfU8) |
+| Global Promo Video | YouTube | ✅ Ready | https://youtu.be/3GON16qglyY (the loop with arrows, from `docs/demo/demo-loop.mp4`; the full demo is https://youtu.be/2g3V4neZfU8) |
 
 Upload the screenshots in this order. `tools/make-store-images.py` rebuilds
 them from the captures in `docs/store/raw/`, which `tools/demo/capture.mjs`
