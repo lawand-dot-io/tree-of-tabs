@@ -239,7 +239,7 @@ https://lawand.io/tree-of-tabs/ with what's new.
 | 1.1.0 | 2026-10-30 | The extension in 11 languages, with a translated store description for each | Released on GitHub, replaced by 1.1.1 before upload |
 | 1.1.1 | 2026-10-30 | European Portuguese, so the extension is in 12 languages | Published |
 | 1.1.2 | 2026-11-01 | A note on the settings page explaining the side panel's minimum width, with a link to vote for a narrower one | Published |
-| 1.2.0 | 2026-11-07 | Tabs reopened with Ctrl+Shift+T go back to their place in the tree; a one-time request for a review after two weeks of use | |
+| 1.2.0 | 2026-11-07 | Tabs reopened with Ctrl+Shift+T go back to their place in the tree; a one-time request for a review after two weeks of use | Published |
 
 ## Review Notes
 
