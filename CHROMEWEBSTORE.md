@@ -227,6 +227,9 @@ upload to the store. By hand:
 zip -r tree-of-tabs-v1.1.2.zip manifest.json LICENSE _locales icons src -x "*.DS_Store"
 ```
 
+After each release, also update the extension's page at
+https://lawand.io/tree-of-tabs/ with what's new.
+
 ## Version History
 
 | Version | Date | Changes | Status |
