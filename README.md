@@ -159,7 +159,7 @@ docs/                screenshots, the README banner and social preview, release 
 tools/make-icons.mjs regenerates icons/ (needs Playwright)
 tools/translation-shots.mjs  screenshots of every language, to check the translations
 tools/make-social-preview.py  rebuilds the banner from the captures in docs/store/raw/
-tools/demo/          records the demo video, GIF and YouTube Short in docs/demo/ (see capture.mjs)
+tools/demo/          records the demo video, GIF and YouTube Shorts in docs/demo/ (see capture.mjs)
 tools/chrome-devtools-mcp.sh  starts the Chrome DevTools MCP server (see below)
 ```
 

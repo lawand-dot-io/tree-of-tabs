@@ -4,7 +4,9 @@ F major, Fmaj7 | Em7 | Dm7 | Cmaj7 three times, with a soft electric piano, bass
 a pad, a swung beat, a sparse melody from the second time round, and faint vinyl
 crackle. Notes that ring past the end wrap into the start, so the loop has no
 seam. Needs numpy and scipy. render_short.py runs it; to run it alone:
-Usage: python3 tools/demo/music.py <seconds> <out.wav>"""
+The bar count can change (4 for the second, shorter Short): the chords repeat,
+and the tempo follows from the length.
+Usage: python3 tools/demo/music.py <seconds> <out.wav> [bars, 12 by default]"""
 import sys
 import wave
 import numpy as np
@@ -13,7 +15,7 @@ from scipy.signal import butter, sosfilt, fftconvolve
 SR = 44100
 LENGTH = float(sys.argv[1])
 OUT = sys.argv[2]
-BARS = 12
+BARS = int(sys.argv[3]) if len(sys.argv) > 3 else 12
 BEAT = LENGTH / (BARS * 4)
 N = int(round(LENGTH * SR))
 TAIL = int(4 * SR)
@@ -138,12 +140,16 @@ for bar in range(BARS):
         add(drums, at(b0 + beat), hat(0.10 if eighth % 2 else 0.16))
 
 # A sparse melody in the second and third times round, on chord tones.
-MELODY = [  # (bar, beat, note, beats)
+MELODY_12 = [  # (bar, beat, note, beats)
     (4, 0.5, 72, 1.5), (4, 2.5, 76, 1.5), (5, 1.0, 74, 2.5),
     (6, 0.5, 72, 1.0), (6, 2.0, 69, 1.5), (7, 1.0, 71, 2.8),
     (8, 0.5, 76, 1.0), (8, 2.0, 77, 1.0), (8, 3.0, 76, 1.5), (9, 1.0, 74, 2.5),
     (10, 0.5, 72, 1.0), (10, 2.0, 74, 1.5), (11, 0.0, 72, 3.5),
 ]
+# Shorter loops get the last phrase, right from the start.
+MELODY = MELODY_12 if BARS == 12 else [
+    (bar - 8 + start, beat, note, beats)
+    for start in range(0, BARS - 3, 4) for bar, beat, note, beats in MELODY_12 if bar >= 8]
 for bar, beat, note, beats in MELODY:
     add(lead, at(bar * 4 + beat), epiano(note, beats * BEAT + 0.4, 0.42))
 

@@ -6,8 +6,14 @@ opening and fades from its end back into its start, since Shorts loop.
 Everything important stays clear of the bottom and right edges, where YouTube
 shows its title, buttons and progress bar. Its music comes from music.py, made
 to the video's length so both loop together. Writes docs/demo/tree-of-tabs-short.mp4.
+
+With --second it renders the second Short, tree-of-tabs-short-2.mp4, made to
+stop people scrolling: it opens on the problem (a real tab strip filling up
+with tabs until they're unreadable, from capture_tabs.mjs), then the tree,
+larger, with three links nesting under their page, then an end card. About 14
+seconds, on a 4-bar version of the music.
 Needs Pillow, numpy, scipy, ffmpeg and the Inter font.
-Usage: python3 tools/demo/render_short.py <capture folder>"""
+Usage: python3 tools/demo/render_short.py <capture folder> [--second]"""
 import json
 import os
 import subprocess
@@ -20,20 +26,24 @@ from frame import (ACCENT, BG, CHROME, GREEN_TINT, TEXT, TITLE, arrow, curve, fo
 ROOT = os.path.join(os.path.dirname(__file__), '../..')
 OUT = os.path.join(ROOT, 'docs/demo')
 CAPTURES = sys.argv[1]
+SECOND = '--second' in sys.argv[2:]
 W, H, FPS = 1080, 1920, 30
 
 # The page close-up: a part of the page, at PAGE_SCALE times its CSS size.
-PAGE_BOX = (60, 330, 1020, 830)
+PAGE_BOX = (60, 330, 1020, 760) if SECOND else (60, 330, 1020, 830)
 PAGE_SCALE = 1.45
 CROP = ((PAGE_BOX[2] - PAGE_BOX[0]) / PAGE_SCALE, (PAGE_BOX[3] - PAGE_BOX[1]) / PAGE_SCALE)
 # The panel, with Chrome's side panel header above it. It shows VISIBLE CSS pixels of the tree at a time and
 # scrolls to follow the cursor, so drags and menu items lower down stay in view.
-PANEL_SCALE = 1.9
+# The second Short shows it larger: the tree is the point.
+PANEL_SCALE = 2.3 if SECOND else 1.9
 PANEL_W = round(320 * PANEL_SCALE)
 HEADER = round(34 * PANEL_SCALE)
-PANEL_BOX = ((W - PANEL_W) // 2, 960, (W + PANEL_W) // 2, 1640)
+PANEL_BOX = ((W - PANEL_W) // 2, 860, (W + PANEL_W) // 2, 1560) if SECOND else ((W - PANEL_W) // 2, 960, (W + PANEL_W) // 2, 1640)
 VISIBLE = (PANEL_BOX[3] - PANEL_BOX[1] - HEADER) / PANEL_SCALE
-CAPTION_Y = 895
+CAPTION_Y = 810 if SECOND else 895
+# The second Short ends after the third link (step 24 in capture.mjs's timeline).
+LAST_STEP = 24 if SECOND else None
 TREES = [('pine', 70, 6), ('round', 150, 5), ('round', 830, 5), ('pine', 910, 6)]
 
 
@@ -207,6 +217,8 @@ def frames():
     marking = None  # The arrow to the newest row, and for how many frames it has shown.
     started = False
     for index, step in enumerate(steps):
+        if LAST_STEP is not None and index > LAST_STEP:
+            break
         kind = step['type']
         if kind == 'click' and index + 1 < len(steps) and steps[index + 1]['type'] == 'fly':
             started = True
@@ -264,9 +276,104 @@ def frames():
             position = step['to']
 
 
+# --- The second Short's opening and end card ------------------------------------
+
+def headline(canvas, title, line=None, y=150, size=96):
+    draw = ImageDraw.Draw(canvas)
+    draw.text((W // 2, y), title, font=font('InterDisplay-Bold.otf', size), fill=TITLE, anchor='mt')
+    if line:
+        draw.text((W // 2, y + size + 28), line, font=font('Inter-Medium.otf', 40), fill=ACCENT, anchor='mt')
+    return canvas
+
+
+STRIP = (0, 0, 1080, 660)  # The window, in the capture's pixels: tab strip, toolbar and the top of the page.
+STRIP_BOX = (40, 560, 1040, 560 + round(660 * 1000 / 1080))
+
+
+@lru_cache(maxsize=1)
+def intro_background():
+    canvas = landscape(gradient((W, H), BG, GREEN_TINT), TREES)
+    canvas = shadow_for(canvas, STRIP_BOX, radius=22)
+    return headline(canvas, 'Too many tabs?', y=330, size=110)
+
+
+@lru_cache(maxsize=32)
+def strip_card(count):
+    window = Image.open(os.path.join(CAPTURES, f'strip-{count}.png')).convert('RGB').crop(STRIP)
+    return window.resize((STRIP_BOX[2] - STRIP_BOX[0], STRIP_BOX[3] - STRIP_BOX[1]), Image.LANCZOS)
+
+
+@lru_cache(maxsize=1)
+def intro_line():
+    layer = Image.new('RGBA', (W, 90), (0, 0, 0, 0))
+    ImageDraw.Draw(layer).text((W // 2, 45), "Can't tell them apart?", font=font('Inter-SemiBold.otf', 54),
+                               fill=TITLE + (255,), anchor='mm')
+    return layer
+
+
+def intro(frames=84):
+    """The tab strip filling up: a few tabs a second at first, faster and faster,
+    then a moment on the full, unreadable strip. The view pushes in on the tabs as
+    they pile up, and a second line comes in under the window."""
+    counts = sorted(int(f[6:-4]) for f in os.listdir(CAPTURES) if f.startswith('strip-') and f.endswith('.png'))
+    first, last = counts.index(6), len(counts) - 1
+    fill = round(frames * 0.78)
+    for i in range(frames):
+        t = min(1, i / fill)
+        count = counts[first + round((last - first) * t ** 1.6)]
+        canvas = intro_background().copy()
+        card = strip_card(count)
+        zoom = 1 + 0.45 * ease(i / frames)
+        if zoom > 1:  # Toward the tabs, at the top left.
+            w, h = card.size
+            card = card.crop((0, 0, round(w / zoom), round(h / zoom))).resize((w, h), Image.LANCZOS)
+        canvas.paste(card, STRIP_BOX[:2], rounded_mask(card.size, 22))
+        appear = (i - frames * 0.4) / 10
+        if appear > 0:
+            line = intro_line()
+            if appear < 1:
+                line = line.copy()
+                line.putalpha(line.getchannel('A').point(lambda a: round(a * appear)))
+            canvas = canvas.convert('RGBA')
+            canvas.alpha_composite(line, (0, STRIP_BOX[3] + 70))
+            canvas = canvas.convert('RGB')
+        yield canvas
+
+
+def end_card():
+    canvas = landscape(gradient((W, H), BG, GREEN_TINT), TREES)
+    logo = icon(220)
+    canvas.paste(logo, ((W - logo.width) // 2, 520), logo)
+    headline(canvas, 'Tree of Tabs', 'Free Chrome extension', y=800, size=110)
+    draw = ImageDraw.Draw(canvas)
+    draw.text((W // 2, 1060), 'Search "Tree of Tabs"', font=font('Inter-SemiBold.otf', 44), fill=TITLE, anchor='mt')
+    draw.text((W // 2, 1124), 'in the Chrome Web Store', font=font('Inter-Medium.otf', 40), fill=TEXT, anchor='mt')
+    return canvas
+
+
+def second_frames():
+    """The problem, a crossfade into the tree, three links nesting, and the end card."""
+    opening = list(intro())
+    yield from opening
+    demo = frames()
+    first = next(demo)
+    for i in range(1, 22):
+        yield Image.blend(opening[-1], first, ease(i / 21))
+    yield first
+    last = first
+    for frame in demo:
+        yield frame
+        last = frame
+    card = end_card()
+    for i in range(1, 13):
+        yield Image.blend(last, card, ease(i / 12))
+    for _ in range(54):
+        yield card
+
+
 def main():
     os.makedirs(OUT, exist_ok=True)
-    video = os.path.join(OUT, 'tree-of-tabs-short.mp4')
+    video = os.path.join(OUT, 'tree-of-tabs-short-2.mp4' if SECOND else 'tree-of-tabs-short.mp4')
     silent = os.path.join(CAPTURES, 'short-silent.mp4')
     encoder = subprocess.Popen(
         ['ffmpeg', '-loglevel', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}', '-r', str(FPS),
@@ -274,7 +381,7 @@ def main():
          silent],
         stdin=subprocess.PIPE)
     count, first, last = 0, None, None
-    for frame in frames():
+    for frame in (second_frames() if SECOND else frames()):
         encoder.stdin.write(frame.tobytes())
         count += 1
         first, last = first or frame, frame
@@ -285,8 +392,8 @@ def main():
     encoder.wait()
     # The music, as long as the video, at YouTube's loudness.
     music = os.path.join(CAPTURES, 'short-music.wav')
-    subprocess.run([sys.executable, os.path.join(os.path.dirname(__file__), 'music.py'), str((count + BACK) / FPS), music],
-                   check=True)
+    subprocess.run([sys.executable, os.path.join(os.path.dirname(__file__), 'music.py'), str((count + BACK) / FPS), music,
+                    '4' if SECOND else '12'], check=True)
     subprocess.run(
         ['ffmpeg', '-loglevel', 'error', '-y', '-i', silent, '-i', music, '-map', '0:v', '-map', '1:a', '-c:v', 'copy',
          '-af', 'loudnorm=I=-16:TP=-1.5:LRA=11', '-ar', '44100', '-c:a', 'aac', '-b:a', '192k', '-shortest',
