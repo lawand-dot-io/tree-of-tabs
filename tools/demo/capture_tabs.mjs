@@ -18,6 +18,7 @@ fs.mkdirSync(OUT, { recursive: true });
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const wiki = (title) => `https://en.wikipedia.org/wiki/${title}`;
+// Sites without cookie banners or pages that change daily, so the shot stays clean.
 const URLS = [
   wiki('Lisbon'),
   wiki('Alfama'),
@@ -25,29 +26,29 @@ const URLS = [
   wiki('Bel%C3%A9m_Tower'),
   'https://www.openstreetmap.org/',
   wiki('Fado'),
-  'https://en.wikivoyage.org/wiki/Lisbon',
-  'https://developer.chrome.com/docs/extensions/reference/api/sidePanel',
+  wiki('Lisbon_Metro'),
+  'https://github.com/lawand-dot-io/tree-of-tabs/releases',
   wiki('Sintra'),
   'https://developer.mozilla.org/en-US/docs/Web/HTML',
   wiki('Porto'),
   'https://github.com/lawand-dot-io/tree-of-tabs/issues',
   wiki('Tagus'),
-  'https://commons.wikimedia.org/wiki/Category:Ocean%C3%A1rio_de_Lisboa',
+  wiki('Ocean%C3%A1rio_de_Lisboa'),
   'https://docs.python.org/3/',
   wiki('Pastel_de_nata'),
-  'https://news.ycombinator.com/',
+  'https://docs.python.org/3/tutorial/',
   wiki('Lisbon_Cathedral'),
   'https://www.w3.org/',
   wiki('S%C3%A3o_Jorge_Castle'),
-  'https://archive.org/',
+  wiki('Cascais'),
   wiki('Tram_28'),
-  'https://stackoverflow.com/questions/tagged/javascript',
+  'https://developer.mozilla.org/en-US/docs/Web/CSS',
   wiki('Azulejo'),
   'https://www.gutenberg.org/',
   wiki('Douro'),
-  'https://en.wikivoyage.org/wiki/Porto',
+  wiki('Algarve'),
   wiki('Coimbra'),
-  'https://developer.chrome.com/docs/extensions',
+  'https://github.com/lawand-dot-io/tree-of-tabs/blob/main/README.md',
   wiki('Madeira'),
 ];
 
@@ -62,6 +63,8 @@ const context = await chromium.launchPersistentContext(profile, {
 const shoot = (count) => execFileSync('import', ['-window', 'root', path.join(OUT, `strip-${count}.png`)]);
 const load = async (page, url) => {
   await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => {});
+  // Wikipedia's banner area (fundraising and other notices), as if closed.
+  await page.addStyleTag({ content: '#siteNotice, #centralNotice, .frb { display: none !important; }' }).catch(() => {});
   await sleep(900); // Let the icon and title arrive and the strip settle.
 };
 let page = context.pages()[0];

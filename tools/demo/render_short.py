@@ -7,11 +7,13 @@ Everything important stays clear of the bottom and right edges, where YouTube
 shows its title, buttons and progress bar. Its music comes from music.py, made
 to the video's length so both loop together. Writes docs/demo/tree-of-tabs-short.mp4.
 
-With --second it renders the second Short, tree-of-tabs-short-2.mp4, made to
-stop people scrolling: it opens on the problem (a real tab strip filling up
-with tabs until they're unreadable, from capture_tabs.mjs), then the tree,
-larger, with three links nesting under their page, then an end card. About 14
-seconds, on a 4-bar version of the music.
+With --second it renders the second Short, tree-of-tabs-short-2.mp4: the same,
+but it opens on the problem, to stop people scrolling (a real tab strip filling
+up with tabs until they're unreadable, from capture_tabs.mjs), and its header
+shows the "Available in the Chrome Web Store" badge, so it's clear at a glance
+that this is a Chrome extension, not another browser. Google's branding
+guidelines allow the badge without approval, resized but otherwise unmodified
+(chrome-web-store-badge.png, from developer.chrome.com/docs/webstore/branding).
 Needs Pillow, numpy, scipy, ffmpeg and the Inter font.
 Usage: python3 tools/demo/render_short.py <capture folder> [--second]"""
 import json
@@ -30,20 +32,17 @@ SECOND = '--second' in sys.argv[2:]
 W, H, FPS = 1080, 1920, 30
 
 # The page close-up: a part of the page, at PAGE_SCALE times its CSS size.
-PAGE_BOX = (60, 330, 1020, 760) if SECOND else (60, 330, 1020, 830)
+PAGE_BOX = (60, 330, 1020, 830)
 PAGE_SCALE = 1.45
 CROP = ((PAGE_BOX[2] - PAGE_BOX[0]) / PAGE_SCALE, (PAGE_BOX[3] - PAGE_BOX[1]) / PAGE_SCALE)
 # The panel, with Chrome's side panel header above it. It shows VISIBLE CSS pixels of the tree at a time and
 # scrolls to follow the cursor, so drags and menu items lower down stay in view.
-# The second Short shows it larger: the tree is the point.
-PANEL_SCALE = 2.3 if SECOND else 1.9
+PANEL_SCALE = 1.9
 PANEL_W = round(320 * PANEL_SCALE)
 HEADER = round(34 * PANEL_SCALE)
-PANEL_BOX = ((W - PANEL_W) // 2, 860, (W + PANEL_W) // 2, 1560) if SECOND else ((W - PANEL_W) // 2, 960, (W + PANEL_W) // 2, 1640)
+PANEL_BOX = ((W - PANEL_W) // 2, 960, (W + PANEL_W) // 2, 1640)
 VISIBLE = (PANEL_BOX[3] - PANEL_BOX[1] - HEADER) / PANEL_SCALE
-CAPTION_Y = 810 if SECOND else 895
-# The second Short ends after the third link (step 24 in capture.mjs's timeline).
-LAST_STEP = 24 if SECOND else None
+CAPTION_Y = 895
 TREES = [('pine', 70, 6), ('round', 150, 5), ('round', 830, 5), ('pine', 910, 6)]
 
 
@@ -56,9 +55,18 @@ def background():
     for box, radius in ((PAGE_BOX, 22), (PANEL_BOX, 22)):
         canvas = shadow_for(canvas, box, radius=radius)
     draw = ImageDraw.Draw(canvas)
-    logo = icon(64)
     title_font = font('InterDisplay-Bold.otf', 80)
     title = 'Vertical tabs, as a tree'
+    if SECOND:
+        # The title, the name, and the store badge under them.
+        draw.text((W // 2, 44), title, font=title_font, fill=TITLE, anchor='mt')
+        draw.text((W // 2, 148), 'Tree of Tabs, a free extension for Google Chrome™', font=font('Inter-Medium.otf', 32),
+                  fill=ACCENT, anchor='mt')
+        badge = Image.open(os.path.join(os.path.dirname(__file__), 'chrome-web-store-badge.png')).convert('RGBA')
+        badge = badge.resize((round(badge.width * 96 / badge.height), 96), Image.LANCZOS)
+        canvas.paste(badge, ((W - badge.width) // 2, 214), badge)
+        return canvas
+    logo = icon(64)
     canvas.paste(logo, ((W - 64) // 2, 70), logo)
     draw.text((W // 2, 170), title, font=title_font, fill=TITLE, anchor='mt')
     draw.text((W // 2, 268), 'Tree of Tabs, a free Chrome extension', font=font('Inter-Medium.otf', 34), fill=ACCENT,
@@ -217,8 +225,6 @@ def frames():
     marking = None  # The arrow to the newest row, and for how many frames it has shown.
     started = False
     for index, step in enumerate(steps):
-        if LAST_STEP is not None and index > LAST_STEP:
-            break
         kind = step['type']
         if kind == 'click' and index + 1 < len(steps) and steps[index + 1]['type'] == 'fly':
             started = True
@@ -340,19 +346,8 @@ def intro(frames=84):
         yield canvas
 
 
-def end_card():
-    canvas = landscape(gradient((W, H), BG, GREEN_TINT), TREES)
-    logo = icon(220)
-    canvas.paste(logo, ((W - logo.width) // 2, 520), logo)
-    headline(canvas, 'Tree of Tabs', 'Free Chrome extension', y=800, size=110)
-    draw = ImageDraw.Draw(canvas)
-    draw.text((W // 2, 1060), 'Search "Tree of Tabs"', font=font('Inter-SemiBold.otf', 44), fill=TITLE, anchor='mt')
-    draw.text((W // 2, 1124), 'in the Chrome Web Store', font=font('Inter-Medium.otf', 40), fill=TEXT, anchor='mt')
-    return canvas
-
-
 def second_frames():
-    """The problem, a crossfade into the tree, three links nesting, and the end card."""
+    """The problem, then a crossfade into the first Short's demo."""
     opening = list(intro())
     yield from opening
     demo = frames()
@@ -360,15 +355,7 @@ def second_frames():
     for i in range(1, 22):
         yield Image.blend(opening[-1], first, ease(i / 21))
     yield first
-    last = first
-    for frame in demo:
-        yield frame
-        last = frame
-    card = end_card()
-    for i in range(1, 13):
-        yield Image.blend(last, card, ease(i / 12))
-    for _ in range(54):
-        yield card
+    yield from demo
 
 
 def main():
@@ -393,7 +380,7 @@ def main():
     # The music, as long as the video, at YouTube's loudness.
     music = os.path.join(CAPTURES, 'short-music.wav')
     subprocess.run([sys.executable, os.path.join(os.path.dirname(__file__), 'music.py'), str((count + BACK) / FPS), music,
-                    '4' if SECOND else '12'], check=True)
+                   ], check=True)
     subprocess.run(
         ['ffmpeg', '-loglevel', 'error', '-y', '-i', silent, '-i', music, '-map', '0:v', '-map', '1:a', '-c:v', 'copy',
          '-af', 'loudnorm=I=-16:TP=-1.5:LRA=11', '-ar', '44100', '-c:a', 'aac', '-b:a', '192k', '-shortest',
