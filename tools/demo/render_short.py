@@ -14,8 +14,13 @@ shows the "Available in the Chrome Web Store" badge, so it's clear at a glance
 that this is a Chrome extension, not another browser. Google's branding
 guidelines allow the badge without approval, resized but otherwise unmodified
 (chrome-web-store-badge.png, from developer.chrome.com/docs/webstore/branding).
+
+With --rabbit it renders the third Short, tree-of-tabs-short-3.mp4, from the
+captures of capture_rabbit.mjs and `capture_tabs.mjs <folder> rabbit`: a
+Wikipedia rabbit hole, first as a tab strip of identical icons, then as the
+tree that shows the path from Octopus down to Captain Nemo, traced row by row.
 Needs Pillow, numpy, scipy, ffmpeg and the Inter font.
-Usage: python3 tools/demo/render_short.py <capture folder> [--second]"""
+Usage: python3 tools/demo/render_short.py <capture folder> [--second | --rabbit]"""
 import json
 import os
 import subprocess
@@ -28,7 +33,11 @@ from frame import (ACCENT, BG, CHROME, GREEN_TINT, TEXT, TITLE, arrow, curve, fo
 ROOT = os.path.join(os.path.dirname(__file__), '../..')
 OUT = os.path.join(ROOT, 'docs/demo')
 CAPTURES = sys.argv[1]
-SECOND = '--second' in sys.argv[2:]
+RABBIT = '--rabbit' in sys.argv[2:]
+# Both later Shorts open on the problem and show the store badge.
+SECOND = RABBIT or '--second' in sys.argv[2:]
+# The opening's headline (one line per entry) and the line under the window.
+INTRO = (['Down a Wikipedia', 'rabbit hole?'], 'Which tab led where?') if RABBIT else (['Too many tabs?'], "Can't tell them apart?")
 W, H, FPS = 1080, 1920, 30
 
 # The page close-up: a part of the page, at PAGE_SCALE times its CSS size.
@@ -183,6 +192,18 @@ def note(frame, marking, camera):
     return frame
 
 
+def trace(frame, trail, camera):
+    """Outlines a path of rows, one after another, then fades them all out at the
+    end of the step: the way from the first page down to the last."""
+    age, total = trail['age'], trail['frames']
+    fade = max(0.0, min(1.0, (total - age) / 12))
+    for k, box in enumerate(trail['boxes']):
+        appear = (age - k * 7) / 6
+        if appear > 0:
+            frame = outline(frame, row_box(box, camera), min(1.0, appear) * fade, width=5, radius=16)
+    return frame
+
+
 def click_ring(frame, position, t):
     x, y = position
     frame = frame.convert('RGBA')
@@ -223,6 +244,7 @@ def frames():
     scroll = scroll_target = 0  # How far the panel is scrolled, in CSS pixels.
     text, caption_age = None, 0
     marking = None  # The arrow to the newest row, and for how many frames it has shown.
+    trail = None  # Rows traced one after another, from a step's 'path'.
     started = False
     for index, step in enumerate(steps):
         kind = step['type']
@@ -266,6 +288,13 @@ def frames():
             if marking:
                 base = note(base, marking, camera)
                 marking['age'] += 1
+            if i == 0 and step.get('path'):
+                trail = {'boxes': step['path'], 'age': 0, 'frames': count}
+            if trail:
+                base = trace(base, trail, camera)
+                trail['age'] += 1
+                if trail['age'] >= trail['frames']:
+                    trail = None
             here = to_screen(start, camera)
             if kind == 'move':
                 there = to_screen(step['to'], camera)
@@ -300,7 +329,10 @@ STRIP_BOX = (40, 560, 1040, 560 + round(660 * 1000 / 1080))
 def intro_background():
     canvas = landscape(gradient((W, H), BG, GREEN_TINT), TREES)
     canvas = shadow_for(canvas, STRIP_BOX, radius=22)
-    return headline(canvas, 'Too many tabs?', y=330, size=110)
+    lines = INTRO[0]
+    for k, line in enumerate(lines):
+        headline(canvas, line, y=330 - 64 * (len(lines) - 1) + 128 * k, size=110)
+    return canvas
 
 
 @lru_cache(maxsize=32)
@@ -312,7 +344,7 @@ def strip_card(count):
 @lru_cache(maxsize=1)
 def intro_line():
     layer = Image.new('RGBA', (W, 90), (0, 0, 0, 0))
-    ImageDraw.Draw(layer).text((W // 2, 45), "Can't tell them apart?", font=font('Inter-SemiBold.otf', 54),
+    ImageDraw.Draw(layer).text((W // 2, 45), INTRO[1], font=font('Inter-SemiBold.otf', 54),
                                fill=TITLE + (255,), anchor='mm')
     return layer
 
@@ -360,7 +392,8 @@ def second_frames():
 
 def main():
     os.makedirs(OUT, exist_ok=True)
-    video = os.path.join(OUT, 'tree-of-tabs-short-2.mp4' if SECOND else 'tree-of-tabs-short.mp4')
+    name = 'tree-of-tabs-short-3.mp4' if RABBIT else 'tree-of-tabs-short-2.mp4' if SECOND else 'tree-of-tabs-short.mp4'
+    video = os.path.join(OUT, name)
     silent = os.path.join(CAPTURES, 'short-silent.mp4')
     encoder = subprocess.Popen(
         ['ffmpeg', '-loglevel', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}', '-r', str(FPS),

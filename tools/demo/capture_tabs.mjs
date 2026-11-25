@@ -4,7 +4,9 @@
 // display and photographs the screen after each new tab (strip-<count>.png in
 // the capture folder). Needs Playwright, Xvfb and ImageMagick's `import`, and
 // network access.
-// Usage: xvfb-run -a -s "-screen 0 1200x800x24" node tools/demo/capture_tabs.mjs <capture folder>
+// With `rabbit`, the tabs are the third Short's Wikipedia rabbit hole instead,
+// from Octopus to Captain Nemo and beyond.
+// Usage: xvfb-run -a -s "-screen 0 1200x800x24" node tools/demo/capture_tabs.mjs <capture folder> [rabbit]
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
@@ -19,7 +21,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const wiki = (title) => `https://en.wikipedia.org/wiki/${title}`;
 // Sites without cookie banners or pages that change daily, so the shot stays clean.
-const URLS = [
+const MIXED = [
   wiki('Lisbon'),
   wiki('Alfama'),
   'https://github.com/lawand-dot-io/tree-of-tabs',
@@ -51,6 +53,14 @@ const URLS = [
   'https://github.com/lawand-dot-io/tree-of-tabs/blob/main/README.md',
   wiki('Madeira'),
 ];
+const RABBIT = [
+  'Octopus', 'Cephalopod', 'Squid', 'Kraken', 'Giant_squid', 'Sea_monster', 'Colossal_squid', 'Jules_Verne',
+  'Twenty_Thousand_Leagues_Under_the_Seas', 'Captain_Nemo', 'Nautilus_(fictional_submarine)', 'Sperm_whale', 'Moby-Dick',
+  'Herman_Melville', 'Leviathan', 'Cryptozoology', 'Loch_Ness_Monster', 'Mariana_Trench', 'Deep_sea', 'Anglerfish',
+  'Bioluminescence', 'Cuttlefish', 'Camouflage', 'Chameleon', 'Around_the_World_in_Eighty_Days', 'Hot_air_balloon',
+  'Montgolfier_brothers', 'Paper_plane', 'Origami', 'Cephalopod_intelligence',
+].map(wiki);
+const URLS = process.argv[3] === 'rabbit' ? RABBIT : MIXED;
 
 const profile = fs.mkdtempSync(path.join(os.tmpdir(), 'strip-'));
 const context = await chromium.launchPersistentContext(profile, {
@@ -64,7 +74,7 @@ const shoot = (count) => execFileSync('import', ['-window', 'root', path.join(OU
 const load = async (page, url) => {
   await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => {});
   // Wikipedia's banner area (fundraising and other notices), as if closed.
-  await page.addStyleTag({ content: '#siteNotice, #centralNotice, .frb { display: none !important; }' }).catch(() => {});
+  await page.addStyleTag({ content: '#siteNotice, #centralNotice, .frb, .ambox { display: none !important; }' }).catch(() => {});
   await sleep(900); // Let the icon and title arrive and the strip settle.
 };
 let page = context.pages()[0];
